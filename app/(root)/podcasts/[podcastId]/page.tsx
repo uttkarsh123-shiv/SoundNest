@@ -29,7 +29,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
     podcastId,
     userId: user?.id
   });
-  
+
   // Get rating distribution
   const ratingDistribution = useQuery(api.podcasts.getRatingDistribution, {
     podcastId
@@ -188,7 +188,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
         </div>
 
         {/* Rating Section */}
-        {!isOwner && user && (
+        {user && (
           <div className="mt-8 bg-black-1/30 p-6 rounded-xl border border-gray-800">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -201,7 +201,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                     <MessageCircle size={18} stroke="white" />
                     <span className="text-14 font-medium text-white-2">{podcast.ratingCount} ratings</span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setShowRatingAnalysis(!showRatingAnalysis)}
                     className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
                   >
@@ -220,10 +220,10 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                 <div className="space-y-2">
                   {ratingDistribution && [5, 4, 3, 2, 1].map((star) => {
                     const count = ratingDistribution[star] || 0;
-                    const percentage = podcast.ratingCount > 0 
-                      ? Math.round((count / podcast.ratingCount) * 100) 
+                    const percentage = podcast.ratingCount > 0
+                      ? Math.round((count / podcast.ratingCount) * 100)
                       : 0;
-                    
+
                     return (
                       <div key={star} className="flex items-center gap-3">
                         <div className="flex items-center w-16">
@@ -231,7 +231,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                           <Star size={16} className="ml-1 fill-orange-1 text-orange-1" />
                         </div>
                         <div className="flex-1 h-4 bg-black-1/50 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-orange-1 rounded-full"
                             style={{ width: `${percentage}%` }}
                           />
