@@ -85,12 +85,12 @@ A cutting-edge AI SaaS platform that enables users to create, discover, and enjo
 
 ## 🔍 Website Preview
 
-You can explore Podcastr live by visiting the website:
+You can explore PodTales live by visiting the website:
 
-[**Podcastr - Preview the App**](https://my-podcastr.vercel.app/)
+[**PodTales - Preview the App**](https://my-podcastr.vercel.app/)
 
 ### 📸 Screenshot
-![image](https://github.com/iamvishalrathi/Podcastr/blob/main/public/sns.png)
+![image](https://github.com/iamvishalrathi/PodTales/blob/main/public/sns.png)
 
 ---
 
