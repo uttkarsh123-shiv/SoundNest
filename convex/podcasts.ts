@@ -1,5 +1,4 @@
 import { ConvexError, v } from "convex/values";
-
 import { mutation, query } from "./_generated/server";
 
 // create podcast mutation
@@ -265,5 +264,77 @@ export const likePodcast = mutation({
       });
       return true;
     }
+  },
+});
+
+// Function to rate a podcast
+export const ratePodcast = mutation({
+  args: {
+    podcastId: v.id("podcasts"),
+    userId: v.string(),
+    rating: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const { podcastId, userId, rating } = args;
+    
+    // Check if the user has already rated this podcast
+    const existingRating = await ctx.db
+      .query("ratings")
+      .withIndex("by_user_and_podcast", (q) => 
+        q.eq("userId", userId).eq("podcastId", podcastId)
+      )
+      .first();
+    
+    if (existingRating) {
+      // Update existing rating
+      await ctx.db.patch(existingRating._id, { rating });
+    } else {
+      // Create new rating
+      await ctx.db.insert("ratings", {
+        podcastId,
+        userId,
+        rating,
+        createdAt: new Date().toISOString(),
+      });
+    }
+    
+    // Calculate new average rating
+    const allRatings = await ctx.db
+      .query("ratings")
+      .withIndex("by_podcast", (q) => q.eq("podcastId", podcastId))
+      .collect();
+    
+    const totalRating = allRatings.reduce((sum, r) => sum + r.rating, 0);
+    const averageRating = totalRating / allRatings.length;
+    
+    // Update podcast with new average rating and count
+    await ctx.db.patch(podcastId, {
+      averageRating,
+      ratingCount: allRatings.length,
+    });
+    
+    return { success: true };
+  },
+});
+
+// Function to get a user's rating for a podcast
+export const getUserRating = query({
+  args: {
+    podcastId: v.id("podcasts"),
+    userId: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { podcastId, userId } = args;
+    
+    if (!userId) return null;
+    
+    const rating = await ctx.db
+      .query("ratings")
+      .withIndex("by_user_and_podcast", (q) => 
+        q.eq("userId", userId).eq("podcastId", podcastId)
+      )
+      .first();
+    
+    return rating ? { rating: rating.rating } : null;
   },
 });
