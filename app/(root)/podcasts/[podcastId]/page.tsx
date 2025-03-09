@@ -257,7 +257,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                     onMouseEnter={() => setHoveredRating(star)}
                     onMouseLeave={() => setHoveredRating(null)}
                     className="p-1 transition-transform hover:scale-110"
-                    disabled={hasRated}
+                    disabled={hasRated && !isOwner}
                   >
                     <Star
                       size={32}
@@ -283,8 +283,16 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                     Submit Rating
                   </button>
                 ) : (
-                  <div className="flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-lg">
-                    <span>Thanks for rating!</span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-lg">
+                      <span>Your rating: {userRating} ★</span>
+                    </div>
+                    <button
+                      onClick={() => setHasRated(false)}
+                      className="px-4 py-2 rounded-lg font-medium bg-white-1/10 text-white-2 hover:bg-white-1/20 transition-all"
+                    >
+                      Modify Rating
+                    </button>
                   </div>
                 )}
 
