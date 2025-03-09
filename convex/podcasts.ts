@@ -338,3 +338,38 @@ export const getUserRating = query({
     return rating ? { rating: rating.rating } : null;
   },
 });
+
+// Function to get rating distribution for a podcast
+export const getRatingDistribution = query({
+  args: {
+    podcastId: v.id("podcasts"),
+  },
+  handler: async (ctx, args) => {
+    const { podcastId } = args;
+    
+    // Get all ratings for this podcast
+    const allRatings = await ctx.db
+      .query("ratings")
+      .withIndex("by_podcast", (q) => q.eq("podcastId", podcastId))
+      .collect();
+    
+    // Count ratings for each star level (1-5)
+    const distribution = {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0
+    };
+    
+    // Count each rating
+    allRatings.forEach(rating => {
+      const starRating = rating.rating;
+      if (starRating >= 1 && starRating <= 5) {
+        distribution[starRating]++;
+      }
+    });
+    
+    return distribution;
+  },
+});
