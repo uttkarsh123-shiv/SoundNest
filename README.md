@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/iamvishalrathi/Podcastr/blob/main/public/icons/logo.png" width="50" alt="logo">
+  <img src="https://github.com/iamvishalrathi/PodTales/blob/main/public/icons/logo.png" width="50" alt="logo">
 </p>
 <p align="center">
     <h1 align="center">PODTALES</h1>
@@ -97,7 +97,7 @@ You can explore Podcastr live by visiting the website:
 ## 📂 Repository Structure
 
 ```sh
-└── Podcastr/
+└── PodTales/
     ├── README.md
     ├── app
     │   ├── (auth)
@@ -173,14 +173,14 @@ You can explore Podcastr live by visiting the website:
 
 Build the project from source:
 
-1. Clone the Podcastr repository:
+1. Clone the PodTales repository:
 ```sh
-❯ git clone https://github.com/iamvishalrathi/Podcastr
+❯ git clone https://github.com/iamvishalrathi/PodTales
 ```
 
 2. Navigate to the project directory:
 ```sh
-❯ cd Podcastr
+❯ cd PodTales
 ```
 
 3. Install the required dependencies:
