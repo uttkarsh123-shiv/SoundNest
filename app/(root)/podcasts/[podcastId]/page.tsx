@@ -20,7 +20,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
   const [userRating, setUserRating] = useState<number | null>(null);
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [hasRated, setHasRated] = useState(false);
-  const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
+  // Removing isRatingSubmitted state
   const [showRatingAnalysis, setShowRatingAnalysis] = useState(false);
 
   // Rating mutation
@@ -59,11 +59,8 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       });
       setHasRated(true);
       setIsRatingSubmitted(true);
-
-      // Reset submission status after showing success message
-      setTimeout(() => {
-        setIsRatingSubmitted(false);
-      }, 3000);
+      
+      // Removing the timeout that resets the submission status
     } catch (error) {
       console.error("Error submitting rating:", error);
     }
@@ -296,11 +293,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                   </div>
                 )}
 
-                {isRatingSubmitted && (
-                  <div className="animate-fadeIn bg-green-500/20 text-green-400 px-4 py-2 rounded-lg">
-                    Rating submitted successfully!
-                  </div>
-                )}
+                {/* Removing the rating submission message */}
               </div>
             </div>
           </div>
