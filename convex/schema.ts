@@ -21,6 +21,8 @@ export default defineSchema({
     podcastType: v.optional(v.string()),
     likes: v.optional(v.array(v.string())),
     likeCount: v.optional(v.float64()),
+    averageRating: v.optional(v.float64()),
+    ratingCount: v.optional(v.float64()),
   })
     .searchIndex("search_author", { searchField: "author" })
     .searchIndex("search_title", { searchField: "podcastTitle" })
