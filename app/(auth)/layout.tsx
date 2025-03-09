@@ -10,7 +10,6 @@ export default function RootLayout({
       <div className="absolute size-full">
         <Image src="/images/bg-img.png" alt="background" fill className="size-full" />
       </div>
-
       {children}
     </main>
   );
