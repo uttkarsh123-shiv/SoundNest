@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://github.com/iamvishalrathi/Podcastr/blob/main/public/icons/logo.svg" width="50" alt="logo">
+  <img src="https://github.com/iamvishalrathi/Podcastr/blob/main/public/icons/logo.png" width="50" alt="logo">
 </p>
 <p align="center">
-    <h1 align="center">PODCASTR</h1>
+    <h1 align="center">PODTALES</h1>
 </p>
 <p align="center">
     <em><code><a href="https://my-podcastr.vercel.app/" target="_blank" >❯ Live</a></code></em>
