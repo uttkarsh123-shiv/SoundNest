@@ -41,4 +41,15 @@ export default defineSchema({
   })
     .index("by_podcast", ["podcastId"])
     .index("by_user_and_podcast", ["userId", "podcastId"]),
+  
+  comments: defineTable({
+    podcastId: v.id("podcasts"),
+    userId: v.string(),
+    userName: v.string(),
+    userImageUrl: v.string(),
+    content: v.string(),
+    createdAt: v.string(),
+  })
+    .index("by_podcast", ["podcastId"])
+    .index("by_user", ["userId"]),
 });

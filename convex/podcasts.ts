@@ -373,3 +373,49 @@ export const getRatingDistribution = query({
     return distribution;
   },
 });
+
+// Function to add a comment to a podcast
+export const addComment = mutation({
+  args: {
+    podcastId: v.id("podcasts"),
+    userId: v.string(),
+    userName: v.string(),
+    userImageUrl: v.string(),
+    content: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const { podcastId, userId, userName, userImageUrl, content } = args;
+    
+    // Verify the podcast exists
+    const podcast = await ctx.db.get(podcastId);
+    if (!podcast) {
+      throw new ConvexError("Podcast not found");
+    }
+    
+    // Create the comment
+    return await ctx.db.insert("comments", {
+      podcastId,
+      userId,
+      userName,
+      userImageUrl,
+      content,
+      createdAt: new Date().toISOString(),
+    });
+  },
+});
+
+// Function to get comments for a podcast
+export const getPodcastComments = query({
+  args: {
+    podcastId: v.id("podcasts"),
+  },
+  handler: async (ctx, args) => {
+    const { podcastId } = args;
+    
+    return await ctx.db
+      .query("comments")
+      .withIndex("by_podcast", (q) => q.eq("podcastId", podcastId))
+      .order("desc")
+      .collect();
+  },
+});

@@ -20,8 +20,11 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
   const [userRating, setUserRating] = useState<number | null>(null);
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [hasRated, setHasRated] = useState(false);
-  // Removing isRatingSubmitted state
   const [showRatingAnalysis, setShowRatingAnalysis] = useState(false);
+  
+  // Comment state
+  const [comment, setComment] = useState('');
+  const [showComments, setShowComments] = useState(true);
 
   // Rating mutation
   const submitRating = useMutation(api.podcasts.ratePodcast);
@@ -34,6 +37,10 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
   const ratingDistribution = useQuery(api.podcasts.getRatingDistribution, {
     podcastId
   });
+  
+  // Comments functionality
+  const submitComment = useMutation(api.podcasts.addComment);
+  const podcastComments = useQuery(api.podcasts.getPodcastComments, { podcastId });
 
   useEffect(() => {
     // Update the view count only once when the component mounts
@@ -58,11 +65,25 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
         rating: userRating
       });
       setHasRated(true);
-      setIsRatingSubmitted(true);
-      
-      // Removing the timeout that resets the submission status
     } catch (error) {
       console.error("Error submitting rating:", error);
+    }
+  };
+  
+  const handleCommentSubmit = async () => {
+    if (!user || !comment.trim()) return;
+    
+    try {
+      await submitComment({
+        podcastId,
+        userId: user.id,
+        userName: user.fullName || user.username || "Anonymous",
+        userImageUrl: user.imageUrl,
+        content: comment.trim()
+      });
+      setComment(''); // Clear comment input after submission
+    } catch (error) {
+      console.error("Error submitting comment:", error);
     }
   };
 
@@ -298,6 +319,98 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
             </div>
           </div>
         )}
+
+        {/* Comments Section */}
+        <div className="bg-black-1/30 p-6 rounded-xl border border-gray-800">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+              <h2 className="text-20 font-bold text-white-1">Comments</h2>
+            </div>
+            <button
+              onClick={() => setShowComments(!showComments)}
+              className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
+            >
+              <MessageCircle size={18} stroke="white" />
+              <span className="text-14 font-medium text-white-2">
+                {showComments ? "Hide Comments" : "Show Comments"}
+              </span>
+            </button>
+          </div>
+
+          {/* Add Comment Form */}
+          {user && (
+            <div className="mb-6">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <img 
+                    src={user.imageUrl} 
+                    alt={user.fullName || "User"} 
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                </div>
+                <div className="flex-grow">
+                  <textarea
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Share your thoughts about this podcast..."
+                    className="w-full bg-black-1/50 border border-gray-800 rounded-lg p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-orange-1 min-h-[100px]"
+                  />
+                  <div className="flex justify-end mt-2">
+                    <button
+                      onClick={handleCommentSubmit}
+                      disabled={!comment.trim()}
+                      className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                        comment.trim()
+                          ? "bg-orange-1 text-black hover:bg-orange-2"
+                          : "bg-white-1/10 text-white-3 cursor-not-allowed"
+                      }`}
+                    >
+                      Post Comment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Comments List */}
+          {showComments && (
+            <div className="space-y-6">
+              {podcastComments && podcastComments.length > 0 ? (
+                podcastComments.map((comment) => (
+                  <div key={comment._id} className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <img 
+                        src={comment.userImageUrl} 
+                        alt={comment.userName} 
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="text-16 font-medium text-white-1">{comment.userName}</h4>
+                        <span className="text-12 text-white-3">
+                          {new Date(comment._creationTime).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                      <p className="text-15 text-white-2">{comment.content}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <MessageCircle size={40} className="mx-auto mb-3 text-white-3" />
+                  <p className="text-white-3">No comments yet. Be the first to share your thoughts!</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Similar Podcasts Section */}
