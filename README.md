@@ -8,10 +8,10 @@
     <em><code><a href="https://podtales.vercel.app/" target="_blank" >❯ Live</a></code></em>
 </p>
 <p align="center">
-	<img src="https://img.shields.io/github/license/iamvishalrathi/podtales?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/iamvishalrathi/podtales?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/iamvishalrathi/podtales?style=flat&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/iamvishalrathi/podtales?style=flat&color=0080ff" alt="repo-language-count">
+	<img src="https://img.shields.io/github/license/iamvishalrathi/podcastr?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
+	<img src="https://img.shields.io/github/last-commit/iamvishalrathi/podcastr?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
+	<img src="https://img.shields.io/github/languages/top/iamvishalrathi/podcastr?style=flat&color=0080ff" alt="repo-top-language">
+	<img src="https://img.shields.io/github/languages/count/iamvishalrathi/podcastr?style=flat&color=0080ff" alt="repo-language-count">
 </p>
 <p align="center">
 		<em>Built with the tools and technologies:</em>
