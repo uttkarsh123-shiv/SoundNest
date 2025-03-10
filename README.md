@@ -5,13 +5,13 @@
     <h1 align="center">PODTALES</h1>
 </p>
 <p align="center">
-    <em><code><a href="https://my-podcastr.vercel.app/" target="_blank" >❯ Live</a></code></em>
+    <em><code><a href="https://podtales.vercel.app/" target="_blank" >❯ Live</a></code></em>
 </p>
 <p align="center">
-	<img src="https://img.shields.io/github/license/iamvishalrathi/Podcastr?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/iamvishalrathi/Podcastr?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/iamvishalrathi/Podcastr?style=flat&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/iamvishalrathi/Podcastr?style=flat&color=0080ff" alt="repo-language-count">
+	<img src="https://img.shields.io/github/license/iamvishalrathi/podtales?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
+	<img src="https://img.shields.io/github/last-commit/iamvishalrathi/podtales?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
+	<img src="https://img.shields.io/github/languages/top/iamvishalrathi/podtales?style=flat&color=0080ff" alt="repo-top-language">
+	<img src="https://img.shields.io/github/languages/count/iamvishalrathi/podtales?style=flat&color=0080ff" alt="repo-language-count">
 </p>
 <p align="center">
 		<em>Built with the tools and technologies:</em>
@@ -87,7 +87,7 @@ A cutting-edge AI SaaS platform that enables users to create, discover, and enjo
 
 You can explore PodTales live by visiting the website:
 
-[**PodTales - Preview the App**](https://my-podcastr.vercel.app/)
+[**PodTales - Preview the App**](https://podtales.vercel.app/)
 
 ### 📸 Screenshot
 ![image](https://github.com/iamvishalrathi/PodTales/blob/main/public/sns.png)
