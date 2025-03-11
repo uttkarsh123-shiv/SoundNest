@@ -7,9 +7,6 @@ import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "PodTales",
   description: "Your World, Your Voice, Anytime",
-  icons: {
-    icon: '/icons/logo.png'
-  }
 };
 
 export default function RootLayout({
