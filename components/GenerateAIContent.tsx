@@ -213,6 +213,12 @@ const GenerateAIContent = ({
                                     placeholder="Add any specific requirements or points you want to include in the content..."
                                     value={note}
                                     onChange={(e) => setNote(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        // Prevent default behavior for space key to ensure it's captured
+                                        if (e.key === ' ') {
+                                            e.stopPropagation();
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>

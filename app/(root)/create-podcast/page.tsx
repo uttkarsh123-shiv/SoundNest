@@ -287,11 +287,7 @@ const CreatePodcast = () => {
                                                             className="input-class focus-visible:ring-offset-orange-1 h-12"
                                                             placeholder="Enter your podcast title..."
                                                             suppressHydrationWarning
-                                                            value={field.value}
-                                                            onChange={(e) => {
-                                                                const value = e.target.value;
-                                                                field.onChange(value);
-                                                            }}
+                                                            {...field}
                                                             onKeyDown={(e) => {
                                                                 // Prevent default behavior for space key to ensure it's captured
                                                                 if (e.key === ' ') {
@@ -398,6 +394,12 @@ const CreatePodcast = () => {
                                                             placeholder="Write or generate a compelling description for your podcast..."
                                                             suppressHydrationWarning
                                                             {...field}
+                                                            onKeyDown={(e) => {
+                                                                // Prevent default behavior for space key to ensure it's captured
+                                                                if (e.key === ' ') {
+                                                                    e.stopPropagation();
+                                                                }
+                                                            }}
                                                         />
                                                     </FormControl>
                                                     <FormMessage className="text-white-1" />

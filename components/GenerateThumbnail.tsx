@@ -334,6 +334,12 @@ const GenerateThumbnail = ({
               value={imagePrompt}
               onChange={(e) => setImagePrompt(e.target.value)}
               disabled={isImageLoading}
+              onKeyDown={(e) => {
+                // Prevent default behavior for space key to ensure it's captured
+                if (e.key === ' ') {
+                  e.stopPropagation();
+                }
+              }}
             />
           </div>
           <div className="flex flex-col gap-4 items-center">
@@ -407,17 +413,17 @@ const GenerateThumbnail = ({
       )}
 
       {(image || isImageLoading) && (
-          <ImagePreview
-            image={image}
-            isImageLoading={isImageLoading}
-            progress={progress}
-            isAiThumbnail={isAiThumbnail}
-            isAiGenerated={isAiGenerated}
-            setIsPreviewOpen={setIsPreviewOpen}
-            handleDownload={handleDownload}
-            handleDelete={handleDelete}
-            isDownloading={isDownloading}
-          />
+        <ImagePreview
+          image={image}
+          isImageLoading={isImageLoading}
+          progress={progress}
+          isAiThumbnail={isAiThumbnail}
+          isAiGenerated={isAiGenerated}
+          setIsPreviewOpen={setIsPreviewOpen}
+          handleDownload={handleDownload}
+          handleDelete={handleDelete}
+          isDownloading={isDownloading}
+        />
       )}
 
       {image && (

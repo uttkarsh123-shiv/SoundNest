@@ -137,7 +137,7 @@ const useGeneratePodcast = ({
   const generatePodcast = async () => {
     try {
       setIsGenerating(true);
-      
+
       // Delete previous audio if it exists
       if (audioStorageId) {
         await deleteFile({ storageId: audioStorageId });
@@ -356,8 +356,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
     handleFileChange,
     uploadProgress,
     fileInputRef,
-    isCustomUploading,
-    isUploading
+    isCustomUploading
   } = useGeneratePodcast(props);
 
   const [isCustomAudio, setIsCustomAudio] = useState(true);
@@ -446,6 +445,12 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
                     description: `Maximum ${MAX_CHARACTERS} characters allowed`,
                     variant: "destructive",
                   });
+                }
+              }}
+              onKeyDown={(e) => {
+                // Prevent default behavior for space key to ensure it's captured
+                if (e.key === ' ') {
+                  e.stopPropagation();
                 }
               }}
             />
@@ -648,7 +653,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             </div>
           )}
         </div>
-      ):(
+      ) : (
         <>
           {isGenerating && (
             <div className="flex flex-col gap-3 mt-8 bg-black-1/50 p-6 rounded-xl border border-white/5 
