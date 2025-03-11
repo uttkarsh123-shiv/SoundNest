@@ -67,7 +67,6 @@ const CreatePodcast = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const createPodcast = useMutation(api.podcasts.createPodcast);
-    const voiceCategories = ['Drew', "Rachel", "Sarah"];
 
     // 1. Define your form
     const form = useForm<z.infer<typeof formSchema>>({
