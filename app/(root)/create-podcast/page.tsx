@@ -287,7 +287,18 @@ const CreatePodcast = () => {
                                                             className="input-class focus-visible:ring-offset-orange-1 h-12"
                                                             placeholder="Enter your podcast title..."
                                                             suppressHydrationWarning
-                                                            {...field}
+                                                            value={field.value}
+                                                            onChange={(e) => {
+                                                                const value = e.target.value;
+                                                                field.onChange(value);
+                                                            }}
+                                                            onKeyDown={(e) => {
+                                                                // Prevent default behavior for space key to ensure it's captured
+                                                                if (e.key === ' ') {
+                                                                    e.stopPropagation();
+                                                                }
+                                                            }}
+                                                            type="text"
                                                         />
                                                     </FormControl>
                                                     <FormMessage className="text-white-1" />
