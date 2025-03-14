@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 const Home = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 3);
+  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 5);
   const featuredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'popular' })?.slice(0, 2);
   const trendingPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'trending' })?.slice(0, 3);
   const topRatedPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'topRated' })?.slice(0, 3);
@@ -148,7 +148,11 @@ const Home = () => {
                 <div className="h-8 bg-white-1/10 rounded animate-pulse w-3/4" />
                 <div className="h-16 bg-white-1/10 rounded animate-pulse w-full" />
                 <div className="flex items-center gap-6">
-                  <div className="h-10 bg-white-1/10 rounded-full animate-pulse w-32" />
+                  <div className="h-10 bg-orange-1/20 rounded-full animate-pulse w-32" />
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-white-1/10 animate-pulse" />
+                    <div className="h-5 bg-white-1/10 rounded animate-pulse w-12" />
+                  </div>
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 rounded-full bg-white-1/10 animate-pulse" />
                     <div className="h-5 bg-white-1/10 rounded animate-pulse w-12" />
@@ -163,7 +167,7 @@ const Home = () => {
           </div>
           <div className="flex justify-center w-full mt-4">
             <div className="flex gap-3">
-              {[...Array(3)].map((_, index) => (
+              {[...Array(2)].map((_, index) => (
                 <div key={index} className="w-3 h-3 rounded-full bg-white-1/10 animate-pulse" />
               ))}
             </div>
@@ -212,8 +216,14 @@ const Home = () => {
                     <div className="h-5 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${70 + Math.random() * 25}%` }} />
                     <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
                     <div className="flex justify-between pt-2">
-                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
-                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
+                      <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
+                        <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
+                        <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -265,8 +275,18 @@ const Home = () => {
                     <div className="h-5 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${70 + Math.random() * 25}%` }} />
                     <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
                     <div className="flex justify-between pt-2">
-                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
-                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
+                      <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
+                        <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
+                        <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
+                        <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -352,7 +372,7 @@ const Home = () => {
               {[...Array(5)].map((_, index) => (
                 <div key={index} className="flex items-center p-3 bg-white-1/5 rounded-lg">
                   <div className="w-8 text-center">
-                    <div className="h-5 w-5 bg-white-1/10 rounded animate-pulse mx-auto" />
+                    <div className="h-5 w-5 bg-orange-1/20 rounded animate-pulse mx-auto" />
                   </div>
                   <div className="flex-1 ml-3">
                     <div className="flex items-center gap-3">
