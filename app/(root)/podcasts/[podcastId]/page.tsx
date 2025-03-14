@@ -357,7 +357,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
           {/* Add Comment Form */}
           {user && (
             <div className="mb-6">
-              <div className="flex gap-4">
+              <div className="flex gap-4 bg-black-1/50 p-4 rounded-lg border border-gray-800">
                 <div className="flex-shrink-0">
                   <img
                     src={user.imageUrl}
@@ -370,19 +370,18 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     onKeyDown={(e) => {
-                      // Prevent default behavior for space key to ensure it's captured
                       if (e.key === ' ') {
                         e.stopPropagation();
                       }
                     }}
                     placeholder="Share your thoughts about this podcast..."
-                    className="w-full bg-black-1/50 border border-gray-800 rounded-lg p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-orange-1 min-h-[100px]"
+                    className="w-full bg-black-1/70 border border-gray-800 rounded-lg p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-orange-1 min-h-[100px]"
                   />
-                  <div className="flex justify-end mt-2">
+                  <div className="flex justify-end mt-3">
                     <button
                       onClick={handleCommentSubmit}
                       disabled={!comment.trim()}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all ${comment.trim()
+                      className={`px-5 py-2 rounded-lg font-medium transition-all ${comment.trim()
                         ? "bg-orange-1 text-black hover:bg-orange-2"
                         : "bg-white-1/10 text-white-3 cursor-not-allowed"
                         }`}
@@ -400,7 +399,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
             <div className="space-y-6">
               {podcastComments && podcastComments.length > 0 ? (
                 podcastComments.map((comment) => (
-                  <div key={comment._id} className="flex gap-4">
+                  <div key={comment._id} className="flex gap-4 bg-black-1/50 p-4 rounded-lg border border-gray-800 hover:border-gray-700 transition-colors">
                     <div className="flex-shrink-0">
                       <img
                         src={comment.userImageUrl}
@@ -409,32 +408,33 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                       />
                     </div>
                     <div className="flex-grow">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="text-16 font-medium text-white-1">{comment.userName}</h4>
-                        <span className="text-12 text-white-3">
-                          {new Date(comment._creationTime).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
-                        </span>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-16 font-medium text-white-1">{comment.userName}</h4>
+                          <span className="text-12 text-white-3">
+                            {new Date(comment._creationTime).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                          </span>
+                        </div>
+                        {user && (user.id === comment.userId || isOwner) && (
+                          <button
+                            onClick={() => handleCommentDelete(comment._id)}
+                            className="text-white-3 hover:text-red-500 transition-colors p-1.5 rounded-full hover:bg-white-1/10"
+                            title="Delete comment"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
                       </div>
-                      {/* Delete button - only visible to comment author or podcast owner */}
-                      {user && (user.id === comment.userId || isOwner) && (
-                        <button
-                          onClick={() => handleCommentDelete(comment._id)}
-                          className="text-white-3 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-white-1/10"
-                          title="Delete comment"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      )}
+                      <p className="text-15 text-white-2">{comment.content}</p>
                     </div>
-                    <p className="text-15 text-white-2">{comment.content}</p>
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8">
+                <div className="text-center py-8 bg-black-1/50 rounded-lg border border-gray-800">
                   <MessageCircle size={40} className="mx-auto mb-3 text-white-3" />
                   <p className="text-white-3">No comments yet. Be the first to share your thoughts!</p>
                 </div>
