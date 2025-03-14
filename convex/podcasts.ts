@@ -122,10 +122,24 @@ export const getFilteredPodcasts = query({
         );
         break;
       case "trending":
-        sortedPodcasts = podcasts.sort(
-          (a, b) =>
-            ((b.views && b.likeCount) || 0) - ((a.views && a.likeCount) || 0)
-        );
+        // Calculate trending score using the formula: (Likes×2)+(Views×1)/((Days Since Release+1)^1.2)
+        sortedPodcasts = podcasts.sort((a, b) => {
+          const aLikes = a.likeCount || 0;
+          const bLikes = b.likeCount || 0;
+          const aViews = a.views || 0;
+          const bViews = b.views || 0;
+          
+          // Calculate days since release
+          const now = Date.now();
+          const aDaysSinceRelease = (now - a._creationTime) / (1000 * 60 * 60 * 24);
+          const bDaysSinceRelease = (now - b._creationTime) / (1000 * 60 * 60 * 24);
+          
+          // Calculate trending scores
+          const aScore = ((aLikes * 2) + aViews) / Math.pow(aDaysSinceRelease + 1, 1.2);
+          const bScore = ((bLikes * 2) + bViews) / Math.pow(bDaysSinceRelease + 1, 1.2);
+          
+          return bScore - aScore; // Higher score first
+        });
         break;
       case "latest":
         sortedPodcasts = podcasts.sort(
