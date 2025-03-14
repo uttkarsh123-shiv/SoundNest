@@ -7,7 +7,7 @@ import { api } from '@/convex/_generated/api'
 import { useUser } from '@clerk/nextjs'
 import { useMutation, useQuery } from 'convex/react'
 import { useEffect, useState } from 'react'
-import { Headphones, Clock, Calendar, Mic2, Layers, Star, MessageCircle, Trash2 } from 'lucide-react'
+import { Headphones, Clock, Calendar, Mic2, Layers, Star, MessageCircle, Trash2, ChevronDown, ChevronUp, ChartBar } from 'lucide-react'
 
 const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'podcasts'> } }) => {
   const { user } = useUser();
@@ -24,7 +24,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
 
   // Comment state
   const [comment, setComment] = useState('');
-  const [showComments, setShowComments] = useState(true);
+  const [showComments, setShowComments] = useState(false);
 
   // Rating mutation
   const submitRating = useMutation(api.podcasts.ratePodcast);
@@ -232,14 +232,14 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
               {podcast?.ratingCount > 0 && (
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full">
-                    <MessageCircle size={18} stroke="white" />
+                    <Star size={18} stroke="white" />
                     <span className="text-14 font-medium text-white-2">{podcast.ratingCount} ratings</span>
                   </div>
                   <button
                     onClick={() => setShowRatingAnalysis(!showRatingAnalysis)}
                     className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
                   >
-                    <Star size={18} stroke="white" />
+                    <ChartBar size={18} stroke="white" />
                     <span className="text-14 font-medium text-white-2">
                       {showRatingAnalysis ? "Hide Analysis" : "Show Analysis"}
                     </span>
@@ -337,21 +337,16 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
         )}
 
         {/* Comments Section */}
+        {/* Comments Section */}
         <div className="bg-black-1/30 p-6 rounded-xl border border-gray-800">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
-              <h2 className="text-20 font-bold text-white-1">Comments</h2>
-            </div>
-            <button
-              onClick={() => setShowComments(!showComments)}
-              className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
-            >
-              <MessageCircle size={18} stroke="white" />
-              <span className="text-14 font-medium text-white-2">
-                {showComments ? "Hide Comments" : "Show Comments"}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+            <h2 className="text-20 font-bold text-white-1">Comments</h2>
+            {podcastComments && podcastComments.length > 0 && (
+              <span className="text-14 text-white-3 bg-black-1/50 px-3 py-1 rounded-full">
+                {podcastComments.length}
               </span>
-            </button>
+            )}
           </div>
 
           {/* Add Comment Form */}
@@ -392,6 +387,35 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                 </div>
               </div>
             </div>
+          )}
+
+          {/* Show Comments Toggle */}
+          {podcastComments && podcastComments.length > 0 ? (
+            <div className="flex justify-center mb-4">
+              <button
+                onClick={() => setShowComments(!showComments)}
+                className="flex items-center gap-2 bg-black-1/50 px-5 py-2 rounded-full hover:bg-white-1/10 transition-colors"
+              >
+                {showComments ? (
+                  <>
+                    <ChevronUp size={18} stroke="white" />
+                    <span className="text-14 font-medium text-white-2">Hide Comments</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown size={18} stroke="white" />
+                    <span className="text-14 font-medium text-white-2">Show {podcastComments.length} Comments</span>
+                  </>
+                )}
+              </button>
+            </div>
+          ) : (
+            !user && (
+              <div className="text-center py-8 bg-black-1/50 rounded-lg border border-gray-800">
+                <MessageCircle size={40} className="mx-auto mb-3 text-white-3" />
+                <p className="text-white-3">No comments yet. Sign in to be the first to comment!</p>
+              </div>
+            )
           )}
 
           {/* Comments List */}
