@@ -22,7 +22,7 @@ const RightSidebar = () => {
 
     return (
         <section className={cn('right_sidebar h-[calc(100vh-5px)]', {
-            'h-[calc(100vh-112px)]': audio?.audioUrl
+            'h-[calc(100vh-80px)]': audio?.audioUrl
         })}>
             <SignedIn>
                 <Link href={`/profile/${user?.id}`} className="flex gap-3 pb-7">
