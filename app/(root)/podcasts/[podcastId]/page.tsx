@@ -7,7 +7,7 @@ import { api } from '@/convex/_generated/api'
 import { useUser } from '@clerk/nextjs'
 import { useMutation, useQuery } from 'convex/react'
 import { useEffect, useState } from 'react'
-import { Headphones, Clock, Calendar, Mic2, Layers, Star, MessageCircle } from 'lucide-react'
+import { Headphones, Clock, Calendar, Mic2, Layers, Star, MessageCircle, Trash2 } from 'lucide-react'
 
 const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'podcasts'> } }) => {
   const { user } = useUser();
@@ -40,6 +40,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
 
   // Comments functionality
   const submitComment = useMutation(api.podcasts.addComment);
+  const deleteComment = useMutation(api.podcasts.deleteComment);
   const podcastComments = useQuery(api.podcasts.getPodcastComments, { podcastId });
 
   useEffect(() => {
@@ -84,6 +85,21 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       setComment(''); // Clear comment input after submission
     } catch (error) {
       console.error("Error submitting comment:", error);
+    }
+  };
+
+  const handleCommentDelete = async (commentId: Id<"comments">) => {
+    if (!user) return;
+
+    try {
+      await deleteComment({
+        commentId,
+        userId: user.id,
+        podcastId,
+        isOwner: isOwner
+      });
+    } catch (error) {
+      console.error("Error deleting comment:", error);
     }
   };
 
@@ -367,8 +383,8 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                       onClick={handleCommentSubmit}
                       disabled={!comment.trim()}
                       className={`px-4 py-2 rounded-lg font-medium transition-all ${comment.trim()
-                          ? "bg-orange-1 text-black hover:bg-orange-2"
-                          : "bg-white-1/10 text-white-3 cursor-not-allowed"
+                        ? "bg-orange-1 text-black hover:bg-orange-2"
+                        : "bg-white-1/10 text-white-3 cursor-not-allowed"
                         }`}
                     >
                       Post Comment
@@ -403,8 +419,18 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                           })}
                         </span>
                       </div>
-                      <p className="text-15 text-white-2">{comment.content}</p>
+                      {/* Delete button - only visible to comment author or podcast owner */}
+                      {user && (user.id === comment.userId || isOwner) && (
+                        <button
+                          onClick={() => handleCommentDelete(comment._id)}
+                          className="text-white-3 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-white-1/10"
+                          title="Delete comment"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
                     </div>
+                    <p className="text-15 text-white-2">{comment.content}</p>
                   </div>
                 ))
               ) : (

@@ -419,3 +419,34 @@ export const getPodcastComments = query({
       .collect();
   },
 });
+
+// Add this function to your existing podcasts.ts file
+
+// Delete a comment
+export const deleteComment = mutation({
+  args: {
+    commentId: v.string(),
+    userId: v.string(),
+    podcastId: v.id("podcasts"),
+    isOwner: v.boolean()
+  },
+  handler: async (ctx, args) => {
+    // Get the comment
+    const comment = await ctx.db.get(args.commentId as Id<"comments">);
+    
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+    
+    // Check if the user is authorized to delete this comment
+    // Allow deletion if user is the comment author or the podcast owner
+    if (comment.userId !== args.userId && !args.isOwner) {
+      throw new Error("Unauthorized to delete this comment");
+    }
+    
+    // Delete the comment
+    await ctx.db.delete(args.commentId as Id<"comments">);
+    
+    return { success: true };
+  },
+});
