@@ -104,6 +104,11 @@ const Home = () => {
                           <Heart size={20} className="text-white-1" />
                           <span className="text-white-1">{podcast.likeCount || 0}</span>
                         </div>
+                        {/* Add rating display */}
+                        <div className="flex items-center gap-2">
+                          <Star size={20} className="text-white-1" />
+                          <span className="text-white-1">{podcast?.averageRating || "0.0"}</span>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -136,7 +136,16 @@ export const getFilteredPodcasts = query({
 
           return bScore - aScore; // Higher score first
         });
+        
+        // Ensure each podcast has rating information for display
+        sortedPodcasts = sortedPodcasts.map(podcast => ({
+          ...podcast,
+          averageRating: podcast.averageRating || 0,
+          ratingCount: podcast.ratingCount || 0,
+          formattedRating: podcast.averageRating ? podcast.averageRating.toFixed(1) : "0.0"
+        }));
         break;
+      
       case "topRated":
         // Sort by average rating, considering only podcasts with at least one rating
         sortedPodcasts = podcasts.sort((a, b) => {
