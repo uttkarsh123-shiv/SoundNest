@@ -182,10 +182,10 @@ const Home = () => {
           </div>
           <Link
             href="/discover"
-            className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition"
+            className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
           >
             See all
-            <ArrowRight size={20} className="text-orange-1" />
+            <ArrowRight size={20} className="text-orange-1 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </header>
         <div className="podcast_grid">
@@ -234,10 +234,10 @@ const Home = () => {
           </div>
           <Link
             href="/discover"
-            className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition"
+            className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
           >
             See all
-            <ArrowRight size={20} className="text-orange-1" />
+            <ArrowRight size={20} className="text-orange-1 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </header>
         <div className="podcast_grid">
@@ -287,10 +287,10 @@ const Home = () => {
           </div>
           <Link
             href="/discover"
-            className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition"
+            className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
           >
             See all
-            <ArrowRight size={20} className="text-orange-1" />
+            <ArrowRight size={20} className="text-orange-1 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </header>
         <div className="flex flex-col gap-6">
