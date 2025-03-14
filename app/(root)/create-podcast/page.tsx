@@ -144,6 +144,7 @@ const CreatePodcast = () => {
                 audioDuration,
                 audioStorageId,
                 imageStorageId,
+                language: selectedLanguage, // Add the selected language
             });
 
             toast({

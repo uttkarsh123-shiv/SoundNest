@@ -16,6 +16,7 @@ export const createPodcast = mutation({
     views: v.float64(),
     audioDuration: v.float64(),
     podcastType: v.optional(v.string()),
+    language: v.optional(v.string()), // Add language as an optional parameter
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -52,6 +53,7 @@ export const createPodcast = mutation({
       podcastType: args.podcastType,
       likes: args.likes || [],
       likeCount: args.likeCount || 0,
+      language: args.language, // Store the language in the database
     });
   },
 });
@@ -136,16 +138,18 @@ export const getFilteredPodcasts = query({
 
           return bScore - aScore; // Higher score first
         });
-        
+
         // Ensure each podcast has rating information for display
-        sortedPodcasts = sortedPodcasts.map(podcast => ({
+        sortedPodcasts = sortedPodcasts.map((podcast) => ({
           ...podcast,
           averageRating: podcast.averageRating || 0,
           ratingCount: podcast.ratingCount || 0,
-          formattedRating: podcast.averageRating ? podcast.averageRating.toFixed(1) : "0.0"
+          formattedRating: podcast.averageRating
+            ? podcast.averageRating.toFixed(1)
+            : "0.0",
         }));
         break;
-      
+
       case "topRated":
         // Sort by average rating, considering only podcasts with at least one rating
         sortedPodcasts = podcasts.sort((a, b) => {
@@ -512,5 +516,19 @@ export const deleteComment = mutation({
     await ctx.db.delete(args.commentId as Id<"comments">);
 
     return { success: true };
+  },
+});
+
+// Function to get podcasts by language
+export const getPodcastsByLanguage = query({
+  args: {
+    language: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("podcasts")
+      .withIndex("by_language", (q) => q.eq("language", args.language))
+      .order("desc")
+      .collect();
   },
 });

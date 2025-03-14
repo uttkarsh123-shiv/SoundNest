@@ -23,10 +23,13 @@ export default defineSchema({
     likeCount: v.optional(v.float64()),
     averageRating: v.optional(v.float64()),
     ratingCount: v.optional(v.float64()),
+    language: v.optional(v.string()), // Add language field
   })
-    .searchIndex("search_author", { searchField: "author" })
-    .searchIndex("search_title", { searchField: "podcastTitle" })
-    .searchIndex("search_body", { searchField: "podcastDescription" }),
+    .index("search_title", ["podcastTitle"])
+    .index("search_body", ["podcastDescription"])
+    .index("search_author", ["author"])
+    .index("by_author", ["authorId"])
+    .index("by_language", ["language"]), // Add language index for filtering
   users: defineTable({
     email: v.string(),
     imageUrl: v.string(),

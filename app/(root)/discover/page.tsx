@@ -397,7 +397,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                 {/* Enhanced loading state with improved skeleton UI */}
                 {isLoading ? (
                     <div className={viewMode === 'grid' ? "podcast_grid" : "flex flex-col gap-4"}>
-                        {[...Array(8)].map((_, index) => (
+                        {[...Array(6)].map((_, index) => (
                             <div key={index} className={`bg-white-1/5 rounded-xl overflow-hidden border border-white-1/10 shadow-md ${viewMode === 'list' ? "flex" : ""
                                 }`}>
                                 <div className={`${viewMode === 'grid' ? "w-full aspect-square" : "w-[120px] h-[120px]"} bg-white-1/10 animate-pulse relative`}>
