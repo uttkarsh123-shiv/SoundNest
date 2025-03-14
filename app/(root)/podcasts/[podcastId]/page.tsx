@@ -291,7 +291,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                     onMouseEnter={() => setHoveredRating(star)}
                     onMouseLeave={() => setHoveredRating(null)}
                     className="p-1 transition-transform hover:scale-110"
-                    disabled={hasRated && !isOwner}
+                    disabled={hasRated}
                   >
                     <Star
                       size={32}
