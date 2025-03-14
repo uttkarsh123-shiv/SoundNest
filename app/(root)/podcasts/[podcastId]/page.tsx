@@ -21,7 +21,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [hasRated, setHasRated] = useState(false);
   const [showRatingAnalysis, setShowRatingAnalysis] = useState(false);
-  
+
   // Comment state
   const [comment, setComment] = useState('');
   const [showComments, setShowComments] = useState(true);
@@ -37,7 +37,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
   const ratingDistribution = useQuery(api.podcasts.getRatingDistribution, {
     podcastId
   });
-  
+
   // Comments functionality
   const submitComment = useMutation(api.podcasts.addComment);
   const podcastComments = useQuery(api.podcasts.getPodcastComments, { podcastId });
@@ -69,10 +69,10 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       console.error("Error submitting rating:", error);
     }
   };
-  
+
   const handleCommentSubmit = async () => {
     if (!user || !comment.trim()) return;
-    
+
     try {
       await submitComment({
         podcastId,
@@ -343,9 +343,9 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
             <div className="mb-6">
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <img 
-                    src={user.imageUrl} 
-                    alt={user.fullName || "User"} 
+                  <img
+                    src={user.imageUrl}
+                    alt={user.fullName || "User"}
                     className="w-10 h-10 rounded-full object-cover"
                   />
                 </div>
@@ -353,6 +353,12 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                   <textarea
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
+                    onKeyDown={(e) => {
+                      // Prevent default behavior for space key to ensure it's captured
+                      if (e.key === ' ') {
+                        e.stopPropagation();
+                      }
+                    }}
                     placeholder="Share your thoughts about this podcast..."
                     className="w-full bg-black-1/50 border border-gray-800 rounded-lg p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-orange-1 min-h-[100px]"
                   />
@@ -360,11 +366,10 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                     <button
                       onClick={handleCommentSubmit}
                       disabled={!comment.trim()}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                        comment.trim()
+                      className={`px-4 py-2 rounded-lg font-medium transition-all ${comment.trim()
                           ? "bg-orange-1 text-black hover:bg-orange-2"
                           : "bg-white-1/10 text-white-3 cursor-not-allowed"
-                      }`}
+                        }`}
                     >
                       Post Comment
                     </button>
@@ -381,9 +386,9 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                 podcastComments.map((comment) => (
                   <div key={comment._id} className="flex gap-4">
                     <div className="flex-shrink-0">
-                      <img 
-                        src={comment.userImageUrl} 
-                        alt={comment.userName} 
+                      <img
+                        src={comment.userImageUrl}
+                        alt={comment.userName}
                         className="w-10 h-10 rounded-full object-cover"
                       />
                     </div>
