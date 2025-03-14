@@ -19,29 +19,39 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
     const router = useRouter()
+    
+    // Use the search query to get initial podcasts
     const podcastsData = useQuery(api.podcasts.getPodcastBySearch, { search: search || '' })
+    
+    // Use the getFilteredPodcasts query for sorting
+    const filteredPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, { type: filterOption })
 
     useEffect(() => {
-        if (podcastsData) {
+        if (podcastsData && filteredPodcastsData) {
             setIsLoading(false)
         }
-    }, [podcastsData])
+    }, [podcastsData, filteredPodcastsData])
 
-    // Filter podcasts based on selected option and categories
-    const filteredPodcasts = podcastsData ? [...podcastsData]
-        .filter(podcast => selectedCategories.length === 0 ||
-            (podcast.podcastType && selectedCategories.includes(podcast.podcastType)))
-        .filter(podcast => selectedLanguages.length === 0 ||
-            (podcast.language && selectedLanguages.includes(podcast.language)))
-        .sort((a, b) => {
-            if (filterOption === 'latest') {
-                return new Date(b._creationTime).getTime() - new Date(a._creationTime).getTime()
-            } else if (filterOption === 'trending') {
-                return (b.views || 0) - (a.views || 0)
-            } else {
-                return (b.likeCount || 0) - (a.likeCount || 0)
-            }
-        }) : []
+    // Combine search results with filtering and sorting
+    const filteredPodcasts = React.useMemo(() => {
+        if (!podcastsData || !filteredPodcastsData) return []
+        
+        // If there's a search query, filter the search results by categories and languages
+        if (search) {
+            return podcastsData
+                .filter(podcast => selectedCategories.length === 0 ||
+                    (podcast.podcastType && selectedCategories.includes(podcast.podcastType)))
+                .filter(podcast => selectedLanguages.length === 0 ||
+                    (podcast.language && selectedLanguages.includes(podcast.language)))
+        }
+        
+        // If no search query, use the filtered podcasts from the API and apply category/language filters
+        return filteredPodcastsData
+            .filter(podcast => selectedCategories.length === 0 ||
+                (podcast.podcastType && selectedCategories.includes(podcast.podcastType)))
+            .filter(podcast => selectedLanguages.length === 0 ||
+                (podcast.language && selectedLanguages.includes(podcast.language)))
+    }, [podcastsData, filteredPodcastsData, selectedCategories, selectedLanguages, search, filterOption])
 
     const toggleCategory = (category: string) => {
         if (selectedCategories.includes(category)) {

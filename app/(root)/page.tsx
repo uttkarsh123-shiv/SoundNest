@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 const Home = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 5);
+  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 3);
   const featuredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'popular' })?.slice(0, 2);
   const trendingPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'trending' })?.slice(0, 3);
   const topRatedPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'topRated' })?.slice(0, 3);
@@ -369,7 +369,7 @@ const Home = () => {
             ))
           ) : (
             <div className="flex flex-col gap-4">
-              {[...Array(5)].map((_, index) => (
+              {[...Array(3)].map((_, index) => (
                 <div key={index} className="flex items-center p-3 bg-white-1/5 rounded-lg">
                   <div className="w-8 text-center">
                     <div className="h-5 w-5 bg-orange-1/20 rounded animate-pulse mx-auto" />
