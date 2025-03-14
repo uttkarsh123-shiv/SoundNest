@@ -116,10 +116,26 @@ export const getFilteredPodcasts = query({
 
     switch (args.type) {
       case "popular":
-        sortedPodcasts = podcasts.sort(
-          (a, b) =>
-            ((b.likeCount && b.views) || 0) - ((a.likeCount && a.views) || 0)
-        );
+        // Calculate popularity score using the formula: (∑Ratings×Avg Rating)/5+(Likes×2)+(Views×1)
+        sortedPodcasts = podcasts.sort((a, b) => {
+          const aLikes = a.likeCount || 0;
+          const bLikes = b.likeCount || 0;
+          const aViews = a.views || 0;
+          const bViews = b.views || 0;
+          const aRatingCount = a.ratingCount || 0;
+          const bRatingCount = b.ratingCount || 0;
+          const aAvgRating = a.averageRating || 0;
+          const bAvgRating = b.averageRating || 0;
+
+          // Calculate popularity scores
+          const aRatingScore = (aRatingCount * aAvgRating) / 5;
+          const bRatingScore = (bRatingCount * bAvgRating) / 5;
+
+          const aScore = aRatingScore + aLikes * 2 + aViews;
+          const bScore = bRatingScore + bLikes * 2 + bViews;
+
+          return bScore - aScore; // Higher score first
+        });
         break;
       case "trending":
         // Calculate trending score using the formula: (Likes×2)+(Views×1)/((Days Since Release+1)^1.2)
@@ -128,16 +144,20 @@ export const getFilteredPodcasts = query({
           const bLikes = b.likeCount || 0;
           const aViews = a.views || 0;
           const bViews = b.views || 0;
-          
+
           // Calculate days since release
           const now = Date.now();
-          const aDaysSinceRelease = (now - a._creationTime) / (1000 * 60 * 60 * 24);
-          const bDaysSinceRelease = (now - b._creationTime) / (1000 * 60 * 60 * 24);
-          
+          const aDaysSinceRelease =
+            (now - a._creationTime) / (1000 * 60 * 60 * 24);
+          const bDaysSinceRelease =
+            (now - b._creationTime) / (1000 * 60 * 60 * 24);
+
           // Calculate trending scores
-          const aScore = ((aLikes * 2) + aViews) / Math.pow(aDaysSinceRelease + 1, 1.2);
-          const bScore = ((bLikes * 2) + bViews) / Math.pow(bDaysSinceRelease + 1, 1.2);
-          
+          const aScore =
+            (aLikes * 2 + aViews) / Math.pow(aDaysSinceRelease + 1, 1.2);
+          const bScore =
+            (bLikes * 2 + bViews) / Math.pow(bDaysSinceRelease + 1, 1.2);
+
           return bScore - aScore; // Higher score first
         });
         break;
@@ -290,15 +310,15 @@ export const ratePodcast = mutation({
   },
   handler: async (ctx, args) => {
     const { podcastId, userId, rating } = args;
-    
+
     // Check if the user has already rated this podcast
     const existingRating = await ctx.db
       .query("ratings")
-      .withIndex("by_user_and_podcast", (q) => 
+      .withIndex("by_user_and_podcast", (q) =>
         q.eq("userId", userId).eq("podcastId", podcastId)
       )
       .first();
-    
+
     if (existingRating) {
       // Update existing rating
       await ctx.db.patch(existingRating._id, { rating });
@@ -311,22 +331,22 @@ export const ratePodcast = mutation({
         createdAt: new Date().toISOString(),
       });
     }
-    
+
     // Calculate new average rating
     const allRatings = await ctx.db
       .query("ratings")
       .withIndex("by_podcast", (q) => q.eq("podcastId", podcastId))
       .collect();
-    
+
     const totalRating = allRatings.reduce((sum, r) => sum + r.rating, 0);
     const averageRating = totalRating / allRatings.length;
-    
+
     // Update podcast with new average rating and count
     await ctx.db.patch(podcastId, {
       averageRating,
       ratingCount: allRatings.length,
     });
-    
+
     return { success: true };
   },
 });
@@ -339,16 +359,16 @@ export const getUserRating = query({
   },
   handler: async (ctx, args) => {
     const { podcastId, userId } = args;
-    
+
     if (!userId) return null;
-    
+
     const rating = await ctx.db
       .query("ratings")
-      .withIndex("by_user_and_podcast", (q) => 
+      .withIndex("by_user_and_podcast", (q) =>
         q.eq("userId", userId).eq("podcastId", podcastId)
       )
       .first();
-    
+
     return rating ? { rating: rating.rating } : null;
   },
 });
@@ -360,30 +380,30 @@ export const getRatingDistribution = query({
   },
   handler: async (ctx, args) => {
     const { podcastId } = args;
-    
+
     // Get all ratings for this podcast
     const allRatings = await ctx.db
       .query("ratings")
       .withIndex("by_podcast", (q) => q.eq("podcastId", podcastId))
       .collect();
-    
+
     // Count ratings for each star level (1-5)
     const distribution = {
       1: 0,
       2: 0,
       3: 0,
       4: 0,
-      5: 0
+      5: 0,
     };
-    
+
     // Count each rating
-    allRatings.forEach(rating => {
+    allRatings.forEach((rating) => {
       const starRating = rating.rating;
       if (starRating >= 1 && starRating <= 5) {
         distribution[starRating]++;
       }
     });
-    
+
     return distribution;
   },
 });
@@ -399,13 +419,13 @@ export const addComment = mutation({
   },
   handler: async (ctx, args) => {
     const { podcastId, userId, userName, userImageUrl, content } = args;
-    
+
     // Verify the podcast exists
     const podcast = await ctx.db.get(podcastId);
     if (!podcast) {
       throw new ConvexError("Podcast not found");
     }
-    
+
     // Create the comment
     return await ctx.db.insert("comments", {
       podcastId,
@@ -425,7 +445,7 @@ export const getPodcastComments = query({
   },
   handler: async (ctx, args) => {
     const { podcastId } = args;
-    
+
     return await ctx.db
       .query("comments")
       .withIndex("by_podcast", (q) => q.eq("podcastId", podcastId))
@@ -442,25 +462,25 @@ export const deleteComment = mutation({
     commentId: v.string(),
     userId: v.string(),
     podcastId: v.id("podcasts"),
-    isOwner: v.boolean()
+    isOwner: v.boolean(),
   },
   handler: async (ctx, args) => {
     // Get the comment
     const comment = await ctx.db.get(args.commentId as Id<"comments">);
-    
+
     if (!comment) {
       throw new Error("Comment not found");
     }
-    
+
     // Check if the user is authorized to delete this comment
     // Allow deletion if user is the comment author or the podcast owner
     if (comment.userId !== args.userId && !args.isOwner) {
       throw new Error("Unauthorized to delete this comment");
     }
-    
+
     // Delete the comment
     await ctx.db.delete(args.commentId as Id<"comments">);
-    
+
     return { success: true };
   },
 });
