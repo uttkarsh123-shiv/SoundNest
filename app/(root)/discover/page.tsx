@@ -22,7 +22,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
 
     // Use the search query to get initial podcasts
     const podcastsData = useQuery(api.podcasts.getPodcastBySearch, { search: search || '' })
-
+    
     // Use the getFilteredPodcasts query for sorting
     const filteredPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, { type: filterOption })
 
@@ -35,22 +35,43 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
     // Combine search results with filtering and sorting
     const filteredPodcasts = React.useMemo(() => {
         if (!podcastsData || !filteredPodcastsData) return []
-
-        // If there's a search query, filter the search results by categories and languages
+        
+        let resultPodcasts = [];
+        
+        // If there's a search query, get search results but apply the same sorting logic
         if (search) {
-            return podcastsData
-                .filter(podcast => selectedCategories.length === 0 ||
-                    (podcast.podcastType && selectedCategories.includes(podcast.podcastType)))
-                .filter(podcast => selectedLanguages.length === 0 ||
-                    (podcast.language && selectedLanguages.includes(podcast.language)))
+            // Get the search results
+            const searchResults = [...podcastsData];
+            
+            // Apply the same sorting logic from filteredPodcastsData
+            // Find matching podcasts in filteredPodcastsData to preserve their order
+            const orderedResults = filteredPodcastsData
+                .filter(filteredPodcast => 
+                    searchResults.some(searchPodcast => 
+                        searchPodcast._id === filteredPodcast._id
+                    )
+                );
+                
+            // Add any remaining search results that weren't in the filtered results
+            const remainingResults = searchResults.filter(searchPodcast => 
+                !orderedResults.some(orderedPodcast => 
+                    orderedPodcast._id === searchPodcast._id
+                )
+            );
+            
+            resultPodcasts = [...orderedResults, ...remainingResults];
+        } else {
+            // If no search query, use the filtered podcasts from the API
+            resultPodcasts = filteredPodcastsData;
         }
-
-        // If no search query, use the filtered podcasts from the API and apply category/language filters
-        return filteredPodcastsData
+        
+        // Apply category and language filters
+        return resultPodcasts
             .filter(podcast => selectedCategories.length === 0 ||
                 (podcast.podcastType && selectedCategories.includes(podcast.podcastType)))
             .filter(podcast => selectedLanguages.length === 0 ||
-                (podcast.language && selectedLanguages.includes(podcast.language)))
+                (podcast.language && selectedLanguages.includes(podcast.language)));
+                
     }, [podcastsData, filteredPodcastsData, selectedCategories, selectedLanguages, search, filterOption])
 
     const toggleCategory = (category: string) => {
