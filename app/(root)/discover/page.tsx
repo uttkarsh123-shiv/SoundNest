@@ -4,13 +4,13 @@ import Searchbar from '@/components/Searchbar'
 import { api } from '@/convex/_generated/api'
 import { podcastTypes, languageOptions } from '@/constants/PodcastFields'
 import { useQuery } from 'convex/react'
-import { Filter, Clock, TrendingUp, Heart, RefreshCw, X, Globe, LayoutGrid, List, Star } from 'lucide-react'
+import { Filter, Clock, TrendingUp, Heart, RefreshCw, X, Globe, LayoutGrid, List, Star, Headphones } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 const Discover = ({ searchParams: { search } }: { searchParams: { search: string } }) => {
-    const [filterOption, setFilterOption] = useState<'latest' | 'trending' | 'popular'>('trending')
+    const [filterOption, setFilterOption] = useState<'latest' | 'trending' | 'popular' | 'topRated'>('trending')
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -202,6 +202,16 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                     >
                                         <Heart size={15} />
                                         Popular
+                                    </button>
+                                    <button
+                                        onClick={() => setFilterOption('topRated')}
+                                        className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 ${filterOption === 'topRated'
+                                            ? 'bg-orange-1 text-black shadow-md'
+                                            : 'text-white-2 hover:bg-white-1/10'
+                                            }`}
+                                    >
+                                        <Star size={15} />
+                                        Top Rated
                                     </button>
                                 </div>
                             </div>
@@ -423,7 +433,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                                             <span className="text-xs text-white-2">{podcast.likeCount || 0}</span>
                                                         </div>
                                                         <div className="flex items-center gap-1">
-                                                            <TrendingUp size={14} className="text-white-3" />
+                                                            <Headphones size={14} className="text-white-3" />
                                                             <span className="text-xs text-white-2">{podcast.views || 0}</span>
                                                         </div>
                                                     </div>
