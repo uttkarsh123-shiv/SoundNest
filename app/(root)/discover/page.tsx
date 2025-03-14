@@ -436,11 +436,23 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                                             <Headphones size={14} className="text-white-3" />
                                                             <span className="text-xs text-white-2">{podcast.views || 0}</span>
                                                         </div>
+                                                        {podcast.averageRating && (
+                                                            <div className="flex items-center gap-1">
+                                                                <Star size={14} className="text-white-3" />
+                                                                <span className="text-xs text-white-2">
+                                                                    {podcast.averageRating.toFixed(1)}
+                                                                </span>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    {podcast.audioDuration && (
+                                                    {podcast.audioDuration !== undefined && (
                                                         <div className="flex items-center gap-1">
                                                             <Clock size={14} className="text-white-3" />
-                                                            <span className="text-xs text-white-2">{Math.floor(podcast.audioDuration / 60)} min</span>
+                                                            <span className="text-xs text-white-2">
+                                                                {Math.floor(podcast.audioDuration / 60) > 0 
+                                                                    ? `${Math.floor(podcast.audioDuration / 60)} min` 
+                                                                    : `${Math.round(podcast.audioDuration)} sec`}
+                                                            </span>
                                                         </div>
                                                     )}
                                                 </div>
