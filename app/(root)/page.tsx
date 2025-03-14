@@ -5,16 +5,17 @@ import { api } from "@/convex/_generated/api";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { TrendingUp, Clock, Headphones, Heart, ArrowRight, Play } from "lucide-react";
+import { TrendingUp, Clock, Headphones, Heart, ArrowRight, Play, Star } from "lucide-react";
 import useEmblaCarousel from 'embla-carousel-react';
 import { useEffect, useState } from 'react';
 
 const Home = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 5);
-  const featuredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'popular' })?.slice(0, 3);
-  const trendingPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'trending' })?.slice(0, 6);
+  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 3);
+  const featuredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'popular' })?.slice(0, 2);
+  const trendingPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'trending' })?.slice(0, 3);
+  const topRatedPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'topRated' })?.slice(0, 3);
   const router = useRouter();
 
   // Add auto-scroll functionality
@@ -130,8 +131,9 @@ const Home = () => {
         </section>
       ) : (
         <section className="relative w-full h-[300px]">
-          <div className="rounded-2xl overflow-hidden bg-white-1/5 h-full">
+          <div className="rounded-2xl overflow-hidden bg-white-1/5 h-full border border-white-1/10 shadow-md">
             <div className="relative w-full h-full">
+              <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/50" />
               <div className="relative h-full flex flex-col justify-end p-6 gap-4">
                 <div className="flex items-center gap-3">
@@ -154,7 +156,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-center w-full mt-8">
+          <div className="flex justify-center w-full mt-4">
             <div className="flex gap-3">
               {[...Array(3)].map((_, index) => (
                 <div key={index} className="w-3 h-3 rounded-full bg-white-1/10 animate-pulse" />
@@ -165,7 +167,7 @@ const Home = () => {
       )}
 
       {/* Trending */}
-      <section className="flex flex-col gap-5 mt-6">
+      <section className="flex flex-col gap-5 mt-12">
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="bg-orange-1/10 p-3 rounded-xl">
@@ -196,12 +198,71 @@ const Home = () => {
             ))
           ) : (
             <>
-              {[...Array(6)].map((_, index) => (
-                <div key={index} className="bg-white-1/5 rounded-xl overflow-hidden">
-                  <div className="w-full aspect-square bg-white-1/10 animate-pulse " />
+              {[...Array(3)].map((_, index) => (
+                <div key={index} className="bg-white-1/5 rounded-xl overflow-hidden border border-white-1/10 shadow-md">
+                  <div className="w-full aspect-square bg-white-1/10 animate-pulse relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
+                  </div>
                   <div className="p-4 space-y-3">
-                    <div className="h-5 bg-white-1/10 rounded animate-pulse w-3/4" />
-                    <div className="h-4 bg-white-1/10 rounded animate-pulse w-full" />
+                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${70 + Math.random() * 25}%` }} />
+                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
+                    <div className="flex justify-between pt-2">
+                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
+                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* Top Rated */}
+      <section className="flex flex-col gap-5 mt-12">
+        <header className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="bg-orange-1/10 p-3 rounded-xl">
+              <Star size={28} className="text-orange-1" />
+            </div>
+            <h1 className="text-2xl font-bold text-white-1">Top Rated Podcasts</h1>
+          </div>
+          <Link
+            href="/discover"
+            className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition"
+          >
+            See all
+            <ArrowRight size={20} className="text-orange-1" />
+          </Link>
+        </header>
+        <div className="podcast_grid">
+          {topRatedPodcasts ? (
+            topRatedPodcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount, averageRating }) => (
+              <PodcastCard
+                key={_id}
+                imgUrl={imageUrl as string}
+                title={podcastTitle}
+                description={podcastDescription}
+                podcastId={_id}
+                views={views}
+                likes={likeCount || 0}
+                rating={averageRating}
+              />
+            ))
+          ) : (
+            <>
+              {[...Array(3)].map((_, index) => (
+                <div key={index} className="bg-white-1/5 rounded-xl overflow-hidden border border-white-1/10 shadow-md">
+                  <div className="w-full aspect-square bg-white-1/10 animate-pulse relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
+                  </div>
+                  <div className="p-4 space-y-3">
+                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${70 + Math.random() * 25}%` }} />
+                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
+                    <div className="flex justify-between pt-2">
+                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
+                      <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -211,7 +272,7 @@ const Home = () => {
       </section>
 
       {/* Latest */}
-      <section className="flex flex-col gap-5 mt-6">
+      <section className="flex flex-col gap-5 mt-12">
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="bg-orange-1/10 p-3 rounded-xl">

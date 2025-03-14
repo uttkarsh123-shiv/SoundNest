@@ -137,6 +137,27 @@ export const getFilteredPodcasts = query({
           return bScore - aScore; // Higher score first
         });
         break;
+      case "topRated":
+        // Sort by average rating, considering only podcasts with at least one rating
+        sortedPodcasts = podcasts.sort((a, b) => {
+          const aRating = a.averageRating || 0;
+          const bRating = b.averageRating || 0;
+          const aCount = a.ratingCount || 0;
+          const bCount = b.ratingCount || 0;
+
+          // If both have ratings, compare by rating
+          if (aCount > 0 && bCount > 0) {
+            return bRating - aRating;
+          }
+
+          // If only one has ratings, prioritize the one with ratings
+          if (aCount > 0) return -1;
+          if (bCount > 0) return 1;
+
+          // If neither has ratings, sort by views as a fallback
+          return b.views - a.views;
+        });
+        break;
       case "trending":
         // Calculate trending score using the formula: (Likes×2)+(Views×1)/((Days Since Release+1)^1.2)
         sortedPodcasts = podcasts.sort((a, b) => {
