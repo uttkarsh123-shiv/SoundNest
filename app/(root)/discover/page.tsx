@@ -19,10 +19,10 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
     const router = useRouter()
-    
+
     // Use the search query to get initial podcasts
     const podcastsData = useQuery(api.podcasts.getPodcastBySearch, { search: search || '' })
-    
+
     // Use the getFilteredPodcasts query for sorting
     const filteredPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, { type: filterOption })
 
@@ -35,7 +35,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
     // Combine search results with filtering and sorting
     const filteredPodcasts = React.useMemo(() => {
         if (!podcastsData || !filteredPodcastsData) return []
-        
+
         // If there's a search query, filter the search results by categories and languages
         if (search) {
             return podcastsData
@@ -44,7 +44,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                 .filter(podcast => selectedLanguages.length === 0 ||
                     (podcast.language && selectedLanguages.includes(podcast.language)))
         }
-        
+
         // If no search query, use the filtered podcasts from the API and apply category/language filters
         return filteredPodcastsData
             .filter(podcast => selectedCategories.length === 0 ||
@@ -416,7 +416,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                             </div>
                                             <div className="p-4 flex-1">
                                                 <h3 className="text-white-1 font-bold truncate">{podcast.podcastTitle}</h3>
-                                                <p className={`text-white-2 text-sm mt-1 ${viewMode === 'grid' ? "line-clamp-2" : "line-clamp-1"}`}>
+                                                <p className={`text-white-2 text-sm mt-1 ${viewMode === 'grid' ? "line-clamp-2 min-h-[40px]" : "line-clamp-1"}`}>
                                                     {podcast.podcastDescription}
                                                 </p>
 
@@ -449,8 +449,8 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                                         <div className="flex items-center gap-1">
                                                             <Clock size={14} className="text-white-3" />
                                                             <span className="text-xs text-white-2">
-                                                                {Math.floor(podcast.audioDuration / 60) > 0 
-                                                                    ? `${Math.floor(podcast.audioDuration / 60)} min` 
+                                                                {Math.floor(podcast.audioDuration / 60) > 0
+                                                                    ? `${Math.floor(podcast.audioDuration / 60)} min`
                                                                     : `${Math.round(podcast.audioDuration)} sec`}
                                                             </span>
                                                         </div>
