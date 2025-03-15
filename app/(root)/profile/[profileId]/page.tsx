@@ -35,24 +35,22 @@ const ProfilePage = ({
   return (
     <section className="mt-9 flex flex-col">
       {/* Profile Header */}
-      <div className="relative w-full rounded-2xl overflow-hidden mb-8">
+      <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-lg">
         {/* Banner Background */}
-        <div className="h-48 bg-gradient-to-r from-orange-1/30 to-purple-600/30 relative">
-          {/* Removing the noise.png reference that's causing 404 error */}
-          {/* Adding a CSS-based noise texture instead */}
+        <div className="h-56 bg-gradient-to-r from-orange-1/30 via-purple-600/30 to-blue-600/20 relative">
           <div className="absolute inset-0 opacity-20" 
                style={{ 
                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` 
                }}>
           </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         </div>
         
-        {/* Rest of the component remains unchanged */}
         {/* Profile Info */}
-        <div className="relative px-6 pb-6 -mt-20 flex flex-col md:flex-row md:items-end gap-6">
+        <div className="relative px-6 sm:px-8 pb-8 -mt-24 flex flex-col md:flex-row md:items-end gap-8">
           {/* Profile Image */}
           <div className="relative z-10">
-            <div className="size-36 rounded-full border-4 border-black overflow-hidden bg-white-1/10">
+            <div className="size-36 sm:size-40 rounded-full border-4 border-black shadow-xl overflow-hidden bg-white-1/10">
               {user?.imageUrl ? (
                 <Image 
                   src={user.imageUrl} 
@@ -69,29 +67,37 @@ const ProfilePage = ({
           </div>
           
           {/* Profile Details */}
-          <div className="flex flex-col md:flex-1">
-            <h1 className="text-3xl font-bold text-white-1">{user?.name || "Podcaster"}</h1>
-            <p className="text-white-2 mt-1 flex items-center gap-2">
-              <Mic size={16} className="text-orange-1" />
-              {podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}
-              <span className="mx-2">•</span>
-              <Calendar size={16} className="text-orange-1" />
-              Joined {new Date(user?.createdAt || Date.now()).toLocaleDateString()}
+          <div className="flex flex-col md:flex-1 mt-3 md:mt-0">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white-1 drop-shadow-sm tracking-tight">{user?.name || "Podcaster"}</h1>
+            <p className="text-white-2 mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
+              <span className="flex items-center gap-2">
+                <Mic size={16} className="text-orange-1" />
+                <span className="font-medium">{podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}</span>
+              </span>
+              <span className="mx-1 text-white-2/50">•</span>
+              <span className="flex items-center gap-2">
+                <Calendar size={16} className="text-orange-1" />
+                <span>Joined {new Date(user?.createdAt || Date.now()).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                })}</span>
+              </span>
             </p>
           </div>
           
           {/* Stats Cards - Desktop */}
           <div className="hidden md:flex gap-4">
-            <StatCard icon={<Headphones size={20} />} value={totalViews.toString()} label="Total Views" />
-            <StatCard icon={<Heart size={20} />} value={totalLikes.toString()} label="Total Likes" />
+            <StatCard icon={<Headphones size={20} />} value={totalViews.toLocaleString()} label="Total Views" />
+            <StatCard icon={<Heart size={20} />} value={totalLikes.toLocaleString()} label="Total Likes" />
             <StatCard icon={<Star size={20} />} value={averageRating} label="Avg Rating" />
           </div>
         </div>
         
         {/* Stats Cards - Mobile */}
-        <div className="flex md:hidden gap-3 px-6 mt-4 overflow-x-auto pb-2">
-          <StatCard icon={<Headphones size={20} />} value={totalViews.toString()} label="Total Views" />
-          <StatCard icon={<Heart size={20} />} value={totalLikes.toString()} label="Total Likes" />
+        <div className="flex md:hidden gap-4 px-6 mt-4 overflow-x-auto pb-4 snap-x">
+          <StatCard icon={<Headphones size={20} />} value={totalViews.toLocaleString()} label="Total Views" />
+          <StatCard icon={<Heart size={20} />} value={totalLikes.toLocaleString()} label="Total Likes" />
           <StatCard icon={<Star size={20} />} value={averageRating} label="Avg Rating" />
         </div>
       </div>
