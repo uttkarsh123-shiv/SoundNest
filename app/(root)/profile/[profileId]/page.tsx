@@ -156,27 +156,6 @@ const ProfilePage = ({
                 {user.bio}
               </p>
             )}
-            
-            {/* Action buttons */}
-            <div className="flex flex-wrap gap-3 mt-4">
-              {podcastsData.podcasts.length > 0 && (
-                <Button 
-                  onClick={playRandomPodcast}
-                  className="bg-orange-1 hover:bg-orange-1/90 text-white-1 flex items-center gap-2"
-                >
-                  <Play size={16} />
-                  Play Random Podcast
-                </Button>
-              )}
-              
-              <Button 
-                onClick={shareProfile}
-                className="bg-white-1/10 hover:bg-white-1/20 text-white-1 flex items-center gap-2 border border-white-1/20"
-              >
-                <Share2 size={16} />
-                Share Profile
-              </Button>
-            </div>
           </div>
 
           {/* Stats Cards - Desktop */}
@@ -193,6 +172,27 @@ const ProfilePage = ({
           <StatCard icon={<Heart size={20} />} value={totalLikes.toLocaleString()} label="Total Likes" />
           <StatCard icon={<Star size={20} />} value={averageRating} label="Avg Rating" />
         </div>
+      </div>
+
+      {/* Action buttons - Moved outside of profile banner */}
+      <div className="flex flex-wrap gap-3 mb-8">
+        {podcastsData.podcasts.length > 0 && (
+          <Button 
+            onClick={playRandomPodcast}
+            className="bg-orange-1 hover:bg-orange-1/90 text-white-1 flex items-center gap-2"
+          >
+            <Play size={16} />
+            Play Random Podcast
+          </Button>
+        )}
+        
+        <Button 
+          onClick={shareProfile}
+          className="bg-white-1/10 hover:bg-white-1/20 text-white-1 flex items-center gap-2 border border-white-1/20"
+        >
+          <Share2 size={16} />
+          Share Profile
+        </Button>
       </div>
 
       {/* Podcasts Section */}
