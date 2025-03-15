@@ -3,7 +3,7 @@
 import { useQuery } from "convex/react";
 import Image from "next/image";
 import { useState } from "react";
-import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Bookmark, Clock, Award } from "lucide-react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award } from "lucide-react";
 
 import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
@@ -33,7 +33,6 @@ const ProfilePage = ({
   const { setAudio } = useAudio();
   const { toast } = useToast();
   const [randomPodcast, setRandomPodcast] = useState<PodcastProps | null>(null);
-  const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest');
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const { userId } = useAuth(); // Add this to get the current user's ID
@@ -372,11 +371,8 @@ const ProfilePage = ({
       )}
 
       {/* Tabbed Content Section */}
-      <Tabs defaultValue="all" className="mb-10" onValueChange={setActiveTab}>
+      <Tabs defaultValue="popular" className="mb-10" onValueChange={setActiveTab}>
         <TabsList className="bg-white-1/5 border border-white-1/10 mb-6">
-          <TabsTrigger value="all" className="data-[state=active]:bg-orange-1 data-[state=active]:text-white-1">
-            All Podcasts
-          </TabsTrigger>
           <TabsTrigger value="popular" className="data-[state=active]:bg-orange-1 data-[state=active]:text-white-1">
             Popular
           </TabsTrigger>
@@ -384,41 +380,6 @@ const ProfilePage = ({
             Recent
           </TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="all" className="mt-0">
-          <section className="flex flex-col gap-5">
-            <div className="flex items-center gap-4">
-              <div className="bg-orange-1/10 p-3 rounded-xl">
-                <Mic size={28} className="text-orange-1" />
-              </div>
-              <h1 className="text-2xl font-bold text-white-1">All Podcasts</h1>
-            </div>
-
-            {podcastsData && podcastsData.podcasts.length > 0 ? (
-              <div className="podcast_grid gap-6">
-                {sortedPodcasts.map((podcast) => (
-                  <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
-                    <PodcastCard
-                      imgUrl={podcast.imageUrl!}
-                      title={podcast.podcastTitle!}
-                      description={podcast.podcastDescription}
-                      podcastId={podcast._id}
-                      views={podcast.views}
-                      likes={podcast.likeCount || 0}
-                      rating={podcast.averageRating}
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                title="No podcasts found"
-                buttonLink="/create-podcast"
-                buttonText="Create Podcast"
-              />
-            )}
-          </section>
-        </TabsContent>
         
         <TabsContent value="popular" className="mt-0">
           <section className="flex flex-col gap-5">
