@@ -9,17 +9,23 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-const Discover = ({ searchParams: { search } }: { searchParams: { search: string } }) => {
-    const [filterOption, setFilterOption] = useState<'latest' | 'trending' | 'popular' | 'topRated'>('trending')
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-    const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [showCategoryFilter, setShowCategoryFilter] = useState(false)
-    const [showLanguageFilter, setShowLanguageFilter] = useState(false)
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+const Discover = ({ searchParams }: { searchParams: { search: string, filter?: string } }) => {
+    const [filterOption, setFilterOption] = useState<'latest' | 'trending' | 'popular' | 'topRated'>(
+        searchParams.filter as any === 'latest' ? 'latest' :
+        searchParams.filter as any === 'topRated' ? 'topRated' :
+        searchParams.filter as any === 'popular' ? 'popular' :
+        searchParams.filter as any === 'trending' ? 'trending' : 'trending'
+    );
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [showCategoryFilter, setShowCategoryFilter] = useState(false);
+    const [showLanguageFilter, setShowLanguageFilter] = useState(false);
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-    const router = useRouter()
-
+    const router = useRouter();
+    const search = searchParams.search || '';
+    
     // Use the search query to get initial podcasts
     const podcastsData = useQuery(api.podcasts.getPodcastBySearch, { search: search || '' })
     

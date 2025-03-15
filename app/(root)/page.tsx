@@ -185,7 +185,7 @@ const Home = () => {
             <h1 className="text-2xl font-bold text-white-1">Trending Podcasts</h1>
           </div>
           <Link
-            href="/discover"
+            href="/discover?filter=trending"
             className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
           >
             See all
@@ -243,7 +243,7 @@ const Home = () => {
             <h1 className="text-2xl font-bold text-white-1">Top Rated Podcasts</h1>
           </div>
           <Link
-            href="/discover"
+            href="/discover?filter=topRated"
             className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
           >
             See all
@@ -306,7 +306,7 @@ const Home = () => {
             <h1 className="text-2xl font-bold text-white-1">Latest Podcasts</h1>
           </div>
           <Link
-            href="/discover"
+            href="/discover?filter=latest"
             className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
           >
             See all
