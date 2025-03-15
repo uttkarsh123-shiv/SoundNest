@@ -1,13 +1,18 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useQuery} from "convex/react";
 import Image from "next/image";
-import { Headphones, Heart, Star, User, Mic, Calendar } from "lucide-react";
+import { useState } from "react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2 } from "lucide-react";
 
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import PodcastCard from "@/components/PodcastCard";
 import { api } from "@/convex/_generated/api";
+import { Button } from "@/components/ui/button";
+import { useAudio } from "@/providers/AudioProvider";
+import { useToast } from "@/components/ui/use-toast";
+import { PodcastProps } from "@/types";
 
 const ProfilePage = ({
   params,
@@ -22,6 +27,10 @@ const ProfilePage = ({
   const podcastsData = useQuery(api.podcasts.getPodcastByAuthorId, {
     authorId: params.profileId,
   });
+  const { setAudio } = useAudio();
+  const { toast } = useToast();
+  const [randomPodcast, setRandomPodcast] = useState<PodcastProps | null>(null);
+  const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest');
 
   if (!user || !podcastsData) return <LoaderSpinner />;
 
@@ -31,6 +40,63 @@ const ProfilePage = ({
   const averageRating = podcastsData.podcasts.length > 0
     ? (podcastsData.podcasts.reduce((sum, podcast) => sum + (podcast.averageRating || 0), 0) / podcastsData.podcasts.length).toFixed(1)
     : "0.0";
+
+  // Play random podcast function
+  const playRandomPodcast = () => {
+    if (podcastsData.podcasts.length === 0) return;
+    
+    const randomIndex = Math.floor(Math.random() * podcastsData.podcasts.length);
+    const podcast = podcastsData.podcasts[randomIndex];
+    
+    setRandomPodcast(podcast);
+    setAudio({
+      title: podcast.podcastTitle || "",
+      audioUrl: podcast.audioUrl || "",
+      imageUrl: podcast.imageUrl || "",
+      author: podcast.author || "",
+      podcastId: podcast._id,
+    });
+
+    toast({
+      title: "Now Playing",
+      description: `${podcast.podcastTitle} by ${podcast.author}`,
+      duration: 3000,
+    });
+  };
+
+  // Share profile function
+  const shareProfile = async () => {
+    const url = window.location.href;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${user?.name}'s Podcast Profile`,
+          text: `Check out ${user?.name}'s podcasts on PodTales!`,
+          url: url,
+        });
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+    } else {
+      // Fallback for browsers that don't support the Web Share API
+      navigator.clipboard.writeText(url);
+      toast({
+        title: "Link Copied!",
+        description: "Profile link copied to clipboard",
+        duration: 3000,
+      });
+    }
+  };
+
+  // Sort podcasts based on selection
+  const sortedPodcasts = [...podcastsData.podcasts].sort((a, b) => {
+    if (sortBy === 'latest') {
+      return (b._creationTime || 0) - (a._creationTime || 0);
+    } else {
+      return (b.views || 0) - (a.views || 0);
+    }
+  });
 
   return (
     <section className="mt-9 flex flex-col">
@@ -83,6 +149,34 @@ const ProfilePage = ({
                 })}</span>
               </span>
             </p>
+            
+            {/* Bio section */}
+            {user?.bio && (
+              <p className="text-white-2 mt-4 text-sm sm:text-base max-w-2xl">
+                {user.bio}
+              </p>
+            )}
+            
+            {/* Action buttons */}
+            <div className="flex flex-wrap gap-3 mt-4">
+              {podcastsData.podcasts.length > 0 && (
+                <Button 
+                  onClick={playRandomPodcast}
+                  className="bg-orange-1 hover:bg-orange-1/90 text-white-1 flex items-center gap-2"
+                >
+                  <Play size={16} />
+                  Play Random Podcast
+                </Button>
+              )}
+              
+              <Button 
+                onClick={shareProfile}
+                className="bg-white-1/10 hover:bg-white-1/20 text-white-1 flex items-center gap-2 border border-white-1/20"
+              >
+                <Share2 size={16} />
+                Share Profile
+              </Button>
+            </div>
           </div>
 
           {/* Stats Cards - Desktop */}
@@ -103,26 +197,51 @@ const ProfilePage = ({
 
       {/* Podcasts Section */}
       <section className="mt-6 flex flex-col gap-5">
-        <div className="flex items-center gap-4">
-          <div className="bg-orange-1/10 p-3 rounded-xl">
-            <Mic size={28} className="text-orange-1" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="bg-orange-1/10 p-3 rounded-xl">
+              <Mic size={28} className="text-orange-1" />
+            </div>
+            <h1 className="text-2xl font-bold text-white-1">All Podcasts</h1>
           </div>
-          <h1 className="text-2xl font-bold text-white-1">All Podcasts</h1>
+          
+          {/* Sort options */}
+          {podcastsData.podcasts.length > 1 && (
+            <div className="flex gap-2">
+              <Button 
+                variant={sortBy === 'latest' ? 'default' : 'outline'} 
+                size="sm"
+                onClick={() => setSortBy('latest')}
+                className={sortBy === 'latest' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
+              >
+                Latest
+              </Button>
+              <Button 
+                variant={sortBy === 'popular' ? 'default' : 'outline'} 
+                size="sm"
+                onClick={() => setSortBy('popular')}
+                className={sortBy === 'popular' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
+              >
+                Popular
+              </Button>
+            </div>
+          )}
         </div>
 
         {podcastsData && podcastsData.podcasts.length > 0 ? (
-          <div className="podcast_grid">
-            {podcastsData.podcasts.map((podcast) => (
-              <PodcastCard
-                key={podcast._id}
-                imgUrl={podcast.imageUrl!}
-                title={podcast.podcastTitle!}
-                description={podcast.podcastDescription}
-                podcastId={podcast._id}
-                views={podcast.views}
-                likes={podcast.likeCount || 0}
-                rating={podcast.averageRating}
-              />
+          <div className="podcast_grid gap-6">
+            {sortedPodcasts.map((podcast) => (
+              <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
+                <PodcastCard
+                  imgUrl={podcast.imageUrl!}
+                  title={podcast.podcastTitle!}
+                  description={podcast.podcastDescription}
+                  podcastId={podcast._id}
+                  views={podcast.views}
+                  likes={podcast.likeCount || 0}
+                  rating={podcast.averageRating}
+                />
+              </div>
             ))}
           </div>
         ) : (
@@ -139,7 +258,7 @@ const ProfilePage = ({
 
 // Stat Card Component
 const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string, label: string }) => (
-  <div className="bg-white-1/5 rounded-xl p-3 flex flex-col items-center min-w-24 border border-white-1/10">
+  <div className="bg-white-1/5 rounded-xl p-3 flex flex-col items-center min-w-24 border border-white-1/10 hover:bg-white-1/10 transition-colors">
     <div className="text-orange-1 mb-1">{icon}</div>
     <div className="text-xl font-bold text-white-1">{value}</div>
     <div className="text-xs text-white-2">{label}</div>
