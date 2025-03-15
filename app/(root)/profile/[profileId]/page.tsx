@@ -1,9 +1,9 @@
 "use client";
 
-import { useQuery} from "convex/react";
+import { useQuery } from "convex/react";
 import Image from "next/image";
 import { useState } from "react";
-import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2 } from "lucide-react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Bookmark, Clock, Award } from "lucide-react";
 
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { useAudio } from "@/providers/AudioProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { PodcastProps } from "@/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 const ProfilePage = ({
   params,
@@ -31,6 +33,8 @@ const ProfilePage = ({
   const { toast } = useToast();
   const [randomPodcast, setRandomPodcast] = useState<PodcastProps | null>(null);
   const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest');
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
 
   if (!user || !podcastsData) return <LoaderSpinner />;
 
@@ -40,6 +44,11 @@ const ProfilePage = ({
   const averageRating = podcastsData.podcasts.length > 0
     ? (podcastsData.podcasts.reduce((sum, podcast) => sum + (podcast.averageRating || 0), 0) / podcastsData.podcasts.length).toFixed(1)
     : "0.0";
+
+  // Get featured podcast (most viewed)
+  const featuredPodcast = podcastsData.podcasts.length > 0 
+    ? [...podcastsData.podcasts].sort((a, b) => (b.views || 0) - (a.views || 0))[0]
+    : null;
 
   // Play random podcast function
   const playRandomPodcast = () => {
@@ -89,6 +98,17 @@ const ProfilePage = ({
     }
   };
 
+  // Follow/Unfollow function
+  const toggleFollow = () => {
+    setIsFollowing(!isFollowing);
+    toast({
+      title: isFollowing ? "Unfollowed" : "Following",
+      description: isFollowing ? `You unfollowed ${user?.name}` : `You are now following ${user?.name}`,
+      duration: 3000,
+    });
+    // TODO: Implement actual follow functionality with Convex
+  };
+
   // Sort podcasts based on selection
   const sortedPodcasts = [...podcastsData.podcasts].sort((a, b) => {
     if (sortBy === 'latest') {
@@ -97,6 +117,15 @@ const ProfilePage = ({
       return (b.views || 0) - (a.views || 0);
     }
   });
+
+  // Filter podcasts for different tabs
+  const popularPodcasts = [...podcastsData.podcasts]
+    .sort((a, b) => (b.views || 0) - (a.views || 0))
+    .slice(0, 4);
+
+  const recentPodcasts = [...podcastsData.podcasts]
+    .sort((a, b) => (b._creationTime || 0) - (a._creationTime || 0))
+    .slice(0, 4);
 
   return (
     <section className="mt-9 flex flex-col">
@@ -116,13 +145,13 @@ const ProfilePage = ({
         <div className="relative px-6 sm:px-8 pb-8 -mt-24 flex flex-col md:flex-row md:items-end gap-8">
           {/* Profile Image */}
           <div className="relative z-10">
-            <div className="size-36 sm:size-40 rounded-full border-4 border-black shadow-xl overflow-hidden bg-white-1/10">
+            <div className="size-36 sm:size-40 rounded-full border-4 border-black shadow-xl overflow-hidden bg-white-1/10 group">
               {user?.imageUrl ? (
                 <Image
                   src={user.imageUrl}
                   alt={user.name || "Profile"}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform group-hover:scale-110"
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
@@ -130,11 +159,24 @@ const ProfilePage = ({
                 </div>
               )}
             </div>
+            {podcastsData.podcasts.length > 0 && (
+              <Badge className="absolute bottom-1 right-1 bg-orange-1 text-white-1 px-2 py-1 text-xs">
+                Creator
+              </Badge>
+            )}
           </div>
 
           {/* Profile Details */}
           <div className="flex flex-col md:flex-1 mt-3 md:mt-0">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white-1 drop-shadow-sm tracking-tight">{user?.name || "Podcaster"}</h1>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-3xl sm:text-4xl font-bold text-white-1 drop-shadow-sm tracking-tight">{user?.name || "Podcaster"}</h1>
+              {isFollowing && (
+                <Badge variant="outline" className="border-orange-1 text-orange-1">
+                  Following
+                </Badge>
+              )}
+            </div>
+            
             <p className="text-white-2 mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
               <span className="flex items-center gap-2">
                 <Mic size={16} className="text-orange-1" />
@@ -148,6 +190,17 @@ const ProfilePage = ({
                   day: 'numeric'
                 })}</span>
               </span>
+              {user?.website && (
+                <a 
+                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-orange-1 hover:underline"
+                >
+                  <Globe size={16} />
+                  <span>Website</span>
+                </a>
+              )}
             </p>
             
             {/* Bio section */}
@@ -155,6 +208,25 @@ const ProfilePage = ({
               <p className="text-white-2 mt-4 text-sm sm:text-base max-w-2xl">
                 {user.bio}
               </p>
+            )}
+
+            {/* Social links */}
+            {user?.socialLinks && (
+              <div className="flex gap-3 mt-4">
+                {user.socialLinks.map((link, index) => (
+                  <a 
+                    key={index}
+                    href={link.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-white-1/10 p-2 rounded-full hover:bg-white-1/20 transition-colors"
+                  >
+                    <span className="sr-only">{link.platform}</span>
+                    {/* Social icon based on platform */}
+                    <Globe size={18} className="text-white-1" />
+                  </a>
+                ))}
+              </div>
             )}
           </div>
 
@@ -174,15 +246,24 @@ const ProfilePage = ({
         </div>
       </div>
 
-      {/* Action buttons - Moved outside of profile banner */}
+      {/* Action buttons */}
       <div className="flex flex-wrap gap-3 mb-8">
+        <Button 
+          onClick={toggleFollow}
+          className={`${isFollowing 
+            ? 'bg-white-1/10 hover:bg-white-1/20 text-white-1 border border-white-1/20' 
+            : 'bg-orange-1 hover:bg-orange-1/90 text-white-1'} flex items-center gap-2`}
+        >
+          {isFollowing ? 'Following' : 'Follow'}
+        </Button>
+        
         {podcastsData.podcasts.length > 0 && (
           <Button 
             onClick={playRandomPodcast}
             className="bg-orange-1 hover:bg-orange-1/90 text-white-1 flex items-center gap-2"
           >
             <Play size={16} />
-            Play Random Podcast
+            Play Random
           </Button>
         )}
         
@@ -195,62 +276,293 @@ const ProfilePage = ({
         </Button>
       </div>
 
-      {/* Podcasts Section */}
-      <section className="mt-6 flex flex-col gap-5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-orange-1/10 p-3 rounded-xl">
-              <Mic size={28} className="text-orange-1" />
+      {/* Featured Podcast Section */}
+      {featuredPodcast && (
+        <section className="mb-10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-orange-1/10 p-2 rounded-lg">
+              <Award size={20} className="text-orange-1" />
             </div>
-            <h1 className="text-2xl font-bold text-white-1">All Podcasts</h1>
+            <h2 className="text-xl font-bold text-white-1">Featured Podcast</h2>
           </div>
           
-          {/* Sort options */}
-          {podcastsData.podcasts.length > 1 && (
-            <div className="flex gap-2">
-              <Button 
-                variant={sortBy === 'latest' ? 'default' : 'outline'} 
-                size="sm"
-                onClick={() => setSortBy('latest')}
-                className={sortBy === 'latest' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
-              >
-                Latest
-              </Button>
-              <Button 
-                variant={sortBy === 'popular' ? 'default' : 'outline'} 
-                size="sm"
-                onClick={() => setSortBy('popular')}
-                className={sortBy === 'popular' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
-              >
-                Popular
-              </Button>
-            </div>
-          )}
-        </div>
-
-        {podcastsData && podcastsData.podcasts.length > 0 ? (
-          <div className="podcast_grid gap-6">
-            {sortedPodcasts.map((podcast) => (
-              <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
-                <PodcastCard
-                  imgUrl={podcast.imageUrl!}
-                  title={podcast.podcastTitle!}
-                  description={podcast.podcastDescription}
-                  podcastId={podcast._id}
-                  views={podcast.views}
-                  likes={podcast.likeCount || 0}
-                  rating={podcast.averageRating}
+          <div className="bg-white-1/5 rounded-xl p-4 border border-white-1/10">
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="w-full md:w-1/3 lg:w-1/4 aspect-square relative rounded-lg overflow-hidden">
+                <Image
+                  src={featuredPodcast.imageUrl || '/placeholder.png'}
+                  alt={featuredPodcast.podcastTitle || 'Featured Podcast'}
+                  fill
+                  className="object-cover"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <Button 
+                  className="absolute bottom-3 left-3 bg-orange-1 hover:bg-orange-1/90 rounded-full size-12 flex items-center justify-center p-0"
+                  onClick={() => {
+                    setAudio({
+                      title: featuredPodcast.podcastTitle || "",
+                      audioUrl: featuredPodcast.audioUrl || "",
+                      imageUrl: featuredPodcast.imageUrl || "",
+                      author: featuredPodcast.author || "",
+                      podcastId: featuredPodcast._id,
+                    });
+                  }}
+                >
+                  <Play size={24} className="ml-1" />
+                </Button>
               </div>
-            ))}
+              
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-white-1 mb-2">{featuredPodcast.podcastTitle || 'Featured Podcast'}</h3>
+                <p className="text-white-2 text-sm mb-4 line-clamp-3">
+                  {featuredPodcast.podcastDescription || 'No description available'}
+                </p>
+                
+                <div className="flex flex-wrap gap-4 text-sm text-white-2">
+                  <div className="flex items-center gap-1">
+                    <Headphones size={16} className="text-orange-1" />
+                    <span>{featuredPodcast.views?.toLocaleString() || 0} views</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Heart size={16} className="text-orange-1" />
+                    <span>{featuredPodcast.likeCount?.toLocaleString() || 0} likes</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Star size={16} className="text-orange-1" />
+                    <span>{featuredPodcast.averageRating || 0} rating</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock size={16} className="text-orange-1" />
+                    <span>{new Date(featuredPodcast._creationTime).toLocaleDateString()}</span>
+                  </div>
+                </div>
+                
+                <div className="mt-6 flex gap-3">
+                  <Button 
+                    className="bg-orange-1 hover:bg-orange-1/90 text-white-1"
+                    onClick={() => {
+                      setAudio({
+                        title: featuredPodcast.podcastTitle || "",
+                        audioUrl: featuredPodcast.audioUrl || "",
+                        imageUrl: featuredPodcast.imageUrl || "",
+                        author: featuredPodcast.author || "",
+                        podcastId: featuredPodcast._id,
+                      });
+                    }}
+                  >
+                    <Play size={16} className="mr-2" /> Play Now
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="border-white-1/20 text-white-1 hover:bg-white-1/10"
+                    onClick={() => {
+                      window.location.href = `/podcast/${featuredPodcast._id}`;
+                    }}
+                  >
+                    View Details
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
-        ) : (
-          <EmptyState
-            title="No podcasts found"
-            buttonLink="/create-podcast"
-            buttonText="Create Podcast"
-          />
-        )}
+        </section>
+      )}
+
+      {/* Tabbed Content Section */}
+      <Tabs defaultValue="all" className="mb-10" onValueChange={setActiveTab}>
+        <TabsList className="bg-white-1/5 border border-white-1/10 mb-6">
+          <TabsTrigger value="all" className="data-[state=active]:bg-orange-1 data-[state=active]:text-white-1">
+            All Podcasts
+          </TabsTrigger>
+          <TabsTrigger value="popular" className="data-[state=active]:bg-orange-1 data-[state=active]:text-white-1">
+            Popular
+          </TabsTrigger>
+          <TabsTrigger value="recent" className="data-[state=active]:bg-orange-1 data-[state=active]:text-white-1">
+            Recent
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="all" className="mt-0">
+          <section className="flex flex-col gap-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="bg-orange-1/10 p-3 rounded-xl">
+                  <Mic size={28} className="text-orange-1" />
+                </div>
+                <h1 className="text-2xl font-bold text-white-1">All Podcasts</h1>
+              </div>
+              
+              {/* Sort options */}
+              {podcastsData.podcasts.length > 1 && (
+                <div className="flex gap-2">
+                  <Button 
+                    variant={sortBy === 'latest' ? 'default' : 'outline'} 
+                    size="sm"
+                    onClick={() => setSortBy('latest')}
+                    className={sortBy === 'latest' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
+                  >
+                    Latest
+                  </Button>
+                  <Button 
+                    variant={sortBy === 'popular' ? 'default' : 'outline'} 
+                    size="sm"
+                    onClick={() => setSortBy('popular')}
+                    className={sortBy === 'popular' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
+                  >
+                    Popular
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {podcastsData && podcastsData.podcasts.length > 0 ? (
+              <div className="podcast_grid gap-6">
+                {sortedPodcasts.map((podcast) => (
+                  <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
+                    <PodcastCard
+                      imgUrl={podcast.imageUrl!}
+                      title={podcast.podcastTitle!}
+                      description={podcast.podcastDescription}
+                      podcastId={podcast._id}
+                      views={podcast.views}
+                      likes={podcast.likeCount || 0}
+                      rating={podcast.averageRating}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyState
+                title="No podcasts found"
+                buttonLink="/create-podcast"
+                buttonText="Create Podcast"
+              />
+            )}
+          </section>
+        </TabsContent>
+        
+        <TabsContent value="popular" className="mt-0">
+          <section className="flex flex-col gap-5">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-orange-1/10 p-3 rounded-xl">
+                <Star size={28} className="text-orange-1" />
+              </div>
+              <h1 className="text-2xl font-bold text-white-1">Popular Podcasts</h1>
+            </div>
+
+            {popularPodcasts.length > 0 ? (
+              <div className="podcast_grid gap-6">
+                {popularPodcasts.map((podcast) => (
+                  <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
+                    <PodcastCard
+                      imgUrl={podcast.imageUrl!}
+                      title={podcast.podcastTitle!}
+                      description={podcast.podcastDescription}
+                      podcastId={podcast._id}
+                      views={podcast.views}
+                      likes={podcast.likeCount || 0}
+                      rating={podcast.averageRating}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyState
+                title="No popular podcasts found"
+                description="Check back later for popular content"
+              />
+            )}
+          </section>
+        </TabsContent>
+        
+        <TabsContent value="recent" className="mt-0">
+          <section className="flex flex-col gap-5">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-orange-1/10 p-3 rounded-xl">
+                <Clock size={28} className="text-orange-1" />
+              </div>
+              <h1 className="text-2xl font-bold text-white-1">Recent Podcasts</h1>
+            </div>
+
+            {recentPodcasts.length > 0 ? (
+              <div className="podcast_grid gap-6">
+                {recentPodcasts.map((podcast) => (
+                  <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
+                    <PodcastCard
+                      imgUrl={podcast.imageUrl!}
+                      title={podcast.podcastTitle!}
+                      description={podcast.podcastDescription}
+                      podcastId={podcast._id}
+                      views={podcast.views}
+                      likes={podcast.likeCount || 0}
+                      rating={podcast.averageRating}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyState
+                title="No recent podcasts found"
+                description="Check back later for new content"
+              />
+            )}
+          </section>
+        </TabsContent>
+      </Tabs>
+      
+      {/* About Section */}
+      <section className="mb-10">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="bg-orange-1/10 p-3 rounded-xl">
+            <User size={28} className="text-orange-1" />
+          </div>
+          <h1 className="text-2xl font-bold text-white-1">About {user?.name}</h1>
+        </div>
+        
+        <div className="bg-white-1/5 rounded-xl p-6 border border-white-1/10">
+          {user?.bio ? (
+            <p className="text-white-2">{user.bio}</p>
+          ) : (
+            <p className="text-white-2 italic">No bio available</p>
+          )}
+          
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-white-1 font-semibold">Joined</h3>
+              <p className="text-white-2 flex items-center gap-2">
+                <Calendar size={16} className="text-orange-1" />
+                {new Date(user?._creationTime || Date.now()).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <h3 className="text-white-1 font-semibold">Content</h3>
+              <p className="text-white-2 flex items-center gap-2">
+                <Mic size={16} className="text-orange-1" />
+                {podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}
+              </p>
+            </div>
+            
+            {user?.website && (
+              <div className="flex flex-col gap-2">
+                <h3 className="text-white-1 font-semibold">Website</h3>
+                <a 
+                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-orange-1 hover:underline flex items-center gap-2"
+                >
+                  <Globe size={16} />
+                  {user.website}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
       </section>
     </section>
   );
