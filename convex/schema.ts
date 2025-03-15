@@ -25,11 +25,10 @@ export default defineSchema({
     ratingCount: v.optional(v.float64()),
     language: v.optional(v.string()), // Add language field
   })
-    .index("search_title", ["podcastTitle"])
-    .index("search_body", ["podcastDescription"])
-    .index("search_author", ["author"])
-    .index("by_author", ["authorId"])
-    .index("by_language", ["language"]), // Add language index for filtering
+    .searchIndex("search_author", { searchField: "author" })
+    .searchIndex("search_title", { searchField: "podcastTitle" })
+    .searchIndex("search_body", { searchField: "podcastDescription" }),
+
   users: defineTable({
     email: v.string(),
     imageUrl: v.string(),
@@ -44,7 +43,7 @@ export default defineSchema({
   })
     .index("by_podcast", ["podcastId"])
     .index("by_user_and_podcast", ["userId", "podcastId"]),
-  
+
   comments: defineTable({
     podcastId: v.id("podcasts"),
     userId: v.string(),
