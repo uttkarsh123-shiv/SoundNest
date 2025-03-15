@@ -449,8 +449,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                                 
                                                 {/* Display language badge if available */}
                                                 {podcast.language && (
-                                                    <span className="inline-block bg-white-1/10 text-white-2 text-xs px-2 py-1 rounded-full mt-2 ml-2">
-                                                        <Globe size={10} className="inline mr-1" />
+                                                    <span className="inline-flex items-center bg-white-1/10 text-white-2 text-xs px-2 py-1 rounded-full mt-2 ml-2">
                                                         {languageOptions.find(l => l.value === podcast.language)?.label || podcast.language}
                                                     </span>
                                                 )}
