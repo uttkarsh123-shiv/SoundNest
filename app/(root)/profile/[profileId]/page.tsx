@@ -57,9 +57,9 @@ const ProfilePage = ({
     ? (podcastsData.podcasts.reduce((sum, podcast) => sum + (podcast.averageRating || 0), 0) / podcastsData.podcasts.length).toFixed(1)
     : "0.0";
 
-  // Get featured podcast (most viewed)
-  const featuredPodcast = podcastsData.podcasts.length > 0 
-    ? [...podcastsData.podcasts].sort((a, b) => (b.views || 0) - (a.views || 0))[0]
+  // Get featured podcast from popularPodcastsData (most viewed)
+  const featuredPodcast = popularPodcastsData.length > 0 
+    ? popularPodcastsData.filter(podcast => podcast.authorId === params.profileId)[0]
     : null;
 
   // Play random podcast function
