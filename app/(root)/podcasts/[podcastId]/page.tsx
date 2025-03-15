@@ -478,13 +478,14 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
         {similarPodcasts && similarPodcasts.length > 0 ? (
           <div className="podcast_grid">
             {similarPodcasts?.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
-              <PodcastCard
-                key={_id}
-                imgUrl={imageUrl as string}
-                title={podcastTitle}
-                description={podcastDescription}
-                podcastId={_id}
-              />
+              <div key={_id} className="transform transition-all duration-300 hover:-translate-y-2">
+                <PodcastCard
+                  imgUrl={imageUrl as string}
+                  title={podcastTitle}
+                  description={podcastDescription}
+                  podcastId={_id}
+                />
+              </div>
             ))}
           </div>
         ) : (
