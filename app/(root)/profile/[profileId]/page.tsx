@@ -30,14 +30,22 @@ const ProfilePage = ({
   const podcastsData = useQuery(api.podcasts.getPodcastByAuthorId, {
     authorId: params.profileId,
   });
+  // Fetch popular podcasts using the getFilteredPodcasts query
+  const popularPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, {
+    type: "popular",
+  });
+  // Fetch recent podcasts using the getFilteredPodcasts query
+  const recentPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, {
+    type: "latest",
+  });
   const { setAudio } = useAudio();
   const { toast } = useToast();
   const [randomPodcast, setRandomPodcast] = useState<PodcastProps | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
-  const { userId } = useAuth(); // Add this to get the current user's ID
+  const { userId } = useAuth();
 
-  if (!user || !podcastsData) return <LoaderSpinner />;
+  if (!user || !podcastsData || !popularPodcastsData || !recentPodcastsData) return <LoaderSpinner />;
 
   // Check if the profile being viewed is the current user's profile
   const isOwnProfile = userId === params.profileId;
