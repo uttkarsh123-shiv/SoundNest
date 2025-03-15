@@ -4,7 +4,7 @@ import Searchbar from '@/components/Searchbar'
 import { api } from '@/convex/_generated/api'
 import { podcastTypes, languageOptions } from '@/constants/PodcastFields'
 import { useQuery } from 'convex/react'
-import { Filter, Clock, TrendingUp, Heart, RefreshCw, X, Globe, LayoutGrid, List, Star, Headphones } from 'lucide-react'
+import { Filter, Clock, TrendingUp, Heart, RefreshCw, X, Globe, LayoutGrid, List, Star, Headphones, Languages } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -182,7 +182,7 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                         : 'bg-black/20 text-white-2 hover:bg-white-1/10'
                                         }`}
                                 >
-                                    <Globe size={16} />
+                                    <Languages size={20} />
                                     Languages {selectedLanguages.length > 0 && (
                                         <span className="bg-black/30 text-white px-2 py-0.5 rounded-full text-xs ml-1">
                                             {selectedLanguages.length}
@@ -444,6 +444,14 @@ const Discover = ({ searchParams: { search } }: { searchParams: { search: string
                                                 {podcast.podcastType && (
                                                     <span className="inline-block bg-orange-1/20 text-orange-1 text-xs px-2 py-1 rounded-full mt-2">
                                                         {podcastTypes.find(c => c.value === podcast.podcastType)?.label || podcast.podcastType}
+                                                    </span>
+                                                )}
+                                                
+                                                {/* Display language badge if available */}
+                                                {podcast.language && (
+                                                    <span className="inline-block bg-white-1/10 text-white-2 text-xs px-2 py-1 rounded-full mt-2 ml-2">
+                                                        <Globe size={10} className="inline mr-1" />
+                                                        {languageOptions.find(l => l.value === podcast.language)?.label || podcast.language}
                                                     </span>
                                                 )}
 
