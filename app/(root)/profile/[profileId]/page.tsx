@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Bookmark, Clock, Award } from "lucide-react";
 
+import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import PodcastCard from "@/components/PodcastCard";
@@ -35,8 +36,12 @@ const ProfilePage = ({
   const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest');
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
+  const { userId } = useAuth(); // Add this to get the current user's ID
 
   if (!user || !podcastsData) return <LoaderSpinner />;
+
+  // Check if the profile being viewed is the current user's profile
+  const isOwnProfile = userId === params.profileId;
 
   // Calculate total views, likes, and average rating
   const totalViews = podcastsData.podcasts.reduce((sum, podcast) => sum + (podcast.views || 0), 0);
@@ -109,13 +114,9 @@ const ProfilePage = ({
     // TODO: Implement actual follow functionality with Convex
   };
 
-  // Sort podcasts based on selection
+  // Sort podcasts based on creation time (latest first)
   const sortedPodcasts = [...podcastsData.podcasts].sort((a, b) => {
-    if (sortBy === 'latest') {
-      return (b._creationTime || 0) - (a._creationTime || 0);
-    } else {
-      return (b.views || 0) - (a.views || 0);
-    }
+    return (b._creationTime || 0) - (a._creationTime || 0);
   });
 
   // Filter podcasts for different tabs
@@ -248,14 +249,16 @@ const ProfilePage = ({
 
       {/* Action buttons */}
       <div className="flex flex-wrap gap-3 mb-8">
-        <Button 
-          onClick={toggleFollow}
-          className={`${isFollowing 
-            ? 'bg-white-1/10 hover:bg-white-1/20 text-white-1 border border-white-1/20' 
-            : 'bg-orange-1 hover:bg-orange-1/90 text-white-1'} flex items-center gap-2`}
-        >
-          {isFollowing ? 'Following' : 'Follow'}
-        </Button>
+        {!isOwnProfile && (
+          <Button 
+            onClick={toggleFollow}
+            className={`${isFollowing 
+              ? 'bg-white-1/10 hover:bg-white-1/20 text-white-1 border border-white-1/20' 
+              : 'bg-orange-1 hover:bg-orange-1/90 text-white-1'} flex items-center gap-2`}
+          >
+            {isFollowing ? 'Following' : 'Follow'}
+          </Button>
+        )}
         
         {podcastsData.podcasts.length > 0 && (
           <Button 
@@ -384,35 +387,11 @@ const ProfilePage = ({
         
         <TabsContent value="all" className="mt-0">
           <section className="flex flex-col gap-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="bg-orange-1/10 p-3 rounded-xl">
-                  <Mic size={28} className="text-orange-1" />
-                </div>
-                <h1 className="text-2xl font-bold text-white-1">All Podcasts</h1>
+            <div className="flex items-center gap-4">
+              <div className="bg-orange-1/10 p-3 rounded-xl">
+                <Mic size={28} className="text-orange-1" />
               </div>
-              
-              {/* Sort options */}
-              {podcastsData.podcasts.length > 1 && (
-                <div className="flex gap-2">
-                  <Button 
-                    variant={sortBy === 'latest' ? 'default' : 'outline'} 
-                    size="sm"
-                    onClick={() => setSortBy('latest')}
-                    className={sortBy === 'latest' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
-                  >
-                    Latest
-                  </Button>
-                  <Button 
-                    variant={sortBy === 'popular' ? 'default' : 'outline'} 
-                    size="sm"
-                    onClick={() => setSortBy('popular')}
-                    className={sortBy === 'popular' ? 'bg-orange-1 text-white-1' : 'text-white-2'}
-                  >
-                    Popular
-                  </Button>
-                </div>
-              )}
+              <h1 className="text-2xl font-bold text-white-1">All Podcasts</h1>
             </div>
 
             {podcastsData && podcastsData.podcasts.length > 0 ? (
