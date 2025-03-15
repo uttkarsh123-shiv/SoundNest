@@ -58,6 +58,34 @@ const PodcastDetailPlayer = ({
     });
   };
 
+  // Share podcast function
+  const sharePodcast = async () => {
+    const url = window.location.href;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: podcastTitle || "Check out this podcast",
+          text: `Listen to ${podcastTitle} by ${author} on PodTales!`,
+          url: url,
+        });
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+    } else {
+      // Fallback for browsers that don't support the Web Share API
+      navigator.clipboard.writeText(url);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+      
+      toast({
+        title: "Link Copied!",
+        description: "Podcast link copied to clipboard",
+        duration: 3000,
+      });
+    }
+  };
+
   const isPlaying = audio?.podcastId === podcastId;
 
   if (!imageUrl || !authorImageUrl) return <LoaderSpinner />;
@@ -120,13 +148,7 @@ const PodcastDetailPlayer = ({
               </Button>
 
               <button
-                onClick={() => {
-                  const url = window.location.href;
-                  navigator.clipboard.writeText(url).then(() => {
-                    setIsCopied(true);
-                    setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
-                  });
-                }}
+                onClick={sharePodcast}
                 className="flex items-center gap-2 bg-black-1/50 hover:bg-black-1/70 transition-colors px-4 py-2 rounded-full cursor-pointer min-w-[100px] justify-center"
               >
                 {isCopied ? (
