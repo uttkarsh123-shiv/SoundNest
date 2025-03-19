@@ -140,7 +140,7 @@ const ProfilePage = ({
     }
   };
 
-  // Updated Follow/Unfollow function
+  // Updated Follow/Unfollow function without notifications
   const toggleFollow = async () => {
     if (!userId) {
       toast({
@@ -156,19 +156,9 @@ const ProfilePage = ({
       if (isFollowing) {
         await unfollowUser({ followingId: params.profileId });
         setIsFollowing(false);
-        toast({
-          title: "Unfollowed",
-          description: `You unfollowed ${user?.name}`,
-          duration: 3000,
-        });
       } else {
         await followUser({ followingId: params.profileId });
         setIsFollowing(true);
-        toast({
-          title: "Following",
-          description: `You are now following ${user?.name}`,
-          duration: 3000,
-        });
       }
     } catch (error) {
       console.error("Error toggling follow:", error);
