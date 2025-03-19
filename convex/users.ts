@@ -154,3 +154,45 @@ export const getUserWithFollowCounts = query({
     };
   },
 });
+
+// Add this mutation to your existing users.ts file
+
+export const updateUserProfile = mutation({
+  args: {
+    clerkId: v.string(),
+    bio: v.optional(v.string()),
+    website: v.optional(v.string()),
+    socialLinks: v.optional(v.array(v.object({
+      platform: v.string(),
+      url: v.string()
+    }))),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError("Not authenticated");
+    }
+
+    // Ensure user can only update their own profile
+    if (identity.subject !== args.clerkId) {
+      throw new ConvexError("Unauthorized to update this profile");
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .filter(q => q.eq(q.field("clerkId"), args.clerkId))
+      .unique();
+
+    if (!user) {
+      throw new ConvexError("User not found");
+    }
+
+    // Update only the fields that are provided
+    const updates: any = {};
+    if (args.bio !== undefined) updates.bio = args.bio;
+    if (args.website !== undefined) updates.website = args.website;
+    if (args.socialLinks !== undefined) updates.socialLinks = args.socialLinks;
+
+    return await ctx.db.patch(user._id, updates);
+  },
+});

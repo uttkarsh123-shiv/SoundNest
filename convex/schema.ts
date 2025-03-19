@@ -36,6 +36,12 @@ export default defineSchema({
     name: v.string(),
     followersCount: v.optional(v.number()),
     followingCount: v.optional(v.number()),
+    bio: v.optional(v.string()),
+    website: v.optional(v.string()),
+    socialLinks: v.optional(v.array(v.object({
+      platform: v.string(),
+      url: v.string()
+    }))),
   }),
   ratings: defineTable({
     podcastId: v.id("podcasts"),

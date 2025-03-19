@@ -3,7 +3,7 @@
 import { useQuery, useMutation } from "convex/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users } from "lucide-react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
@@ -18,6 +18,8 @@ import { Badge } from "@/components/ui/badge";
 
 // Near the top of the file, add the useRouter import if it's not already there
 import { useRouter } from "next/navigation";
+
+import ProfileEditModal from "@/components/ProfileEditModal";
 
 const ProfilePage = ({
   params,
@@ -368,6 +370,16 @@ const ProfilePage = ({
         </Button>
       </div>
 
+      {/* Add edit profile button for own profile */}
+      {isOwnProfile && (
+        <ProfileEditModal 
+          clerkId={params.profileId}
+          initialBio={user?.bio || ""}
+          initialWebsite={user?.website || ""}
+          initialSocialLinks={user?.socialLinks || []}
+        />
+      )}
+
       {/* Featured Podcast Section */}
       {featuredPodcast && (
         <section className="mb-10">
@@ -560,46 +572,52 @@ const ProfilePage = ({
         </div>
 
         <div className="bg-white-1/5 rounded-xl p-6 border border-white-1/10">
+          {/* Bio */}
           {user?.bio ? (
-            <p className="text-white-2">{user.bio}</p>
+            <p className="text-white-2 mb-6">{user.bio}</p>
           ) : (
-            <p className="text-white-2 italic">No bio available</p>
+            isOwnProfile ? (
+              <p className="text-white-3 italic mb-6">Add a bio to tell others about yourself.</p>
+            ) : (
+              <p className="text-white-3 italic mb-6">This user hasn't added a bio yet.</p>
+            )
           )}
-
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <h3 className="text-white-1 font-semibold">Joined</h3>
-              <p className="text-white-2 flex items-center gap-2">
-                <Calendar size={16} className="text-orange-1" />
-                {new Date(user?._creationTime || Date.now()).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <h3 className="text-white-1 font-semibold">Content</h3>
-              <p className="text-white-2 flex items-center gap-2">
-                <Mic size={16} className="text-orange-1" />
-                {podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}
-              </p>
-            </div>
-
+      
+          {/* Website and Social Links */}
+          <div className="flex flex-wrap gap-4">
             {user?.website && (
-              <div className="flex flex-col gap-2">
-                <h3 className="text-white-1 font-semibold">Website</h3>
-                <a
-                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
-                  target="_blank"
+              <a 
+                href={user.website.startsWith('http') ? user.website : `https://${user.website}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
+              >
+                <Globe size={18} className="text-orange-1" />
+                <span className="text-white-2">Website</span>
+              </a>
+            )}
+            
+            {user?.socialLinks && user.socialLinks.length > 0 && user.socialLinks.map((link, index) => {
+              return (
+                <a 
+                  key={index}
+                  href={link.url.startsWith('http') ? link.url : `https://${link.url}`} 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-orange-1 hover:underline flex items-center gap-2"
+                  className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
                 >
-                  <Globe size={16} />
-                  {user.website}
+                  <Link size={18} className="text-orange-1" />
+                  <span className="text-white-2">{link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}</span>
                 </a>
-              </div>
+              );
+            })}
+            
+            {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && (
+              isOwnProfile ? (
+                <p className="text-white-3 italic">Add your website and social links to help others connect with you.</p>
+              ) : (
+                <p className="text-white-3 italic">No website or social links available.</p>
+              )
             )}
           </div>
         </div>
