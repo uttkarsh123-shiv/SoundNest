@@ -1,10 +1,9 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import Image from "next/image";
-import { useState } from "react";
-import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award } from "lucide-react";
-
+import { useState, useEffect } from "react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
@@ -38,12 +37,43 @@ const ProfilePage = ({
   const recentPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, {
     type: "latest",
   });
+  
+  // Add follow-related queries and mutations with proper error handling
+  const isUserFollowing = useQuery(api.follows.isFollowing, 
+    { followingId: params.profileId },
+    // Add options to handle potential errors
+    { 
+      onError: (error) => {
+        console.error("Error checking follow status:", error);
+        return false;
+      }
+    }
+  );
+  
+  const followersCount = useQuery(api.follows.getFollowersCount, {
+    userId: params.profileId,
+  });
+  
+  const followingCount = useQuery(api.follows.getFollowingCount, {
+    userId: params.profileId,
+  });
+  
+  const followUser = useMutation(api.follows.followUser);
+  const unfollowUser = useMutation(api.follows.unfollowUser);
+  
   const { setAudio } = useAudio();
   const { toast } = useToast();
   const [randomPodcast, setRandomPodcast] = useState<PodcastProps | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("popular");
   const { userId } = useAuth();
+  
+  // Update isFollowing state when the query result changes
+  useEffect(() => {
+    if (isUserFollowing !== undefined) {
+      setIsFollowing(isUserFollowing);
+    }
+  }, [isUserFollowing]);
 
   if (!user || !podcastsData || !popularPodcastsData || !recentPodcastsData) return <LoaderSpinner />;
 
@@ -58,17 +88,17 @@ const ProfilePage = ({
     : "0.0";
 
   // Get featured podcast from popularPodcastsData (most viewed)
-  const featuredPodcast = popularPodcastsData.length > 0 
+  const featuredPodcast = popularPodcastsData.length > 0
     ? popularPodcastsData.filter(podcast => podcast.authorId === params.profileId)[0]
     : null;
 
   // Play random podcast function
   const playRandomPodcast = () => {
     if (podcastsData.podcasts.length === 0) return;
-    
+
     const randomIndex = Math.floor(Math.random() * podcastsData.podcasts.length);
     const podcast = podcastsData.podcasts[randomIndex];
-    
+
     setRandomPodcast(podcast);
     setAudio({
       title: podcast.podcastTitle || "",
@@ -88,7 +118,7 @@ const ProfilePage = ({
   // Share profile function
   const shareProfile = async () => {
     const url = window.location.href;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -110,15 +140,45 @@ const ProfilePage = ({
     }
   };
 
-  // Follow/Unfollow function
-  const toggleFollow = () => {
-    setIsFollowing(!isFollowing);
-    toast({
-      title: isFollowing ? "Unfollowed" : "Following",
-      description: isFollowing ? `You unfollowed ${user?.name}` : `You are now following ${user?.name}`,
-      duration: 3000,
-    });
-    // TODO: Implement actual follow functionality with Convex
+  // Updated Follow/Unfollow function
+  const toggleFollow = async () => {
+    if (!userId) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to follow creators",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
+    }
+    
+    try {
+      if (isFollowing) {
+        await unfollowUser({ followingId: params.profileId });
+        setIsFollowing(false);
+        toast({
+          title: "Unfollowed",
+          description: `You unfollowed ${user?.name}`,
+          duration: 3000,
+        });
+      } else {
+        await followUser({ followingId: params.profileId });
+        setIsFollowing(true);
+        toast({
+          title: "Following",
+          description: `You are now following ${user?.name}`,
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling follow:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   };
 
   // Sort podcasts based on creation time (latest first)
@@ -184,12 +244,26 @@ const ProfilePage = ({
                 </Badge>
               )}
             </div>
-            
+
             <p className="text-white-2 mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
               <span className="flex items-center gap-2">
                 <Mic size={16} className="text-orange-1" />
                 <span className="font-medium">{podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}</span>
               </span>
+              {/* Add followers count */}
+              {followersCount !== undefined && (
+                <span className="flex items-center gap-2">
+                  <User size={16} className="text-orange-1" />
+                  <span>{followersCount} {followersCount === 1 ? 'Follower' : 'Followers'}</span>
+                </span>
+              )}
+              {/* Add following count */}
+              {followingCount !== undefined && (
+                <span className="flex items-center gap-2">
+                  <Users size={16} className="text-orange-1" />
+                  <span>{followingCount} Following</span>
+                </span>
+              )}
               <span className="flex items-center gap-2">
                 <Calendar size={16} className="text-orange-1" />
                 <span>Joined {new Date(user?._creationTime || Date.now()).toLocaleDateString('en-US', {
@@ -199,9 +273,9 @@ const ProfilePage = ({
                 })}</span>
               </span>
               {user?.website && (
-                <a 
-                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`} 
-                  target="_blank" 
+                <a
+                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-orange-1 hover:underline"
                 >
@@ -210,7 +284,7 @@ const ProfilePage = ({
                 </a>
               )}
             </p>
-            
+
             {/* Bio section */}
             {user?.bio && (
               <p className="text-white-2 mt-4 text-sm sm:text-base max-w-2xl">
@@ -222,10 +296,10 @@ const ProfilePage = ({
             {user?.socialLinks && (
               <div className="flex gap-3 mt-4">
                 {user.socialLinks.map((link, index) => (
-                  <a 
+                  <a
                     key={index}
-                    href={link.url} 
-                    target="_blank" 
+                    href={link.url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="bg-white-1/10 p-2 rounded-full hover:bg-white-1/20 transition-colors"
                   >
@@ -257,18 +331,32 @@ const ProfilePage = ({
       {/* Action buttons */}
       <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
         {!isOwnProfile && (
-          <Button 
+          <Button
             onClick={toggleFollow}
-            className={`${isFollowing 
-              ? 'bg-white-1/10 hover:bg-white-1/20 text-white-1 border border-white-1/20' 
-              : 'bg-orange-1 hover:bg-orange-1/90 text-white-1'} flex items-center gap-2 px-5 py-2.5 rounded-full`}
+            className={`${isFollowing
+              ? 'bg-white-1/5 hover:bg-white-1/10 text-white-1 border border-white-1/10'
+              : 'bg-gradient-to-r from-orange-1 to-orange-600 hover:opacity-90 text-black font-medium'} 
+              flex items-center gap-2 px-5 py-2.5 rounded-full shadow-md transition-all duration-200`}
           >
-            {isFollowing ? 'Following' : 'Follow'}
+            {isFollowing ? (
+              <>
+                <span className="relative flex h-2 w-2 mr-1">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-1 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-1"></span>
+                </span>
+                Following
+              </>
+            ) : (
+              <>
+                <Heart size={16} className={isFollowing ? "text-orange-1" : ""} />
+                Follow
+              </>
+            )}
           </Button>
         )}
-        
+
         {podcastsData.podcasts.length > 0 && (
-          <Button 
+          <Button
             onClick={playRandomPodcast}
             className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
           >
@@ -276,8 +364,8 @@ const ProfilePage = ({
             <span>Play Random</span>
           </Button>
         )}
-        
-        <Button 
+
+        <Button
           onClick={shareProfile}
           className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
         >
@@ -295,7 +383,7 @@ const ProfilePage = ({
             </div>
             <h2 className="text-xl font-bold text-white-1">Featured Podcast</h2>
           </div>
-          
+
           <div className="bg-white-1/5 rounded-xl p-4 border border-white-1/10">
             <div className="flex flex-col md:flex-row gap-6">
               <div className="w-full md:w-1/3 lg:w-1/4 aspect-square relative rounded-lg overflow-hidden">
@@ -306,7 +394,7 @@ const ProfilePage = ({
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <Button 
+                <Button
                   className="absolute bottom-3 left-3 bg-orange-1 hover:bg-orange-1/90 rounded-full size-12 flex items-center justify-center p-0"
                   onClick={() => {
                     setAudio({
@@ -321,13 +409,13 @@ const ProfilePage = ({
                   <Play size={24} className="ml-1" />
                 </Button>
               </div>
-              
+
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-white-1 mb-2">{featuredPodcast.podcastTitle || 'Featured Podcast'}</h3>
                 <p className="text-white-2 text-sm mb-4 line-clamp-3">
                   {featuredPodcast.podcastDescription || 'No description available'}
                 </p>
-                
+
                 <div className="flex flex-wrap gap-4 text-sm text-white-2">
                   <div className="flex items-center gap-1">
                     <Headphones size={16} className="text-orange-1" />
@@ -346,9 +434,9 @@ const ProfilePage = ({
                     <span>{new Date(featuredPodcast._creationTime).toLocaleDateString()}</span>
                   </div>
                 </div>
-                
+
                 <div className="mt-6 flex gap-3">
-                  <Button 
+                  <Button
                     className="bg-orange-1 hover:bg-orange-1/90 text-white-1"
                     onClick={() => {
                       setAudio({
@@ -362,7 +450,7 @@ const ProfilePage = ({
                   >
                     <Play size={16} className="mr-2" /> Play Now
                   </Button>
-                  <Button 
+                  <Button
                     variant="outline"
                     className="border-white-1/20 text-white-1 hover:bg-white-1/10"
                     onClick={() => {
@@ -382,15 +470,15 @@ const ProfilePage = ({
       <Tabs defaultValue="popular" className="mb-10" onValueChange={setActiveTab}>
         <div className="bg-black/20 p-1.5 rounded-lg shadow-inner backdrop-blur-sm inline-flex mb-6">
           <TabsList className="bg-transparent border-0 p-0">
-            <TabsTrigger 
-              value="popular" 
+            <TabsTrigger
+              value="popular"
               className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
             >
               <Star size={15} />
               Popular
             </TabsTrigger>
-            <TabsTrigger 
-              value="recent" 
+            <TabsTrigger
+              value="recent"
               className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
             >
               <Clock size={15} />
@@ -398,7 +486,7 @@ const ProfilePage = ({
             </TabsTrigger>
           </TabsList>
         </div>
-        
+
         <TabsContent value="popular" className="mt-0">
           <section className="flex flex-col gap-5">
             <div className="flex items-center gap-4 mb-6">
@@ -432,7 +520,7 @@ const ProfilePage = ({
             )}
           </section>
         </TabsContent>
-        
+
         <TabsContent value="recent" className="mt-0">
           <section className="flex flex-col gap-5">
             <div className="flex items-center gap-4 mb-6">
@@ -467,7 +555,7 @@ const ProfilePage = ({
           </section>
         </TabsContent>
       </Tabs>
-      
+
       {/* About Section */}
       <section className="mb-10">
         <div className="flex items-center gap-4 mb-6">
@@ -476,14 +564,14 @@ const ProfilePage = ({
           </div>
           <h1 className="text-2xl font-bold text-white-1">About {user?.name}</h1>
         </div>
-        
+
         <div className="bg-white-1/5 rounded-xl p-6 border border-white-1/10">
           {user?.bio ? (
             <p className="text-white-2">{user.bio}</p>
           ) : (
             <p className="text-white-2 italic">No bio available</p>
           )}
-          
+
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <h3 className="text-white-1 font-semibold">Joined</h3>
@@ -496,7 +584,7 @@ const ProfilePage = ({
                 })}
               </p>
             </div>
-            
+
             <div className="flex flex-col gap-2">
               <h3 className="text-white-1 font-semibold">Content</h3>
               <p className="text-white-2 flex items-center gap-2">
@@ -504,13 +592,13 @@ const ProfilePage = ({
                 {podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}
               </p>
             </div>
-            
+
             {user?.website && (
               <div className="flex flex-col gap-2">
                 <h3 className="text-white-1 font-semibold">Website</h3>
-                <a 
-                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`} 
-                  target="_blank" 
+                <a
+                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-orange-1 hover:underline flex items-center gap-2"
                 >

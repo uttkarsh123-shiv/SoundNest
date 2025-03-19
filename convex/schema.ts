@@ -34,6 +34,8 @@ export default defineSchema({
     imageUrl: v.string(),
     clerkId: v.string(),
     name: v.string(),
+    followersCount: v.optional(v.number()),
+    followingCount: v.optional(v.number()),
   }),
   ratings: defineTable({
     podcastId: v.id("podcasts"),
@@ -54,4 +56,13 @@ export default defineSchema({
   })
     .index("by_podcast", ["podcastId"])
     .index("by_user", ["userId"]),
+    
+  follows: defineTable({
+    follower: v.string(), // The clerkId of the user who is following
+    following: v.string(), // The clerkId of the user being followed
+    createdAt: v.number(), // Timestamp when the follow relationship was created
+  })
+    .index("by_follower", ["follower"])
+    .index("by_following", ["following"])
+    .index("by_follower_and_following", ["follower", "following"])
 });

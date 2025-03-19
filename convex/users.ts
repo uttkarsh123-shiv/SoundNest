@@ -118,3 +118,39 @@ export const deleteUser = internalMutation({
         await ctx.db.delete(user._id);
     },
 });
+
+
+// Add this new query to the existing users.ts file
+
+// Get user with followers and following counts
+export const getUserWithFollowCounts = query({
+  args: { clerkId: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
+      .unique();
+
+    if (!user) {
+      throw new ConvexError("User not found");
+    }
+
+    // Get followers count
+    const followers = await ctx.db
+      .query("follows")
+      .withIndex("by_following", (q) => q.eq("following", args.clerkId))
+      .collect();
+
+    // Get following count
+    const following = await ctx.db
+      .query("follows")
+      .withIndex("by_follower", (q) => q.eq("follower", args.clerkId))
+      .collect();
+
+    return {
+      ...user,
+      followersCount: followers.length,
+      followingCount: following.length
+    };
+  },
+});
