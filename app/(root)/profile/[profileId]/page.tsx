@@ -255,13 +255,13 @@ const ProfilePage = ({
       </div>
 
       {/* Action buttons */}
-      <div className="flex flex-wrap gap-3 mb-8">
+      <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
         {!isOwnProfile && (
           <Button 
             onClick={toggleFollow}
             className={`${isFollowing 
               ? 'bg-white-1/10 hover:bg-white-1/20 text-white-1 border border-white-1/20' 
-              : 'bg-orange-1 hover:bg-orange-1/90 text-white-1'} flex items-center gap-2`}
+              : 'bg-orange-1 hover:bg-orange-1/90 text-white-1'} flex items-center gap-2 px-5 py-2.5 rounded-full`}
           >
             {isFollowing ? 'Following' : 'Follow'}
           </Button>
@@ -270,19 +270,19 @@ const ProfilePage = ({
         {podcastsData.podcasts.length > 0 && (
           <Button 
             onClick={playRandomPodcast}
-            className="bg-orange-1 hover:bg-orange-1/90 text-white-1 flex items-center gap-2"
+            className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
           >
-            <Play size={16} />
-            Play Random
+            <Play size={16} className="text-orange-1" />
+            <span>Play Random</span>
           </Button>
         )}
         
         <Button 
           onClick={shareProfile}
-          className="bg-white-1/10 hover:bg-white-1/20 text-white-1 flex items-center gap-2 border border-white-1/20"
+          className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
         >
-          <Share2 size={16} />
-          Share Profile
+          <Share2 size={16} className="text-orange-1" />
+          <span>Share Profile</span>
         </Button>
       </div>
 
