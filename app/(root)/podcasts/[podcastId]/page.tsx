@@ -44,9 +44,22 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
   const podcastComments = useQuery(api.podcasts.getPodcastComments, { podcastId });
 
   useEffect(() => {
-    // Update the view count only once when the component mounts
-    if (!hasUpdatedView && podcast) {
-      updateViewCount({ podcastId }).then(() => setHasUpdatedView(true));
+    // Add a check to prevent multiple view count updates
+    if (!hasUpdatedView && podcast && typeof window !== 'undefined') {
+      // Use sessionStorage to prevent multiple view counts in the same session
+      const viewKey = `podcast-view-${podcastId}`;
+      const hasViewedInSession = sessionStorage.getItem(viewKey);
+      
+      if (!hasViewedInSession) {
+        updateViewCount({ podcastId }).then(() => {
+          setHasUpdatedView(true);
+          // Mark this podcast as viewed in this session
+          sessionStorage.setItem(viewKey, 'true');
+        });
+      } else {
+        // Already viewed in this session, just update the state
+        setHasUpdatedView(true);
+      }
     }
 
     // Set user's previous rating if it exists
@@ -54,7 +67,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       setUserRating(userRatingData.rating);
       setHasRated(true);
     }
-  }, [podcast, userRatingData]); // Only rerun if dependencies change
+  }, [podcast, userRatingData, podcastId, updateViewCount]); // Add proper dependencies
 
   const handleRatingSubmit = async () => {
     if (!user || !userRating) return;
