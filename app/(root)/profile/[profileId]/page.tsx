@@ -16,6 +16,9 @@ import { PodcastProps } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
+// Near the top of the file, add the useRouter import if it's not already there
+import { useRouter } from "next/navigation";
+
 const ProfilePage = ({
   params,
 }: {
@@ -23,6 +26,7 @@ const ProfilePage = ({
     profileId: string;
   };
 }) => {
+  const router = useRouter(); // Add this line to get the router
   const user = useQuery(api.users.getUserById, {
     clerkId: params.profileId,
   });
@@ -444,7 +448,7 @@ const ProfilePage = ({
                     variant="outline"
                     className="border-white-1/20 text-white-1 hover:bg-white-1/10"
                     onClick={() => {
-                      window.location.href = `/podcasts/${featuredPodcast._id}`;
+                      router.push(`/podcasts/${featuredPodcast._id}`);
                     }}
                   >
                     View Details
