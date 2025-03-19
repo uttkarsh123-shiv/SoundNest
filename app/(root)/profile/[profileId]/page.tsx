@@ -366,7 +366,7 @@ const ProfilePage = ({
                     variant="outline"
                     className="border-white-1/20 text-white-1 hover:bg-white-1/10"
                     onClick={() => {
-                      window.location.href = `/podcast/${featuredPodcast._id}`;
+                      window.location.href = `/podcasts/${featuredPodcast._id}`;
                     }}
                   >
                     View Details
@@ -380,14 +380,24 @@ const ProfilePage = ({
 
       {/* Tabbed Content Section */}
       <Tabs defaultValue="popular" className="mb-10" onValueChange={setActiveTab}>
-        <TabsList className="bg-white-1/5 border border-white-1/10 mb-6">
-          <TabsTrigger value="popular" className="data-[state=active]:bg-orange-1 data-[state=active]:text-white-1">
-            Popular
-          </TabsTrigger>
-          <TabsTrigger value="recent" className="data-[state=active]:bg-orange-1 data-[state=active]:text-white-1">
-            Recent
-          </TabsTrigger>
-        </TabsList>
+        <div className="bg-black/20 p-1.5 rounded-lg shadow-inner backdrop-blur-sm inline-flex mb-6">
+          <TabsList className="bg-transparent border-0 p-0">
+            <TabsTrigger 
+              value="popular" 
+              className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
+            >
+              <Star size={15} />
+              Popular
+            </TabsTrigger>
+            <TabsTrigger 
+              value="recent" 
+              className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
+            >
+              <Clock size={15} />
+              Recent
+            </TabsTrigger>
+          </TabsList>
+        </div>
         
         <TabsContent value="popular" className="mt-0">
           <section className="flex flex-col gap-5">
