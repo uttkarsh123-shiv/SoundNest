@@ -3,7 +3,7 @@
 import { useQuery, useMutation } from "convex/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link } from "lucide-react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link, Twitter, Instagram, Youtube, Facebook, Linkedin, Github, QrCode } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
@@ -248,14 +248,20 @@ const ProfilePage = ({
               </span>
               {/* Add followers count */}
               {followersCount !== undefined && (
-                <span className="flex items-center gap-2">
+                <span 
+                  className="flex items-center gap-2 cursor-pointer hover:text-orange-1 transition-colors"
+                  onClick={() => router.push(`/profile/${params.profileId}/followers`)}
+                >
                   <User size={16} className="text-orange-1" />
                   <span>{followersCount} {followersCount === 1 ? 'Follower' : 'Followers'}</span>
                 </span>
               )}
               {/* Add following count */}
               {followingCount !== undefined && (
-                <span className="flex items-center gap-2">
+                <span 
+                  className="flex items-center gap-2 cursor-pointer hover:text-orange-1 transition-colors"
+                  onClick={() => router.push(`/profile/${params.profileId}/following`)}
+                >
                   <Users size={16} className="text-orange-1" />
                   <span>{followingCount} Following</span>
                 </span>
@@ -538,8 +544,16 @@ const ProfilePage = ({
 
             {recentPodcasts.length > 0 ? (
               <div className="podcast_grid gap-6">
-                {recentPodcasts.map((podcast) => (
-                  <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
+                {popularPodcasts.map((podcast, index) => (
+                  <div 
+                    key={podcast._id} 
+                    className="group transition-all duration-300 hover:scale-[1.02]"
+                    style={{ 
+                      animationDelay: `${index * 0.1}s`,
+                      animation: 'fadeIn 0.5s ease-in-out forwards',
+                      opacity: 0
+                    }}
+                  >
                     <PodcastCard
                       imgUrl={podcast.imageUrl!}
                       title={podcast.podcastTitle!}
@@ -598,6 +612,19 @@ const ProfilePage = ({
             )}
             
             {user?.socialLinks && user.socialLinks.length > 0 && user.socialLinks.map((link, index) => {
+              // Get appropriate icon based on platform
+              const getSocialIcon = (platform: string) => {
+                switch (platform.toLowerCase()) {
+                  case 'twitter': return <Twitter size={18} className="text-orange-1" />;
+                  case 'instagram': return <Instagram size={18} className="text-orange-1" />;
+                  case 'youtube': return <Youtube size={18} className="text-orange-1" />;
+                  case 'facebook': return <Facebook size={18} className="text-orange-1" />;
+                  case 'linkedin': return <Linkedin size={18} className="text-orange-1" />;
+                  case 'github': return <Github size={18} className="text-orange-1" />;
+                  default: return <Link size={18} className="text-orange-1" />;
+                }
+              };
+              
               return (
                 <a 
                   key={index}
@@ -606,7 +633,7 @@ const ProfilePage = ({
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
                 >
-                  <Link size={18} className="text-orange-1" />
+                  {getSocialIcon(link.platform)}
                   <span className="text-white-2">{link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}</span>
                 </a>
               );
