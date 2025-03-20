@@ -3,7 +3,9 @@
 import { useQuery, useMutation } from "convex/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link, Twitter, Instagram, Youtube, Facebook, Linkedin, Github, QrCode } from "lucide-react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link, Twitter, Instagram, Youtube, Facebook, Linkedin, Github } from "lucide-react";
+// Removed QrCode from imports since it's not being used
+
 import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
@@ -12,7 +14,6 @@ import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { useAudio } from "@/providers/AudioProvider";
 import { useToast } from "@/components/ui/use-toast";
-import { PodcastProps } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
@@ -69,7 +70,7 @@ const ProfilePage = ({
   
   const { setAudio } = useAudio();
   const { toast } = useToast();
-  const [randomPodcast, setRandomPodcast] = useState<PodcastProps | null>(null);
+  // Removed randomPodcast state since it's set but never read
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("popular");
   const { userId } = useAuth();
@@ -105,7 +106,7 @@ const ProfilePage = ({
     const randomIndex = Math.floor(Math.random() * podcastsData.podcasts.length);
     const podcast = podcastsData.podcasts[randomIndex];
 
-    setRandomPodcast(podcast);
+    // Removed setRandomPodcast since the state isn't used elsewhere
     setAudio({
       title: podcast.podcastTitle || "",
       audioUrl: podcast.audioUrl || "",
@@ -121,7 +122,7 @@ const ProfilePage = ({
     });
   };
 
-  // Share profile function
+  // Share profile function - simplified
   const shareProfile = async () => {
     const url = window.location.href;
 
@@ -136,7 +137,6 @@ const ProfilePage = ({
         console.error("Error sharing:", error);
       }
     } else {
-      // Fallback for browsers that don't support the Web Share API
       navigator.clipboard.writeText(url);
       toast({
         title: "Link Copied!",
