@@ -262,9 +262,6 @@ const ProfilePage = ({
                 </span>
               )}
             </p>
-
-            {/* Removed bio section */}
-            {/* Removed social links */}
           </div>
 
           {/* Stats Cards - Desktop */}

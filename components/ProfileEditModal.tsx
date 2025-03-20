@@ -67,20 +67,20 @@ export default function ProfileEditModal({
     try {
       // Filter out empty social links
       const filteredLinks = socialLinks.filter(link => link.url.trim() !== "");
-      
+
       await updateProfile({
         clerkId,
         bio: bio.trim() !== "" ? bio : undefined,
         website: website.trim() !== "" ? website : undefined,
         socialLinks: filteredLinks.length > 0 ? filteredLinks : undefined,
       });
-      
+
       toast({
         title: "Profile updated",
         description: "Your profile information has been updated successfully.",
         duration: 3000,
       });
-      
+
       setOpen(false);
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -105,7 +105,7 @@ export default function ProfileEditModal({
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-white-1">Edit Profile</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6 py-4">
           {/* Bio */}
           <div className="space-y-2">
@@ -115,12 +115,18 @@ export default function ProfileEditModal({
               placeholder="Tell others about yourself..."
               value={bio}
               onChange={(e) => setBio(e.target.value)}
+              onKeyDown={(e) => {
+                // Prevent default behavior for space key to ensure it's captured
+                if (e.key === ' ') {
+                  e.stopPropagation();
+                }
+              }}
               className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
               maxLength={250}
             />
             <p className="text-xs text-white-3 text-right">{bio.length}/250</p>
           </div>
-          
+
           {/* Website */}
           <div className="space-y-2">
             <Label htmlFor="website" className="text-white-2">Website</Label>
@@ -132,15 +138,15 @@ export default function ProfileEditModal({
               className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
             />
           </div>
-          
+
           {/* Social Links */}
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <Label className="text-white-2">Social Links</Label>
-              <Button 
-                type="button" 
-                variant="outline" 
-                size="sm" 
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
                 onClick={handleAddSocialLink}
                 className="h-8 gap-1 border-white-1/20 text-white-1 hover:bg-white-1/10"
                 disabled={socialLinks.length >= 5}
@@ -149,7 +155,7 @@ export default function ProfileEditModal({
                 Add
               </Button>
             </div>
-            
+
             {socialLinks.length === 0 ? (
               <p className="text-sm text-white-3 italic">No social links added yet.</p>
             ) : (
@@ -191,16 +197,16 @@ export default function ProfileEditModal({
             )}
           </div>
         </div>
-        
+
         <div className="flex justify-end gap-3 mt-4">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={() => setOpen(false)}
             className="text-white-2 hover:bg-white-1/10"
           >
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={handleSubmit}
             className="bg-orange-1 hover:bg-orange-1/90 text-black"
           >
