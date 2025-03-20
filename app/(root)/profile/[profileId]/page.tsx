@@ -281,7 +281,7 @@ const ProfilePage = ({
       </div>
 
       {/* Action buttons */}
-      <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
+      <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
         {!isOwnProfile && (
           <Button
             onClick={toggleFollow}
@@ -317,6 +317,15 @@ const ProfilePage = ({
           </Button>
         )}
 
+        {isOwnProfile && (
+          <ProfileEditModal
+            clerkId={params.profileId}
+            initialBio={user?.bio || ""}
+            initialWebsite={user?.website || ""}
+            initialSocialLinks={user?.socialLinks || []}
+          />
+        )}
+
         <Button
           onClick={shareProfile}
           className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
@@ -326,19 +335,11 @@ const ProfilePage = ({
         </Button>
       </div>
 
-      {/* Add edit profile button for own profile */}
-      {isOwnProfile && (
-        <ProfileEditModal
-          clerkId={params.profileId}
-          initialBio={user?.bio || ""}
-          initialWebsite={user?.website || ""}
-          initialSocialLinks={user?.socialLinks || []}
-        />
-      )}
+      {/* Removed the edit profile button from here */}
 
       {/* Featured Podcast Section */}
       {featuredPodcast && (
-        <section className="mb-10">
+        <section className="my-10">
           <div className="flex items-center gap-3 mb-4">
             <div className="bg-orange-1/10 p-2 rounded-lg">
               <Award size={20} className="text-orange-1" />

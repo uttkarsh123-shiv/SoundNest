@@ -96,9 +96,12 @@ export default function ProfileEditModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2 border-white-1/20 text-white-1 hover:bg-white-1/10">
-          <Pencil size={16} />
-          Edit Profile
+        <Button 
+          variant="outline" 
+          className="gap-2.5 bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center px-6 py-2.5 rounded-full border border-gray-800 transition-all duration-200 shadow-sm"
+        >
+          <Pencil size={16} className="text-orange-1" />
+          <span className="font-medium">Edit Profile</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-black-1 border-gray-800 text-white-1 max-w-md md:max-w-lg">
