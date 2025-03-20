@@ -158,15 +158,21 @@ export const getUserWithFollowCounts = query({
 
 // Around line 160, you're likely using mutation without importing it
 // Make sure you're using the imported mutation function
+// Look for the updateUserProfile mutation in this file and update it to include the name field
 export const updateUserProfile = mutation({
   args: {
     clerkId: v.string(),
+    name: v.optional(v.string()),  // Add this line to accept the name parameter
     bio: v.optional(v.string()),
     website: v.optional(v.string()),
-    socialLinks: v.optional(v.array(v.object({
-      platform: v.string(),
-      url: v.string()
-    })))
+    socialLinks: v.optional(
+      v.array(
+        v.object({
+          platform: v.string(),
+          url: v.string(),
+        })
+      )
+    ),
   },
   handler: async (ctx, args) => {
     const user = await ctx.db
@@ -178,13 +184,14 @@ export const updateUserProfile = mutation({
       throw new ConvexError("User not found");
     }
 
-    // Update the user profile
+    // Update the patch operation to include the name field if provided
     await ctx.db.patch(user._id, {
+      name: args.name !== undefined ? args.name : user.name,
       bio: args.bio,
       website: args.website,
-      socialLinks: args.socialLinks
+      socialLinks: args.socialLinks,
     });
 
     return { success: true };
-  }
+  },
 });

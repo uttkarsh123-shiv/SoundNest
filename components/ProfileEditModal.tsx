@@ -18,6 +18,7 @@ type SocialLink = {
 
 type ProfileEditModalProps = {
   clerkId: string;
+  initialName?: string;
   initialBio?: string;
   initialWebsite?: string;
   initialSocialLinks?: SocialLink[];
@@ -35,10 +36,12 @@ const PLATFORM_OPTIONS = [
 
 export default function ProfileEditModal({
   clerkId,
+  initialName = "",
   initialBio = "",
   initialWebsite = "",
   initialSocialLinks = [],
 }: ProfileEditModalProps) {
+  const [name, setName] = useState(initialName);
   const [bio, setBio] = useState(initialBio);
   const [website, setWebsite] = useState(initialWebsite);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>(initialSocialLinks);
@@ -70,6 +73,7 @@ export default function ProfileEditModal({
 
       await updateProfile({
         clerkId,
+        name: name.trim() !== "" ? name : undefined,
         bio: bio.trim() !== "" ? bio : undefined,
         website: website.trim() !== "" ? website : undefined,
         socialLinks: filteredLinks.length > 0 ? filteredLinks : undefined,
@@ -96,8 +100,8 @@ export default function ProfileEditModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="gap-2.5 bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center px-6 py-2.5 rounded-full border border-gray-800 transition-all duration-200 shadow-sm"
         >
           <Pencil size={16} className="text-orange-1" />
@@ -110,6 +114,24 @@ export default function ProfileEditModal({
         </DialogHeader>
 
         <div className="space-y-6 py-4">
+          {/* Name */}
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-white-2">Name</Label>
+            <Input
+              id="name"
+              placeholder="Your display name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={(e) => {
+                // Prevent default behavior for space key to ensure it's captured
+                if (e.key === ' ') {
+                  e.stopPropagation();
+                }
+              }}
+              className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
+            />
+          </div>
+
           {/* Bio */}
           <div className="space-y-2">
             <Label htmlFor="bio" className="text-white-2">Bio</Label>

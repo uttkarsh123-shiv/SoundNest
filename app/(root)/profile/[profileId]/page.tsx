@@ -320,6 +320,7 @@ const ProfilePage = ({
         {isOwnProfile && (
           <ProfileEditModal
             clerkId={params.profileId}
+            initialName={user?.name || ""}
             initialBio={user?.bio || ""}
             initialWebsite={user?.website || ""}
             initialSocialLinks={user?.socialLinks || []}
@@ -334,8 +335,6 @@ const ProfilePage = ({
           <span>Share Profile</span>
         </Button>
       </div>
-
-      {/* Removed the edit profile button from here */}
 
       {/* Featured Podcast Section */}
       {featuredPodcast && (
@@ -495,7 +494,7 @@ const ProfilePage = ({
 
             {recentPodcasts.length > 0 ? (
               <div className="podcast_grid gap-6">
-                {popularPodcasts.map((podcast, index) => (
+                {recentPodcasts.map((podcast, index) => (
                   <div
                     key={podcast._id}
                     className="group transition-all duration-300 hover:scale-[1.02]"
