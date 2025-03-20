@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +46,30 @@ export default function ProfileEditModal({
   const [website, setWebsite] = useState(initialWebsite);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>(initialSocialLinks);
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Prevent auto-focus on any input when modal opens
+  useEffect(() => {
+    if (open && dialogRef.current) {
+      // Set focus to the dialog container itself
+      dialogRef.current.focus();
+      
+      // Add a one-time event listener to capture and prevent focus events
+      const preventFocus = (e: FocusEvent) => {
+        if (e.target instanceof HTMLInputElement || 
+            e.target instanceof HTMLTextAreaElement || 
+            e.target instanceof HTMLSelectElement) {
+          dialogRef.current?.focus();
+        }
+      };
+      
+      document.addEventListener('focusin', preventFocus, { once: true });
+      
+      return () => {
+        document.removeEventListener('focusin', preventFocus);
+      };
+    }
+  }, [open]);
 
   const updateProfile = useMutation(api.users.updateUserProfile);
   const { toast } = useToast();
@@ -108,7 +132,14 @@ export default function ProfileEditModal({
           <span className="font-medium">Edit Profile</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-black-1 border-gray-800 text-white-1 max-w-md md:max-w-lg max-h-[90vh] overflow-y-auto scrollbar-hide">
+      <DialogContent 
+        ref={dialogRef}
+        className="bg-black-1 border-gray-800 text-white-1 max-w-md md:max-w-lg max-h-[90vh] overflow-y-auto scrollbar-hide"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault(); // Prevent the default auto-focus behavior
+        }}
+        tabIndex={0} // Make the dialog container focusable
+      >
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-white-1">Edit Profile</DialogTitle>
         </DialogHeader>
@@ -130,6 +161,7 @@ export default function ProfileEditModal({
               }}
               className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
               autoFocus={false}
+              tabIndex={-1} // This helps prevent focus during tab navigation
             />
           </div>
 
