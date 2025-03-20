@@ -31,7 +31,7 @@ const PLATFORM_OPTIONS = [
   { value: "facebook", label: "Facebook" },
   { value: "linkedin", label: "LinkedIn" },
   { value: "github", label: "GitHub" },
-  { value: "website", label: "Other" },
+  { value: "social", label: "Other" },
 ];
 
 export default function ProfileEditModal({
@@ -108,7 +108,7 @@ export default function ProfileEditModal({
           <span className="font-medium">Edit Profile</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-black-1 border-gray-800 text-white-1 max-w-md md:max-w-lg">
+      <DialogContent className="bg-black-1 border-gray-800 text-white-1 max-w-md md:max-w-lg max-h-[90vh] overflow-y-auto scrollbar-hide">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-white-1">Edit Profile</DialogTitle>
         </DialogHeader>
@@ -129,6 +129,7 @@ export default function ProfileEditModal({
                 }
               }}
               className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
+              autoFocus={false}
             />
           </div>
 

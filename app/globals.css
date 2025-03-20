@@ -244,3 +244,14 @@ html {
     transform: translateY(0);
   }
 }
+
+
+/* Add this to your existing CSS, perhaps after the custom-scrollbar styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
