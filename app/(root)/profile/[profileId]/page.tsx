@@ -44,37 +44,37 @@ const ProfilePage = ({
   const recentPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, {
     type: "latest",
   });
-  
+
   // Add follow-related queries and mutations with proper error handling
-  const isUserFollowing = useQuery(api.follows.isFollowing, 
+  const isUserFollowing = useQuery(api.follows.isFollowing,
     { followingId: params.profileId },
     // Add options to handle potential errors
-    { 
+    {
       onError: (error) => {
         console.error("Error checking follow status:", error);
         return false;
       }
     }
   );
-  
+
   const followersCount = useQuery(api.follows.getFollowersCount, {
     userId: params.profileId,
   });
-  
+
   const followingCount = useQuery(api.follows.getFollowingCount, {
     userId: params.profileId,
   });
-  
+
   const followUser = useMutation(api.follows.followUser);
   const unfollowUser = useMutation(api.follows.unfollowUser);
-  
+
   const { setAudio } = useAudio();
   const { toast } = useToast();
   // Removed randomPodcast state since it's set but never read
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("popular");
   const { userId } = useAuth();
-  
+
   // Update isFollowing state when the query result changes
   useEffect(() => {
     if (isUserFollowing !== undefined) {
@@ -157,7 +157,7 @@ const ProfilePage = ({
       });
       return;
     }
-    
+
     try {
       if (isFollowing) {
         await unfollowUser({ followingId: params.profileId });
@@ -176,11 +176,6 @@ const ProfilePage = ({
       });
     }
   };
-
-  // Sort podcasts based on creation time (latest first)
-  const sortedPodcasts = [...podcastsData.podcasts].sort((a, b) => {
-    return (b._creationTime || 0) - (a._creationTime || 0);
-  });
 
   // Filter podcasts for different tabs
   const popularPodcasts = [...podcastsData.podcasts]
@@ -248,7 +243,7 @@ const ProfilePage = ({
               </span>
               {/* Add followers count */}
               {followersCount !== undefined && (
-                <span 
+                <span
                   className="flex items-center gap-2 cursor-pointer hover:text-orange-1 transition-colors"
                   onClick={() => router.push(`/profile/${params.profileId}/followers`)}
                 >
@@ -258,7 +253,7 @@ const ProfilePage = ({
               )}
               {/* Add following count */}
               {followingCount !== undefined && (
-                <span 
+                <span
                   className="flex items-center gap-2 cursor-pointer hover:text-orange-1 transition-colors"
                   onClick={() => router.push(`/profile/${params.profileId}/following`)}
                 >
@@ -266,52 +261,10 @@ const ProfilePage = ({
                   <span>{followingCount} Following</span>
                 </span>
               )}
-              <span className="flex items-center gap-2">
-                <Calendar size={16} className="text-orange-1" />
-                <span>Joined {new Date(user?._creationTime || Date.now()).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric'
-                })}</span>
-              </span>
-              {user?.website && (
-                <a
-                  href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-orange-1 hover:underline"
-                >
-                  <Globe size={16} />
-                  <span>Website</span>
-                </a>
-              )}
             </p>
 
-            {/* Bio section */}
-            {user?.bio && (
-              <p className="text-white-2 mt-4 text-sm sm:text-base max-w-2xl">
-                {user.bio}
-              </p>
-            )}
-
-            {/* Social links */}
-            {user?.socialLinks && (
-              <div className="flex gap-3 mt-4">
-                {user.socialLinks.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-white-1/10 p-2 rounded-full hover:bg-white-1/20 transition-colors"
-                  >
-                    <span className="sr-only">{link.platform}</span>
-                    {/* Social icon based on platform */}
-                    <Globe size={18} className="text-white-1" />
-                  </a>
-                ))}
-              </div>
-            )}
+            {/* Removed bio section */}
+            {/* Removed social links */}
           </div>
 
           {/* Stats Cards - Desktop */}
@@ -378,7 +331,7 @@ const ProfilePage = ({
 
       {/* Add edit profile button for own profile */}
       {isOwnProfile && (
-        <ProfileEditModal 
+        <ProfileEditModal
           clerkId={params.profileId}
           initialBio={user?.bio || ""}
           initialWebsite={user?.website || ""}
@@ -545,10 +498,10 @@ const ProfilePage = ({
             {recentPodcasts.length > 0 ? (
               <div className="podcast_grid gap-6">
                 {popularPodcasts.map((podcast, index) => (
-                  <div 
-                    key={podcast._id} 
+                  <div
+                    key={podcast._id}
                     className="group transition-all duration-300 hover:scale-[1.02]"
-                    style={{ 
+                    style={{
                       animationDelay: `${index * 0.1}s`,
                       animation: 'fadeIn 0.5s ease-in-out forwards',
                       opacity: 0
@@ -596,13 +549,13 @@ const ProfilePage = ({
               <p className="text-white-3 italic mb-6">This user hasn't added a bio yet.</p>
             )
           )}
-      
+
           {/* Website and Social Links */}
           <div className="flex flex-wrap gap-4">
             {user?.website && (
-              <a 
-                href={user.website.startsWith('http') ? user.website : `https://${user.website}`} 
-                target="_blank" 
+              <a
+                href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
               >
@@ -610,7 +563,7 @@ const ProfilePage = ({
                 <span className="text-white-2">Website</span>
               </a>
             )}
-            
+
             {user?.socialLinks && user.socialLinks.length > 0 && user.socialLinks.map((link, index) => {
               // Get appropriate icon based on platform
               const getSocialIcon = (platform: string) => {
@@ -624,12 +577,12 @@ const ProfilePage = ({
                   default: return <Link size={18} className="text-orange-1" />;
                 }
               };
-              
+
               return (
-                <a 
+                <a
                   key={index}
-                  href={link.url.startsWith('http') ? link.url : `https://${link.url}`} 
-                  target="_blank" 
+                  href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
                 >
@@ -638,7 +591,7 @@ const ProfilePage = ({
                 </a>
               );
             })}
-            
+
             {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && (
               isOwnProfile ? (
                 <p className="text-white-3 italic">Add your website and social links to help others connect with you.</p>
