@@ -16,15 +16,16 @@ const PodcastCard = ({
 
     return (
         <div 
-            className='cursor-pointer bg-white-1/5 rounded-xl p-3 hover:bg-white-1/10 transition-all duration-200 h-full flex flex-col' 
+            className='cursor-pointer bg-white-1/5 rounded-xl p-3 hover:bg-white-1/10 transition-all duration-200 h-full flex flex-col w-full' 
             onClick={() => router.push(`/podcasts/${podcastId}`)}
         >
-            <figure className="flex flex-col gap-3 h-full">
+            <figure className="flex flex-col gap-3 h-full w-full">
                 <div className="relative w-full aspect-square overflow-hidden rounded-lg">
                     <Image
                         src={imgUrl}
                         alt={title}
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-cover rounded-lg hover:scale-105 transition-transform duration-300"
                     />
                 </div>
@@ -34,7 +35,7 @@ const PodcastCard = ({
 
                     {/* Stats display */}
                     {(views !== undefined || likes !== undefined || rating !== undefined) && (
-                        <div className="flex items-center gap-3 mt-2">
+                        <div className="flex items-center gap-3 mt-auto pt-2">
                             {views !== undefined && (
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
                                     <Headphones size={12} className="flex-shrink-0" />
@@ -50,7 +51,7 @@ const PodcastCard = ({
                             {rating !== undefined && (
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
                                     <Star size={12} className="flex-shrink-0" />
-                                    <span>{rating.toFixed(1)}</span>
+                                    <span>{rating?.toFixed(1)}</span>
                                 </div>
                             )}
                         </div>
