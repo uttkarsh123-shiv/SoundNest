@@ -13,8 +13,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import ProfileEditModal from "@/components/ProfileEditModal";
-import StatCard from "@/components/ProfilePage/StatCard";
-import PodcastTabs from "@/components/ProfilePage/PodcastTabs";
+import StatCard from "@/components/Profile/StatCard";
+import PodcastTabs from "@/components/Profile/PodcastTabs";
 const ProfilePage = ({
   params,
 }: {
@@ -406,7 +406,7 @@ const ProfilePage = ({
       )}
 
       {/* Tabbed Content Section - Using the new PodcastTabs component */}
-      <PodcastTabs 
+      <PodcastTabs
         popularPodcasts={popularPodcasts}
         recentPodcasts={recentPodcasts}
         isOwnProfile={isOwnProfile}
@@ -429,7 +429,7 @@ const ProfilePage = ({
               <p className="text-white-2">{user.bio}</p>
             ) : (
               isOwnProfile && (
-                <p 
+                <p
                   className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
                   onClick={() => {
                     const editButton = document.getElementById('profile-edit-button');
@@ -498,7 +498,7 @@ const ProfilePage = ({
             })}
 
             {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && isOwnProfile && (
-              <p 
+              <p
                 className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
                 onClick={() => {
                   const editButton = document.getElementById('profile-edit-button');

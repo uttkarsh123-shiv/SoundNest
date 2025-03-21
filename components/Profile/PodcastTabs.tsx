@@ -1,6 +1,6 @@
 import { Star, Clock } from "lucide-react";
 import { Tabs,  TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PodcastSection from "@/components/ProfilePage/PodcastSection";
+import PodcastSection from "@/components/Profile/PodcastSection";
 import EmptyState from "@/components/EmptyState";
 import { useState } from "react";
 
