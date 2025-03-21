@@ -47,14 +47,7 @@ const ProfilePage = ({
 
   // Add follow-related queries and mutations with proper error handling
   const isUserFollowing = useQuery(api.follows.isFollowing,
-    { followingId: params.profileId },
-    // Add options to handle potential errors
-    {
-      onError: (error) => {
-        console.error("Error checking follow status:", error);
-        return false;
-      }
-    }
+    { followingId: params.profileId }
   );
 
   const followersCount = useQuery(api.follows.getFollowersCount, {
@@ -176,9 +169,6 @@ const ProfilePage = ({
       });
     }
   };
-
-  // Filter podcasts for different tabs - these are redundant since you're already fetching filtered podcasts
-  // Remove these redundant filters since you're already fetching the data from the API
   const popularPodcasts = [...podcastsData.podcasts]
     .sort((a, b) => (b.views || 0) - (a.views || 0))
 
