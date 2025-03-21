@@ -2,6 +2,7 @@ import { PodcastProps } from "@/types";
 import PodcastCard from "@/components/PodcastCard";
 import Link from "next/link";
 import { TrendingUp, ArrowRight } from "lucide-react";
+import PodcastCardSkeleton from "../PodcastCardSkeleton";
 
 interface TrendingPodcastsProps {
     trendingPodcasts: PodcastProps[] | undefined;
@@ -41,30 +42,8 @@ const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
                     ))
                 ) : (
                     <>
-                        {[...Array(3)].map((_, index) => (
-                            <div key={index} className="bg-white-1/5 rounded-xl overflow-hidden border border-white-1/10 shadow-md">
-                                <div className="w-full aspect-square bg-white-1/10 animate-pulse relative">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
-                                </div>
-                                <div className="p-4 space-y-3">
-                                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse w-4/5" />
-                                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
-                                    <div className="flex justify-between pt-2">
-                                        <div className="flex items-center gap-1">
-                                            <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
-                                            <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
-                                            <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
-                                            <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        {[...Array(3)].map(() => (
+                            <PodcastCardSkeleton/>
                         ))}
                     </>
                 )}
