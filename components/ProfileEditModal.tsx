@@ -38,7 +38,7 @@ const PLATFORM_OPTIONS = [
 // Add URL validation helper function
 const validateSocialUrl = (platform: string, url: string): boolean => {
   if (!url) return true; // Empty URLs are allowed (will be filtered out on submit)
-  
+
   const urlPatterns: Record<string, RegExp> = {
     twitter: /^https?:\/\/(www\.)?(twitter\.com|x\.com)\/.+/i,
     instagram: /^https?:\/\/(www\.)?instagram\.com\/.+/i,
@@ -105,7 +105,7 @@ export default function ProfileEditModal({
 
   const handleSocialLinkChange = (index: number, field: keyof SocialLink, value: string) => {
     const newLinks = [...socialLinks];
-    
+
     if (field === "platform" && value === "other") {
       // Initialize customPlatform when switching to "other"
       newLinks[index] = { ...newLinks[index], [field]: value, customPlatform: "" };
@@ -115,25 +115,25 @@ export default function ProfileEditModal({
     } else {
       newLinks[index] = { ...newLinks[index], [field]: value };
     }
-    
+
     setSocialLinks(newLinks);
-    
+
     // Clear error when platform changes
     if (field === "platform") {
       setUrlErrors(prev => {
-        const updated = {...prev};
+        const updated = { ...prev };
         delete updated[index];
         return updated;
       });
     }
-    
+
     // Validate URL when URL changes
     if (field === "url" && value) {
       const isValid = validateSocialUrl(newLinks[index].platform, value);
       setUrlErrors(prev => ({
         ...prev,
-        [index]: isValid ? "" : `Invalid URL for ${newLinks[index].platform === "other" && newLinks[index].customPlatform 
-          ? newLinks[index].customPlatform 
+        [index]: isValid ? "" : `Invalid URL for ${newLinks[index].platform === "other" && newLinks[index].customPlatform
+          ? newLinks[index].customPlatform
           : PLATFORM_OPTIONS.find(p => p.value === newLinks[index].platform)?.label}`
       }));
     }
@@ -143,12 +143,12 @@ export default function ProfileEditModal({
     try {
       // Check for URL validation errors
       const hasErrors = Object.values(urlErrors).some(error => error !== "");
-      
+
       // Check for missing custom platform names
       const missingCustomPlatforms = socialLinks.some(
         link => link.platform === "other" && (!link.customPlatform || link.customPlatform.trim() === "")
       );
-      
+
       if (hasErrors) {
         toast({
           title: "Invalid social links",
@@ -158,7 +158,7 @@ export default function ProfileEditModal({
         });
         return;
       }
-      
+
       if (missingCustomPlatforms) {
         toast({
           title: "Missing platform name",
@@ -370,17 +370,20 @@ export default function ProfileEditModal({
                     {link.platform === "other" && (
                       <div className="flex gap-2 mt-2">
                         <div className="w-1/3"></div> {/* Spacer to align with fields above */}
-                        <Input
-                          placeholder={`Your ${link.customPlatform || "Other"} URL`}
-                          value={link.url}
-                          onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
-                          className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
-                        />
+                        <div className="flex-1 flex gap-2">
+                          <Input
+                            placeholder={`Your ${link.customPlatform || "Other"} URL`}
+                            value={link.url}
+                            onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
+                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 w-full ${urlErrors[index] ? 'border-red-500' : ''}`}
+                          />
+                          <div className="w-12"></div> {/* Spacer for alignment with delete button */}
+                        </div>
                       </div>
                     )}
                     
                     {urlErrors[index] && (
-                      <p className="text-xs text-red-500 ml-[calc(33.333%+0.5rem)]">{urlErrors[index]}</p>
+                      <p className="text-xs text-red-500 mt-1 ml-[calc(33.333%+0.5rem)]">{urlErrors[index]}</p>
                     )}
                   </div>
                 ))}
