@@ -1,25 +1,28 @@
 import { PodcastProps } from "@/types";
 import PodcastCard from "@/components/PodcastCard";
 import Link from "next/link";
-import { TrendingUp, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import PodcastCardSkeleton from "../PodcastCardSkeleton";
 
-interface TrendingPodcastsProps {
-    trendingPodcasts: PodcastProps[] | undefined;
+interface PodcastSectionProps {
+    title: string;
+    icon: React.ReactNode;
+    podcasts: PodcastProps[] | undefined;
+    filterType: string;
 }
 
-const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
+const PodcastSection = ({ title, icon, podcasts, filterType }: PodcastSectionProps) => {
     return (
         <section className="flex flex-col gap-5 mt-12">
             <header className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <div className="bg-orange-1/10 p-3 rounded-xl">
-                        <TrendingUp size={28} className="text-orange-1" />
+                        {icon}
                     </div>
-                    <h1 className="text-2xl font-bold text-white-1">Trending Podcasts</h1>
+                    <h1 className="text-2xl font-bold text-white-1">{title}</h1>
                 </div>
                 <Link
-                    href="/discover?filter=trending"
+                    href={`/discover?filter=${filterType}`}
                     className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
                 >
                     See all
@@ -27,8 +30,8 @@ const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
                 </Link>
             </header>
             <div className="podcast_grid">
-                {trendingPodcasts ? (
-                    trendingPodcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount, averageRating }) => (
+                {podcasts ? (
+                    podcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount, averageRating }) => (
                         <PodcastCard
                             key={_id}
                             imgUrl={imageUrl as string}
@@ -42,8 +45,8 @@ const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
                     ))
                 ) : (
                     <>
-                        {[...Array(3)].map(() => (
-                            <PodcastCardSkeleton/>
+                        {[...Array(3)].map((_, index) => (
+                            <PodcastCardSkeleton key={index} />
                         ))}
                     </>
                 )}
@@ -52,4 +55,4 @@ const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
     );
 };
 
-export default TrendingPodcasts;
+export default PodcastSection;

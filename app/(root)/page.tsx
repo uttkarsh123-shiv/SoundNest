@@ -2,9 +2,9 @@
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import FeaturedPodcasts from "@/components/HomePage/FeaturedPodcasts";
-import TrendingPodcasts from "@/components/HomePage/TrendingPodcasts";
-import TopRatedPodcasts from "@/components/HomePage/TopRatedPodcasts";
+import PodcastSection from "@/components/HomePage/PodcastSection";
 import LatestPodcasts from "@/components/HomePage/LatestPodcasts";
+import { TrendingUp, Star } from "lucide-react";
 
 const Home = () => {
   const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 3);
@@ -18,10 +18,20 @@ const Home = () => {
       <FeaturedPodcasts featuredPodcasts={featuredPodcasts} />
 
       {/* Trending */}
-      <TrendingPodcasts trendingPodcasts={trendingPodcasts} />
+      <PodcastSection 
+        title="Trending Podcasts"
+        icon={<TrendingUp size={28} className="text-orange-1" />}
+        podcasts={trendingPodcasts}
+        filterType="trending"
+      />
 
       {/* Top Rated */}
-      <TopRatedPodcasts topRatedPodcasts={topRatedPodcasts} />
+      <PodcastSection 
+        title="Top Rated Podcasts"
+        icon={<Star size={28} className="text-orange-1" />}
+        podcasts={topRatedPodcasts}
+        filterType="topRated"
+      />
 
       {/* Latest */}
       <LatestPodcasts latestPodcasts={latestPodcasts} />
