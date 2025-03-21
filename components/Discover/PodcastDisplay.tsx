@@ -25,6 +25,7 @@ const PodcastDisplay = ({ filteredPodcasts, viewMode }: PodcastDisplayProps) => 
               duration={podcast.audioDuration}
               podcastType={podcast.podcastType}
               language={podcast.language}
+
             />
           ) : (
             <ListPodcastCard
@@ -36,6 +37,8 @@ const PodcastDisplay = ({ filteredPodcasts, viewMode }: PodcastDisplayProps) => 
               author={podcast.author || 'Unknown Author'}
               likeCount={podcast.likeCount}
               index={index}
+              podcastType={podcast.podcastType}
+              language={podcast.language}
             />
           )}
         </div>
