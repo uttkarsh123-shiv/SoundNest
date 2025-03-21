@@ -241,22 +241,16 @@ const ProfilePage = ({
                 <Mic size={16} className="text-orange-1" />
                 <span className="font-medium">{podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}</span>
               </span>
-              {/* Add followers count */}
+              {/* Followers count - removed clickable behavior */}
               {followersCount !== undefined && (
-                <span
-                  className="flex items-center gap-2 cursor-pointer hover:text-orange-1 transition-colors"
-                  onClick={() => router.push(`/profile/${params.profileId}/followers`)}
-                >
+                <span className="flex items-center gap-2">
                   <User size={16} className="text-orange-1" />
                   <span>{followersCount} {followersCount === 1 ? 'Follower' : 'Followers'}</span>
                 </span>
               )}
-              {/* Add following count */}
+              {/* Following count - removed clickable behavior */}
               {followingCount !== undefined && (
-                <span
-                  className="flex items-center gap-2 cursor-pointer hover:text-orange-1 transition-colors"
-                  onClick={() => router.push(`/profile/${params.profileId}/following`)}
-                >
+                <span className="flex items-center gap-2">
                   <Users size={16} className="text-orange-1" />
                   <span>{followingCount} Following</span>
                 </span>
