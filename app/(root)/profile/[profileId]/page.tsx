@@ -510,8 +510,9 @@ const ProfilePage = ({
       ) : (
         <section className="my-8">
           <EmptyState
-            title="No podcasts found"
-            description={isOwnProfile ? "Start creating your podcast journey today!" : "This user hasn't created any podcasts yet."}
+            title={"No Podcasts created yet"}
+            buttonLink={isOwnProfile ? "/create-podcast" : undefined}
+            buttonText="Create Podcast"
           />
         </section>
       )}
