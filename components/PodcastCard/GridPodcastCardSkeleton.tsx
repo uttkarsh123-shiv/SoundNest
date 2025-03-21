@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PodcastCardSkeleton = () => {
+const GridPodcastCardSkeleton = () => {
     return (
         <div className="bg-white-1/5 rounded-xl p-3 border border-white-1/10 shadow-md flex flex-col h-full w-full">
             <figure className="flex flex-col gap-3 h-full w-full">
@@ -10,7 +10,7 @@ const PodcastCardSkeleton = () => {
                 <div className="flex flex-col flex-1 w-full space-y-3">
                     <div className="h-5 bg-white-1/10 rounded-md animate-pulse w-4/5" />
                     <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
-                    
+
                     <div className="flex items-center justify-between mt-auto pt-2">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-1">
@@ -37,4 +37,4 @@ const PodcastCardSkeleton = () => {
     )
 }
 
-export default PodcastCardSkeleton
+export default GridPodcastCardSkeleton
