@@ -2,7 +2,7 @@ import { PodcastProps } from "@/types";
 import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
 import LatestPodcastSkeleton from "./Skeleton/LatestPodcastSkeleton";
-import ListPodcastCard from "@/components/ListPodcastCard";
+import ListPodcastCard from "@/components/PodcastCard/ListPodcastCard";
 
 interface LatestPodcastsProps {
     latestPodcasts: PodcastProps[] | undefined;

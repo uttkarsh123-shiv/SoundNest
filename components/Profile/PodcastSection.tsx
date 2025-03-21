@@ -1,4 +1,4 @@
-import PodcastCard from "@/components/GridPodcastCard";
+import PodcastCard from "@/components/PodcastCard/GridPodcastCard";
 
 interface PodcastSectionProps {
     title: string;

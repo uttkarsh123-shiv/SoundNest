@@ -1,7 +1,7 @@
 'use client'
 import EmptyState from '@/components/EmptyState'
 import LoaderSpinner from '@/components/LoaderSpinner'
-import PodcastCard from '@/components/GridPodcastCard'
+import PodcastCard from '@/components/PodcastCard/GridPodcastCard'
 import PodcastDetailPlayer from '@/components/PodcastDetailPlayer'
 import { api } from '@/convex/_generated/api'
 import { useUser } from '@clerk/nextjs'
