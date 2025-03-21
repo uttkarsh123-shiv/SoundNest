@@ -28,23 +28,24 @@ export interface TopPodcastersProps {
 export interface PodcastProps {
   _id: Id<"podcasts">;
   _creationTime: number;
-  audioStorageId: Id<"_storage"> | null;
+  audioStorageId?: Id<"_storage"> | null;
   user: Id<"users">;
   podcastTitle: string;
   podcastDescription: string;
-  audioUrl: string | null;
-  imageUrl: string | null;
-  imageStorageId: Id<"_storage"> | null;
+  audioUrl?: string | null;
+  imageUrl?: string | null;
+  imageStorageId?: Id<"_storage"> | null;
   author: string;
   authorId: string;
   authorImageUrl: string;
   voicePrompt: string;
-  imagePrompt: string | null;
+  imagePrompt: string | null | undefined;
   voiceType: string;
   audioDuration: number;
   views: number;
   likeCount?: number;
   averageRating?: number;
+  likes?: string[];
 }
 
 export interface ProfilePodcastProps {
@@ -112,13 +113,13 @@ export interface AudioContextType {
 }
 
 export interface PodcastCardProps {
-    imgUrl: string;
-    title: string;
-    description?: string;
-    podcastId: string;
-    views?: number;
-    likes?: number;
-    rating?: number;
+  imgUrl: string;
+  title: string;
+  description?: string;
+  podcastId: string;
+  views?: number;
+  likes?: number;
+  rating?: number;
 }
 
 export interface CarouselProps {
@@ -135,4 +136,4 @@ export type UseDotButtonType = {
   selectedIndex: number;
   scrollSnaps: number[];
   onDotButtonClick: (index: number) => void;
-}
+};
