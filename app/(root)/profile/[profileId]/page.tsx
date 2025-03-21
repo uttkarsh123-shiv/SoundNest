@@ -4,8 +4,6 @@ import { useQuery, useMutation } from "convex/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link, Twitter, Instagram, Youtube, Facebook, Linkedin, Github } from "lucide-react";
-// Removed QrCode from imports since it's not being used
-
 import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
@@ -16,12 +14,9 @@ import { useAudio } from "@/providers/AudioProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-
-// Near the top of the file, add the useRouter import if it's not already there
 import { useRouter } from "next/navigation";
-
 import ProfileEditModal from "@/components/ProfileEditModal";
-
+import StatCard from "@/components/ProfilePage/StatCard";
 const ProfilePage = ({
   params,
 }: {
@@ -528,16 +523,18 @@ const ProfilePage = ({
 
         <div className="bg-white-1/5 rounded-xl p-6 border border-white-1/10">
           {/* Bio */}
-          {user?.bio ? (
-            <p className="text-white-2">{user.bio}</p>
-          ) : (
-            isOwnProfile && (
-              <p className="text-white-3 italic">Add a bio to tell others about yourself.</p>
-            )
-          )}
+          <div className={`flex flex-wrap gap-4 ${(user?.bio || isOwnProfile) ? "mb-6" : ""} `}>
+            {user?.bio ? (
+              <p className="text-white-2">{user.bio}</p>
+            ) : (
+              isOwnProfile && (
+                <p className="text-white-3 italic">Add a bio to tell others about yourself.</p>
+              )
+            )}
+          </div>
 
           {/* Joining Date */}
-          <div className={`flex items-center ${(user?.website || (user?.socialLinks && user?.socialLinks.length > 0) || isOwnProfile) ? "mb-6" : ""} text-white-2`}>
+          <div className={`flex items-center gap-2 ${(user?.website || (user?.socialLinks && user?.socialLinks.length > 0) || isOwnProfile) ? "mb-6" : ""} text-white-2`}>
             <Calendar size={18} className="text-orange-1" />
             <span>Joined {user?._creationTime ? new Date(user._creationTime).toLocaleDateString('en-US', {
               month: 'long',
@@ -547,7 +544,7 @@ const ProfilePage = ({
           </div>
 
           {/* Website and Social Links */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-2">
             {user?.website && (
               <a
                 href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
@@ -597,14 +594,5 @@ const ProfilePage = ({
     </section>
   );
 };
-
-// Stat Card Component
-const StatCard = ({ icon, value, label }: { icon: React.ReactNode, value: string, label: string }) => (
-  <div className="bg-white-1/5 rounded-xl p-3 flex flex-col items-center min-w-24 border border-white-1/10 hover:bg-white-1/10 transition-colors">
-    <div className="text-orange-1 mb-1">{icon}</div>
-    <div className="text-xl font-bold text-white-1">{value}</div>
-    <div className="text-xs text-white-2">{label}</div>
-  </div>
-);
 
 export default ProfilePage;
