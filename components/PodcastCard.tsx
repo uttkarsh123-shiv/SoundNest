@@ -2,6 +2,7 @@ import { PodcastCardProps } from '@/types'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Headphones, Heart, Star, Clock } from 'lucide-react'
+import { podcastTypes, languageOptions } from '@/constants/PodcastFields'
 
 const PodcastCard = ({
     imgUrl,
@@ -11,7 +12,9 @@ const PodcastCard = ({
     views,
     likes,
     rating,
-    duration
+    duration,
+    podcastType,
+    language
 }: PodcastCardProps) => {
     const router = useRouter();
 
@@ -44,6 +47,21 @@ const PodcastCard = ({
                 <div className="flex flex-col flex-1 w-full">
                     <h1 className="text-base sm:text-lg font-bold text-white-1 line-clamp-1">{title}</h1>
                     <h2 className="text-xs sm:text-sm font-normal capitalize text-white-4 line-clamp-2 mt-1 flex-grow">{description}</h2>
+
+                    {/* Category and language badges */}
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        {podcastType && (
+                            <span className="inline-block bg-orange-1/20 text-orange-1 text-xs px-2 py-1 rounded-full">
+                                {podcastTypes.find(c => c.value === podcastType)?.label || podcastType}
+                            </span>
+                        )}
+                        
+                        {language && (
+                            <span className="inline-flex items-center bg-white-1/10 text-white-2 text-xs px-2 py-1 rounded-full">
+                                {languageOptions.find(l => l.value === language)?.label || language}
+                            </span>
+                        )}
+                    </div>
 
                     {/* Stats display */}
                     {(views !== undefined || likes !== undefined || rating !== undefined || duration) && (

@@ -121,6 +121,8 @@ export interface PodcastCardProps {
   likes?: number;
   rating?: number;
   duration?: number;
+  podcastType: string | undefined;
+  language?: string | undefined;
 }
 
 export interface CarouselProps {
