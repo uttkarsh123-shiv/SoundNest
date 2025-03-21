@@ -460,7 +460,6 @@ const ProfilePage = ({
             ) : (
               <EmptyState
                 title="No popular podcasts found"
-                description="Check back later for popular content"
               />
             )}
           </section>
@@ -502,7 +501,6 @@ const ProfilePage = ({
             ) : (
               <EmptyState
                 title="No recent podcasts found"
-                description="Check back later for new content"
               />
             )}
           </section>
