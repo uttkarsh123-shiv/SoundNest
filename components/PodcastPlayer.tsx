@@ -3,17 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Slider } from "./ui/slider";
-import { 
-  Play, 
+import {
+  Play,
   Pause,
-  Volume2, 
+  Volume2,
   VolumeX,
   Gauge,
   FastForward,
   Repeat,
   Maximize2
 } from "lucide-react";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -195,8 +195,6 @@ const PodcastPlayer = () => {
         <Progress
           value={(currentTime / duration) * 100}
           className="h-1 w-full bg-gray-800"
-          indicatorClassName="bg-primary"
-          max={duration === 0 ? 100 : duration}
         />
       </div>
 
@@ -208,7 +206,7 @@ const PodcastPlayer = () => {
           onLoadedMetadata={handleLoadedMetadata}
           onEnded={handleAudioEnded}
         />
-        
+
         {/* Left Section - Album Art and Title */}
         <div className="flex items-center gap-4 min-w-[200px] max-w-[300px]">
           <Link href={`/podcasts/${audio?.podcastId}`}>
@@ -230,7 +228,7 @@ const PodcastPlayer = () => {
 
         {/* Center Section - Player Controls */}
         <div className="flex items-center justify-center gap-8 flex-1 max-w-[400px]">
-          <button 
+          <button
             className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
             onClick={rewind}
             title="Rewind 5s (Left Arrow)"
@@ -244,13 +242,13 @@ const PodcastPlayer = () => {
             title="Play/Pause (Space)"
           >
             {isPlaying ? (
-              <Pause className="h-5 w-5" stroke="white"/>
+              <Pause className="h-5 w-5" stroke="white" />
             ) : (
-              <Play className="h-5 w-5" stroke="white"/>
+              <Play className="h-5 w-5" stroke="white" />
             )}
           </button>
 
-          <button 
+          <button
             className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
             onClick={forward}
             title="Forward 5s (Right Arrow)"
@@ -266,7 +264,7 @@ const PodcastPlayer = () => {
             )}
             title="Toggle Loop"
           >
-            <Repeat className="h-5 w-5"/>
+            <Repeat className="h-5 w-5" />
           </button>
 
           <button
