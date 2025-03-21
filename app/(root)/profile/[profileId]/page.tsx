@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import ProfileEditModal from "@/components/ProfileEditModal";
 import StatCard from "@/components/ProfilePage/StatCard";
+import PodcastTabs from "@/components/ProfilePage/PodcastTabs";
 const ProfilePage = ({
   params,
 }: {
@@ -164,11 +165,12 @@ const ProfilePage = ({
       });
     }
   };
+  // Sort podcasts for tabs
   const popularPodcasts = [...podcastsData.podcasts]
-    .sort((a, b) => (b.views || 0) - (a.views || 0))
+    .sort((a, b) => (b.views || 0) - (a.views || 0));
 
   const recentPodcasts = [...podcastsData.podcasts]
-    .sort((a, b) => (b._creationTime || 0) - (a._creationTime || 0))
+    .sort((a, b) => (b._creationTime || 0) - (a._creationTime || 0));
 
   return (
     <section className="mt-9 flex flex-col">
@@ -406,107 +408,13 @@ const ProfilePage = ({
         </section>
       )}
 
-      {/* Tabbed Content Section - Only show if there are podcasts */}
-      {podcastsData.podcasts.length > 0 ? (
-        <Tabs defaultValue="popular" className="mb-10" onValueChange={setActiveTab}>
-          <div className="bg-black/20 p-1.5 rounded-lg shadow-inner backdrop-blur-sm inline-flex mb-6">
-            <TabsList className="bg-transparent border-0 p-0">
-              <TabsTrigger
-                value="popular"
-                className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
-              >
-                <Star size={15} />
-                Popular
-              </TabsTrigger>
-              <TabsTrigger
-                value="recent"
-                className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
-              >
-                <Clock size={15} />
-                Recent
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value="popular" className="mt-0">
-            <section className="flex flex-col gap-5">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="bg-orange-1/10 p-3 rounded-xl">
-                  <Star size={28} className="text-orange-1" />
-                </div>
-                <h1 className="text-2xl font-bold text-white-1">Popular Podcasts</h1>
-              </div>
-
-              <div className="podcast_grid gap-6">
-                {popularPodcasts.length > 0 ? (
-                  popularPodcasts.map((podcast) => (
-                    <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
-                      <PodcastCard
-                        imgUrl={podcast.imageUrl!}
-                        title={podcast.podcastTitle!}
-                        description={podcast.podcastDescription}
-                        podcastId={podcast._id}
-                        views={podcast.views}
-                        likes={podcast.likeCount || 0}
-                        rating={podcast.averageRating}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <EmptyState title="No popular podcasts found" />
-                )}
-              </div>
-            </section>
-          </TabsContent>
-
-          <TabsContent value="recent" className="mt-0">
-            <section className="flex flex-col gap-5">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="bg-orange-1/10 p-3 rounded-xl">
-                  <Clock size={28} className="text-orange-1" />
-                </div>
-                <h1 className="text-2xl font-bold text-white-1">Recent Podcasts</h1>
-              </div>
-
-              <div className="podcast_grid gap-6">
-                {recentPodcasts.length > 0 ? (
-                  recentPodcasts.map((podcast, index) => (
-                    <div
-                      key={podcast._id}
-                      className="group transition-all duration-300 hover:scale-[1.02]"
-                      style={{
-                        animationDelay: `${index * 0.1}s`,
-                        animation: 'fadeIn 0.5s ease-in-out forwards',
-                        opacity: 0
-                      }}
-                    >
-                      <PodcastCard
-                        imgUrl={podcast.imageUrl!}
-                        title={podcast.podcastTitle!}
-                        description={podcast.podcastDescription}
-                        podcastId={podcast._id}
-                        views={podcast.views}
-                        likes={podcast.likeCount || 0}
-                        rating={podcast.averageRating}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <EmptyState title="No recent podcasts found" />
-                )}
-              </div>
-            </section>
-          </TabsContent>
-        </Tabs>
-      ) : (
-        <section className="my-8">
-          <EmptyState
-            title={"No Podcasts created yet"}
-            buttonLink={isOwnProfile ? "/create-podcast" : undefined}
-            buttonText="Create Podcast"
-          />
-        </section>
-      )}
+      {/* Tabbed Content Section - Using the new PodcastTabs component */}
+      <PodcastTabs 
+        popularPodcasts={popularPodcasts}
+        recentPodcasts={recentPodcasts}
+        isOwnProfile={isOwnProfile}
+        onTabChange={setActiveTab}
+      />
 
       {/* About Section */}
       <section className="mb-10">
