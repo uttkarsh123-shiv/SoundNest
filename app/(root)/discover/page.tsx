@@ -410,9 +410,11 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                                     <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
                                 </div>
                                 <div className="p-5 space-y-3 flex-1">
-                                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${70 + Math.random() * 25}%` }} />
+                                    {/* Replace dynamic width with fixed Tailwind class */}
+                                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse w-4/5" />
                                     <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
-                                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${40 + Math.random() * 30}%` }} />
+                                    {/* Replace dynamic width with fixed Tailwind class */}
+                                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-3/5" />
                                     <div className="flex justify-between pt-2">
                                         <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
                                         <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[40px]" />
