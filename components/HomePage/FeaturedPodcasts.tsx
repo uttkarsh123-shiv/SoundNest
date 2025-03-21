@@ -14,15 +14,31 @@ interface FeaturedPodcastsProps {
 const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
     const router = useRouter();
 
     // Add auto-scroll functionality
     useEffect(() => {
         if (!emblaApi) return;
 
-        const autoplay = setInterval(() => {
-            emblaApi.scrollNext();
-        }, 4000);
+        let autoplay: NodeJS.Timeout | null = null;
+        
+        const startAutoplay = () => {
+            autoplay = setInterval(() => {
+                emblaApi.scrollNext();
+            }, 4000);
+        };
+        
+        const stopAutoplay = () => {
+            if (autoplay) {
+                clearInterval(autoplay);
+                autoplay = null;
+            }
+        };
+        
+        if (!isPaused) {
+            startAutoplay();
+        }
 
         const onSelect = () => {
             setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -32,10 +48,10 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
 
         // Cleanup interval and event listener on unmount
         return () => {
-            clearInterval(autoplay);
+            stopAutoplay();
             emblaApi.off('select', onSelect);
         };
-    }, [emblaApi]);
+    }, [emblaApi, isPaused]);
 
     if (!featuredPodcasts || featuredPodcasts.length === 0) {
         return <FeaturedSkeleton />;
@@ -43,7 +59,12 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
 
     return (
         <section className="relative w-full h-[300px]">
-            <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
+            <div 
+                className="overflow-hidden rounded-2xl" 
+                ref={emblaRef}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+            >
                 <div className="flex">
                     {featuredPodcasts.map((podcast) => (
                         <div key={podcast._id} className="relative w-full flex-[0_0_100%]">
