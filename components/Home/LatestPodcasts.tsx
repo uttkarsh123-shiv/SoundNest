@@ -1,8 +1,8 @@
 import { PodcastProps } from "@/types";
 import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
-import LatestPodcastSkeleton from "./Skeleton/LatestPodcastSkeleton";
 import ListPodcastCard from "@/components/PodcastCard/ListPodcastCard";
+import ListPodcastSkeleton from "@/components/PodcastCard/ListPodcastSkeleton";
 
 interface LatestPodcastsProps {
     latestPodcasts: PodcastProps[] | undefined;
@@ -42,7 +42,11 @@ const LatestPodcasts = ({ latestPodcasts }: LatestPodcastsProps) => {
                         />
                     ))
                 ) : (
-                    <LatestPodcastSkeleton />
+                    <div className="flex flex-col gap-6">
+                            {[...Array(3)].map((_, index) => (
+                                <ListPodcastSkeleton key={index} />
+                            ))}
+                    </div>
                 )}
             </div>
         </section>

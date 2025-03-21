@@ -2,7 +2,7 @@ import { PodcastProps } from "@/types";
 import PodcastCard from "@/components/PodcastCard/GridPodcastCard";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import PodcastCardSkeleton from "../PodcastCard/GridPodcastCardSkeleton";
+import PodcastCardSkeleton from "../PodcastCard/GridPodcastSkeleton";
 
 interface PodcastSectionProps {
     title: string;

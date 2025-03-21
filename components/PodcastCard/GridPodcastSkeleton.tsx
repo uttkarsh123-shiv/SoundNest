@@ -1,6 +1,6 @@
 import React from 'react'
 
-const GridPodcastCardSkeleton = () => {
+const GridPodcastSkeleton = () => {
     return (
         <div className="bg-white-1/5 rounded-xl p-3 border border-white-1/10 shadow-md flex flex-col h-full w-full">
             <figure className="flex flex-col gap-3 h-full w-full">
@@ -37,4 +37,4 @@ const GridPodcastCardSkeleton = () => {
     )
 }
 
-export default GridPodcastCardSkeleton
+export default GridPodcastSkeleton
