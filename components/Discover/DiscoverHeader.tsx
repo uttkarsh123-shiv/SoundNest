@@ -1,5 +1,5 @@
 import React from 'react';
-import Searchbar from '@/components/Searchbar';
+import Searchbar from '@/components/Discover/Searchbar';
 
 const DiscoverHeader = () => {
     return (
