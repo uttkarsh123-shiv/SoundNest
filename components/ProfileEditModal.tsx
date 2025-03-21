@@ -14,6 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 type SocialLink = {
   platform: string;
   url: string;
+  customPlatform?: string; // Add this field to store custom platform names
 };
 
 type ProfileEditModalProps = {
@@ -93,7 +94,7 @@ export default function ProfileEditModal({
   const { toast } = useToast();
 
   const handleAddSocialLink = () => {
-    setSocialLinks([...socialLinks, { platform: "twitter", url: "" }]);
+    setSocialLinks([...socialLinks, { platform: "twitter", url: "", customPlatform: "" }]);
   };
 
   const handleRemoveSocialLink = (index: number) => {
@@ -104,7 +105,17 @@ export default function ProfileEditModal({
 
   const handleSocialLinkChange = (index: number, field: keyof SocialLink, value: string) => {
     const newLinks = [...socialLinks];
-    newLinks[index] = { ...newLinks[index], [field]: value };
+    
+    if (field === "platform" && value === "other") {
+      // Initialize customPlatform when switching to "other"
+      newLinks[index] = { ...newLinks[index], [field]: value, customPlatform: "" };
+    } else if (field === "platform" && newLinks[index].customPlatform) {
+      // Clear customPlatform when switching from "other" to a predefined platform
+      newLinks[index] = { ...newLinks[index], [field]: value, customPlatform: undefined };
+    } else {
+      newLinks[index] = { ...newLinks[index], [field]: value };
+    }
+    
     setSocialLinks(newLinks);
     
     // Clear error when platform changes
@@ -121,7 +132,9 @@ export default function ProfileEditModal({
       const isValid = validateSocialUrl(newLinks[index].platform, value);
       setUrlErrors(prev => ({
         ...prev,
-        [index]: isValid ? "" : `Invalid URL for ${PLATFORM_OPTIONS.find(p => p.value === newLinks[index].platform)?.label}`
+        [index]: isValid ? "" : `Invalid URL for ${newLinks[index].platform === "other" && newLinks[index].customPlatform 
+          ? newLinks[index].customPlatform 
+          : PLATFORM_OPTIONS.find(p => p.value === newLinks[index].platform)?.label}`
       }));
     }
   };
@@ -140,8 +153,22 @@ export default function ProfileEditModal({
         return;
       }
 
-      // Filter out empty social links
-      const filteredLinks = socialLinks.filter(link => link.url.trim() !== "");
+      // Filter out empty social links and prepare for submission
+      const filteredLinks = socialLinks
+        .filter(link => link.url.trim() !== "")
+        .map(link => {
+          // For "other" platform, use the customPlatform as the platform name
+          if (link.platform === "other" && link.customPlatform) {
+            return {
+              platform: link.customPlatform,
+              url: link.url
+            };
+          }
+          return {
+            platform: link.platform,
+            url: link.url
+          };
+        });
 
       await updateProfile({
         clerkId,
@@ -280,8 +307,18 @@ export default function ProfileEditModal({
                           </option>
                         ))}
                       </select>
+                      {link.platform === "other" && (
+                        <Input
+                          placeholder="Platform name"
+                          value={link.customPlatform || ""}
+                          onChange={(e) => handleSocialLinkChange(index, "customPlatform", e.target.value)}
+                          className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 w-1/3"
+                        />
+                      )}
                       <Input
-                        placeholder={`Your ${PLATFORM_OPTIONS.find(p => p.value === link.platform)?.label} URL`}
+                        placeholder={`Your ${link.platform === "other" 
+                          ? (link.customPlatform || "Other") 
+                          : PLATFORM_OPTIONS.find(p => p.value === link.platform)?.label} URL`}
                         value={link.url}
                         onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
                         className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
