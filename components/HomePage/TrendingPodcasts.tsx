@@ -27,7 +27,7 @@ const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
             </header>
             <div className="podcast_grid">
                 {trendingPodcasts ? (
-                    trendingPodcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount }) => (
+                    trendingPodcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount, averageRating }) => (
                         <PodcastCard
                             key={_id}
                             imgUrl={imageUrl as string}
@@ -36,6 +36,7 @@ const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
                             podcastId={_id}
                             views={views}
                             likes={likeCount || 0}
+                            rating={averageRating}
                         />
                     ))
                 ) : (
@@ -49,6 +50,10 @@ const TrendingPodcasts = ({ trendingPodcasts }: TrendingPodcastsProps) => {
                                     <div className="h-5 bg-white-1/10 rounded-md animate-pulse w-4/5" />
                                     <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
                                     <div className="flex justify-between pt-2">
+                                        <div className="flex items-center gap-1">
+                                            <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
+                                            <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
+                                        </div>
                                         <div className="flex items-center gap-1">
                                             <div className="w-4 h-4 rounded-full bg-white-1/10 animate-pulse" />
                                             <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-[30px]" />
