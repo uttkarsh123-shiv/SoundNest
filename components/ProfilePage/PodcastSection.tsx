@@ -4,7 +4,6 @@ interface PodcastSectionProps {
     title: string;
     icon: React.ReactNode;
     podcasts: any[];
-    emptyStateMessage: string;
     useAnimation?: boolean;
 }
 

@@ -55,6 +55,7 @@ const PodcastTabs = ({
                     title="Popular Podcasts"
                     icon={<Star size={28} className="text-orange-1" />}
                     podcasts={popularPodcasts}
+                    useAnimation={true}
                 />
             </TabsContent>
 
