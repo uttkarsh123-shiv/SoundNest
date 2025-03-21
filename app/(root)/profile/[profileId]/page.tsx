@@ -411,101 +411,110 @@ const ProfilePage = ({
         </section>
       )}
 
-      {/* Tabbed Content Section */}
-      <Tabs defaultValue="popular" className="mb-10" onValueChange={setActiveTab}>
-        <div className="bg-black/20 p-1.5 rounded-lg shadow-inner backdrop-blur-sm inline-flex mb-6">
-          <TabsList className="bg-transparent border-0 p-0">
-            <TabsTrigger
-              value="popular"
-              className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
-            >
-              <Star size={15} />
-              Popular
-            </TabsTrigger>
-            <TabsTrigger
-              value="recent"
-              className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
-            >
-              <Clock size={15} />
-              Recent
-            </TabsTrigger>
-          </TabsList>
-        </div>
+      {/* Tabbed Content Section - Only show if there are podcasts */}
+      {podcastsData.podcasts.length > 0 ? (
+        <Tabs defaultValue="popular" className="mb-10" onValueChange={setActiveTab}>
+          <div className="bg-black/20 p-1.5 rounded-lg shadow-inner backdrop-blur-sm inline-flex mb-6">
+            <TabsList className="bg-transparent border-0 p-0">
+              <TabsTrigger
+                value="popular"
+                className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
+              >
+                <Star size={15} />
+                Popular
+              </TabsTrigger>
+              <TabsTrigger
+                value="recent"
+                className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all duration-200 data-[state=active]:bg-orange-1 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
+              >
+                <Clock size={15} />
+                Recent
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-        <TabsContent value="popular" className="mt-0">
-          <section className="flex flex-col gap-5">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="bg-orange-1/10 p-3 rounded-xl">
-                <Star size={28} className="text-orange-1" />
+          <TabsContent value="popular" className="mt-0">
+            <section className="flex flex-col gap-5">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="bg-orange-1/10 p-3 rounded-xl">
+                  <Star size={28} className="text-orange-1" />
+                </div>
+                <h1 className="text-2xl font-bold text-white-1">Popular Podcasts</h1>
               </div>
-              <h1 className="text-2xl font-bold text-white-1">Popular Podcasts</h1>
-            </div>
 
-            {popularPodcasts.length > 0 ? (
-              <div className="podcast_grid gap-6">
-                {popularPodcasts.map((podcast) => (
-                  <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
-                    <PodcastCard
-                      imgUrl={podcast.imageUrl!}
-                      title={podcast.podcastTitle!}
-                      description={podcast.podcastDescription}
-                      podcastId={podcast._id}
-                      views={podcast.views}
-                      likes={podcast.likeCount || 0}
-                      rating={podcast.averageRating}
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                title="No popular podcasts found"
-              />
-            )}
-          </section>
-        </TabsContent>
+              {popularPodcasts.length > 0 ? (
+                <div className="podcast_grid gap-6">
+                  {popularPodcasts.map((podcast) => (
+                    <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
+                      <PodcastCard
+                        imgUrl={podcast.imageUrl!}
+                        title={podcast.podcastTitle!}
+                        description={podcast.podcastDescription}
+                        podcastId={podcast._id}
+                        views={podcast.views}
+                        likes={podcast.likeCount || 0}
+                        rating={podcast.averageRating}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState
+                  title="No popular podcasts found"
+                />
+              )}
+            </section>
+          </TabsContent>
 
-        <TabsContent value="recent" className="mt-0">
-          <section className="flex flex-col gap-5">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="bg-orange-1/10 p-3 rounded-xl">
-                <Clock size={28} className="text-orange-1" />
+          <TabsContent value="recent" className="mt-0">
+            <section className="flex flex-col gap-5">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="bg-orange-1/10 p-3 rounded-xl">
+                  <Clock size={28} className="text-orange-1" />
+                </div>
+                <h1 className="text-2xl font-bold text-white-1">Recent Podcasts</h1>
               </div>
-              <h1 className="text-2xl font-bold text-white-1">Recent Podcasts</h1>
-            </div>
 
-            {recentPodcasts.length > 0 ? (
-              <div className="podcast_grid gap-6">
-                {recentPodcasts.map((podcast, index) => (
-                  <div
-                    key={podcast._id}
-                    className="group transition-all duration-300 hover:scale-[1.02]"
-                    style={{
-                      animationDelay: `${index * 0.1}s`,
-                      animation: 'fadeIn 0.5s ease-in-out forwards',
-                      opacity: 0
-                    }}
-                  >
-                    <PodcastCard
-                      imgUrl={podcast.imageUrl!}
-                      title={podcast.podcastTitle!}
-                      description={podcast.podcastDescription}
-                      podcastId={podcast._id}
-                      views={podcast.views}
-                      likes={podcast.likeCount || 0}
-                      rating={podcast.averageRating}
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                title="No recent podcasts found"
-              />
-            )}
-          </section>
-        </TabsContent>
-      </Tabs>
+              {recentPodcasts.length > 0 ? (
+                <div className="podcast_grid gap-6">
+                  {recentPodcasts.map((podcast, index) => (
+                    <div
+                      key={podcast._id}
+                      className="group transition-all duration-300 hover:scale-[1.02]"
+                      style={{
+                        animationDelay: `${index * 0.1}s`,
+                        animation: 'fadeIn 0.5s ease-in-out forwards',
+                        opacity: 0
+                      }}
+                    >
+                      <PodcastCard
+                        imgUrl={podcast.imageUrl!}
+                        title={podcast.podcastTitle!}
+                        description={podcast.podcastDescription}
+                        podcastId={podcast._id}
+                        views={podcast.views}
+                        likes={podcast.likeCount || 0}
+                        rating={podcast.averageRating}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState
+                  title="No recent podcasts found"
+                />
+              )}
+            </section>
+          </TabsContent>
+        </Tabs>
+      ) : (
+        <section className="my-8">
+          <EmptyState
+            title="No podcasts found"
+            description={isOwnProfile ? "Start creating your podcast journey today!" : "This user hasn't created any podcasts yet."}
+          />
+        </section>
+      )}
 
       {/* About Section */}
       <section className="mb-10">
