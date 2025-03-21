@@ -177,14 +177,13 @@ const ProfilePage = ({
     }
   };
 
-  // Filter podcasts for different tabs
+  // Filter podcasts for different tabs - these are redundant since you're already fetching filtered podcasts
+  // Remove these redundant filters since you're already fetching the data from the API
   const popularPodcasts = [...podcastsData.podcasts]
     .sort((a, b) => (b.views || 0) - (a.views || 0))
-    .slice(0, 4);
 
   const recentPodcasts = [...podcastsData.podcasts]
     .sort((a, b) => (b._creationTime || 0) - (a._creationTime || 0))
-    .slice(0, 4);
 
   return (
     <section className="mt-9 flex flex-col">
