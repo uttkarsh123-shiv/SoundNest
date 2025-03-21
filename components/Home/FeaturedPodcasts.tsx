@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Headphones, Heart, Play, Star } from "lucide-react";
 import useEmblaCarousel from 'embla-carousel-react';
 import { PodcastProps } from '@/types';
-import FeaturedSkeleton from './Skeleton/FeaturedSkeleton';
+import FeaturedSkeleton from './FeaturedSkeleton';
 
 interface FeaturedPodcastsProps {
     featuredPodcasts: PodcastProps[] | undefined;
