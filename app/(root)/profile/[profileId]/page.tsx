@@ -250,7 +250,7 @@ const ProfilePage = ({
           </div>
         </div>
 
-        {/* Stats Cards - Mobile */}
+        {/* Stats Cards - Mobile - Reusing the same components */}
         <div className="flex md:hidden gap-4 px-6 mt-4 overflow-x-auto pb-4 snap-x">
           <StatCard icon={<Headphones size={20} />} value={totalViews.toLocaleString()} label="Total Views" />
           <StatCard icon={<Heart size={20} />} value={totalLikes.toLocaleString()} label="Total Likes" />
@@ -437,9 +437,9 @@ const ProfilePage = ({
                 <h1 className="text-2xl font-bold text-white-1">Popular Podcasts</h1>
               </div>
 
-              {popularPodcasts.length > 0 ? (
-                <div className="podcast_grid gap-6">
-                  {popularPodcasts.map((podcast) => (
+              <div className="podcast_grid gap-6">
+                {popularPodcasts.length > 0 ? (
+                  popularPodcasts.map((podcast) => (
                     <div key={podcast._id} className="group transition-all duration-300 hover:scale-[1.02]">
                       <PodcastCard
                         imgUrl={podcast.imageUrl!}
@@ -451,13 +451,11 @@ const ProfilePage = ({
                         rating={podcast.averageRating}
                       />
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <EmptyState
-                  title="No popular podcasts found"
-                />
-              )}
+                  ))
+                ) : (
+                  <EmptyState title="No popular podcasts found" />
+                )}
+              </div>
             </section>
           </TabsContent>
 
@@ -470,9 +468,9 @@ const ProfilePage = ({
                 <h1 className="text-2xl font-bold text-white-1">Recent Podcasts</h1>
               </div>
 
-              {recentPodcasts.length > 0 ? (
-                <div className="podcast_grid gap-6">
-                  {recentPodcasts.map((podcast, index) => (
+              <div className="podcast_grid gap-6">
+                {recentPodcasts.length > 0 ? (
+                  recentPodcasts.map((podcast, index) => (
                     <div
                       key={podcast._id}
                       className="group transition-all duration-300 hover:scale-[1.02]"
@@ -492,13 +490,11 @@ const ProfilePage = ({
                         rating={podcast.averageRating}
                       />
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <EmptyState
-                  title="No recent podcasts found"
-                />
-              )}
+                  ))
+                ) : (
+                  <EmptyState title="No recent podcasts found" />
+                )}
+              </div>
             </section>
           </TabsContent>
         </Tabs>
