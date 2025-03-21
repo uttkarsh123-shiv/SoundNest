@@ -7,10 +7,21 @@ const GridPodcastSkeleton = () => {
                 <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-white-1/10 animate-pulse">
                     <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
                 </div>
-                <div className="flex flex-col flex-1 w-full space-y-3">
-                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse w-4/5" />
-                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
+                <div className="flex flex-col flex-1 w-full">
+                    {/* Title skeleton */}
+                    <div className="h-6 bg-white-1/10 rounded-md animate-pulse w-4/5" />
+                    
+                    {/* Description skeleton - two lines */}
+                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full mt-1" />
+                    <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full mt-1" />
 
+                    {/* Category and language badges skeleton */}
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="h-6 bg-orange-1/10 rounded-full animate-pulse w-20" />
+                        <div className="h-6 bg-white-1/10 rounded-full animate-pulse w-16" />
+                    </div>
+
+                    {/* Stats display skeleton */}
                     <div className="flex items-center justify-between mt-auto pt-2">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-1">
