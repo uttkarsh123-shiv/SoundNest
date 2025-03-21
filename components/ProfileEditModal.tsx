@@ -143,10 +143,26 @@ export default function ProfileEditModal({
     try {
       // Check for URL validation errors
       const hasErrors = Object.values(urlErrors).some(error => error !== "");
+      
+      // Check for missing custom platform names
+      const missingCustomPlatforms = socialLinks.some(
+        link => link.platform === "other" && (!link.customPlatform || link.customPlatform.trim() === "")
+      );
+      
       if (hasErrors) {
         toast({
           title: "Invalid social links",
           description: "Please correct the errors in your social links before saving.",
+          variant: "destructive",
+          duration: 3000,
+        });
+        return;
+      }
+      
+      if (missingCustomPlatforms) {
+        toast({
+          title: "Missing platform name",
+          description: "Please provide a name for all custom platforms.",
           variant: "destructive",
           duration: 3000,
         });
@@ -307,32 +323,62 @@ export default function ProfileEditModal({
                           </option>
                         ))}
                       </select>
-                      {link.platform === "other" && (
-                        <Input
-                          placeholder="Platform name"
-                          value={link.customPlatform || ""}
-                          onChange={(e) => handleSocialLinkChange(index, "customPlatform", e.target.value)}
-                          className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 w-1/3"
-                        />
+                      
+                      {link.platform === "other" ? (
+                        <>
+                          <Input
+                            placeholder="Platform name *"
+                            value={link.customPlatform || ""}
+                            onChange={(e) => handleSocialLinkChange(index, "customPlatform", e.target.value)}
+                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${
+                              !link.customPlatform || link.customPlatform.trim() === "" ? 'border-red-500' : ''
+                            }`}
+                            required
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleRemoveSocialLink(index)}
+                            className="h-10 w-10 text-white-3 hover:text-red-500 hover:bg-white-1/10"
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Input
+                            placeholder={`Your ${PLATFORM_OPTIONS.find(p => p.value === link.platform)?.label} URL`}
+                            value={link.url}
+                            onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
+                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleRemoveSocialLink(index)}
+                            className="h-10 w-10 text-white-3 hover:text-red-500 hover:bg-white-1/10"
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </>
                       )}
-                      <Input
-                        placeholder={`Your ${link.platform === "other" 
-                          ? (link.customPlatform || "Other") 
-                          : PLATFORM_OPTIONS.find(p => p.value === link.platform)?.label} URL`}
-                        value={link.url}
-                        onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
-                        className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleRemoveSocialLink(index)}
-                        className="h-10 w-10 text-white-3 hover:text-red-500 hover:bg-white-1/10"
-                      >
-                        <Trash2 size={16} />
-                      </Button>
                     </div>
+                    
+                    {/* Add URL field on next line for "other" platform */}
+                    {link.platform === "other" && (
+                      <div className="flex gap-2 mt-2">
+                        <div className="w-1/3"></div> {/* Spacer to align with fields above */}
+                        <Input
+                          placeholder={`Your ${link.customPlatform || "Other"} URL`}
+                          value={link.url}
+                          onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
+                          className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
+                        />
+                      </div>
+                    )}
+                    
                     {urlErrors[index] && (
                       <p className="text-xs text-red-500 ml-[calc(33.333%+0.5rem)]">{urlErrors[index]}</p>
                     )}
