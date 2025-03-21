@@ -31,7 +31,7 @@ const PodcastSection = ({ title, icon, podcasts, filterType }: PodcastSectionPro
             </header>
             <div className="podcast_grid">
                 {podcasts ? (
-                    podcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount, averageRating }) => (
+                    podcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount, averageRating, audioDuration }) => (
                         <PodcastCard
                             key={_id}
                             imgUrl={imageUrl as string}
@@ -41,6 +41,7 @@ const PodcastSection = ({ title, icon, podcasts, filterType }: PodcastSectionPro
                             views={views}
                             likes={likeCount || 0}
                             rating={averageRating}
+                            duration={audioDuration}
                         />
                     ))
                 ) : (

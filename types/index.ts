@@ -120,6 +120,7 @@ export interface PodcastCardProps {
   views?: number;
   likes?: number;
   rating?: number;
+  duration?: number;
 }
 
 export interface CarouselProps {

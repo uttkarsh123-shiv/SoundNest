@@ -85,7 +85,7 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                                             alt={podcast.author}
                                             width={40}
                                             height={40}
-                                            className="rounded-full border-2 border-orange-1/50 cursor-pointer hover:border-orange-1 hover:scale-105 transition-all duration-200"
+                                            className="rounded-full border-2 border-orange-1/50 cursor-pointer hover:border-white-1 hover:scale-105 transition-all duration-200"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 router.push(`/profile/${podcast.authorId}`);

@@ -1,7 +1,7 @@
 import { PodcastCardProps } from '@/types'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Headphones, Heart, Star } from 'lucide-react'
+import { Headphones, Heart, Star, Clock } from 'lucide-react'
 
 const PodcastCard = ({
     imgUrl,
@@ -10,9 +10,21 @@ const PodcastCard = ({
     podcastId,
     views,
     likes,
-    rating
+    rating,
+    duration
 }: PodcastCardProps) => {
     const router = useRouter();
+
+    const formatDuration = (seconds: number) => {
+        if (!seconds) return null;
+        
+        if (seconds < 60) {
+            return `${Math.round(seconds)} sec`;
+        } else {
+            const minutes = Math.floor(seconds / 60);
+            return `${minutes} min`;
+        }
+    };
 
     return (
         <div 
@@ -34,7 +46,7 @@ const PodcastCard = ({
                     <h2 className="text-xs sm:text-sm font-normal capitalize text-white-4 line-clamp-2 mt-1 flex-grow">{description}</h2>
 
                     {/* Stats display */}
-                    {(views !== undefined || likes !== undefined || rating !== undefined) && (
+                    {(views !== undefined || likes !== undefined || rating !== undefined || duration) && (
                         <div className="flex items-center gap-3 mt-auto pt-2">
                             {views !== undefined && (
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
@@ -52,6 +64,12 @@ const PodcastCard = ({
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
                                     <Star size={12} className="flex-shrink-0" />
                                     <span>{rating?.toFixed(1)}</span>
+                                </div>
+                            )}
+                            {duration && (
+                                <div className="flex items-center gap-1 text-white-3 text-xs">
+                                    <Clock size={12} className="flex-shrink-0" />
+                                    <span>{formatDuration(duration)}</span>
                                 </div>
                             )}
                         </div>
