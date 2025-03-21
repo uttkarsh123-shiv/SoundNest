@@ -3,7 +3,7 @@
 import { useQuery, useMutation } from "convex/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link, Twitter, Instagram, Youtube, Facebook, Linkedin, Github } from "lucide-react";
+import { Headphones, Heart, Star, User, Mic, Calendar, Play, Share2, Globe, Clock, Award, Users, Link, Twitter, Instagram, Youtube, Facebook, Linkedin, Github, Pen } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
@@ -528,7 +528,15 @@ const ProfilePage = ({
               <p className="text-white-2">{user.bio}</p>
             ) : (
               isOwnProfile && (
-                <p className="text-white-3 italic">Add a bio to tell others about yourself.</p>
+                <p 
+                  className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
+                  onClick={() => document.getElementById('profile-edit-button')?.click()}
+                >
+                  Add a bio to tell others about yourself
+                  <span className="bg-white-1/10 p-1 rounded-full">
+                    <Pen size={14} className="text-orange-1" />
+                  </span>
+                </p>
               )
             )}
           </div>
@@ -586,7 +594,15 @@ const ProfilePage = ({
             })}
 
             {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && isOwnProfile && (
-              <p className="text-white-3 italic">Add your website and social links to help others connect with you.</p>
+              <p 
+                className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
+                onClick={() => document.getElementById('profile-edit-button')?.click()}
+              >
+                Add your website and social links to help others connect with you
+                <span className="bg-white-1/10 p-1 rounded-full">
+                  <Pen size={14} className="text-orange-1" />
+                </span>
+              </p>
             )}
           </div>
         </div>
