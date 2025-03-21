@@ -468,42 +468,89 @@ const ProfilePage = ({
 
           <TabsContent value="recent" className="mt-0">
             <section className="flex flex-col gap-5">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="bg-orange-1/10 p-3 rounded-xl">
-                  <Clock size={28} className="text-orange-1" />
+              {/* About Section */}
+              <section className="mb-10">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="bg-orange-1/10 p-3 rounded-xl">
+                    <User size={28} className="text-orange-1" />
+                  </div>
+                  <h1 className="text-2xl font-bold text-white-1">About {user?.name}</h1>
                 </div>
-                <h1 className="text-2xl font-bold text-white-1">Recent Podcasts</h1>
-              </div>
 
-              {recentPodcasts.length > 0 ? (
-                <div className="podcast_grid gap-6">
-                  {recentPodcasts.map((podcast, index) => (
-                    <div
-                      key={podcast._id}
-                      className="group transition-all duration-300 hover:scale-[1.02]"
-                      style={{
-                        animationDelay: `${index * 0.1}s`,
-                        animation: 'fadeIn 0.5s ease-in-out forwards',
-                        opacity: 0
-                      }}
-                    >
-                      <PodcastCard
-                        imgUrl={podcast.imageUrl!}
-                        title={podcast.podcastTitle!}
-                        description={podcast.podcastDescription}
-                        podcastId={podcast._id}
-                        views={podcast.views}
-                        likes={podcast.likeCount || 0}
-                        rating={podcast.averageRating}
-                      />
+                <div className="bg-white-1/5 rounded-xl p-6 border border-white-1/10">
+                  {/* Bio */}
+                  {user?.bio ? (
+                    <div className="mb-6">
+                      <p className="text-white-2">{user.bio}</p>
                     </div>
-                  ))}
+                  ) : (
+                    isOwnProfile && (
+                      <div className="mb-6">
+                        <p className="text-white-3 italic">Add a bio to tell others about yourself.</p>
+                      </div>
+                    )
+                  )}
+
+                  {/* Joining Date - Always show this */}
+                  <div className="flex items-center gap-2 mb-6 text-white-2">
+                    <Calendar size={18} className="text-orange-1" />
+                    <span>Joined {user?._creationTime ? new Date(user._creationTime).toLocaleDateString('en-US', { 
+                      month: 'long', 
+                      year: 'numeric',
+                      day: 'numeric'
+                    }) : 'recently'}</span>
+                  </div>
+
+                  {/* Website and Social Links */}
+                  {(user?.website || (user?.socialLinks && user?.socialLinks.length > 0) || isOwnProfile) && (
+                    <div className="flex flex-wrap gap-4">
+                      {user?.website && (
+                        <a
+                          href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
+                        >
+                          <Globe size={18} className="text-orange-1" />
+                          <span className="text-white-2">Website</span>
+                        </a>
+                      )}
+
+                      {user?.socialLinks && user.socialLinks.length > 0 && user.socialLinks.map((link, index) => {
+                        // Get appropriate icon based on platform
+                        const getSocialIcon = (platform: string) => {
+                          switch (platform.toLowerCase()) {
+                            case 'twitter': return <Twitter size={18} className="text-orange-1" />;
+                            case 'instagram': return <Instagram size={18} className="text-orange-1" />;
+                            case 'youtube': return <Youtube size={18} className="text-orange-1" />;
+                            case 'facebook': return <Facebook size={18} className="text-orange-1" />;
+                            case 'linkedin': return <Linkedin size={18} className="text-orange-1" />;
+                            case 'github': return <Github size={18} className="text-orange-1" />;
+                            default: return <Link size={18} className="text-orange-1" />;
+                          }
+                        };
+
+                        return (
+                          <a
+                            key={index}
+                            href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
+                          >
+                            {getSocialIcon(link.platform)}
+                            <span className="text-white-2">{link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}</span>
+                          </a>
+                        );
+                      })}
+
+                      {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && isOwnProfile && (
+                        <p className="text-white-3 italic">Add your website and social links to help others connect with you.</p>
+                      )}
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <EmptyState
-                  title="No recent podcasts found"
-                />
-              )}
+              </section>
             </section>
           </TabsContent>
         </Tabs>
