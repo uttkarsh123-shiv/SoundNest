@@ -43,6 +43,8 @@ export interface PodcastProps {
   voiceType: string;
   audioDuration: number;
   views: number;
+  likeCount?: number;
+  averageRating?: number;
 }
 
 export interface ProfilePodcastProps {
