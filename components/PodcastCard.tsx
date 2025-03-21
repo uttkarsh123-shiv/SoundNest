@@ -47,25 +47,27 @@ const PodcastCard = ({
 
                     {/* Stats display */}
                     {(views !== undefined || likes !== undefined || rating !== undefined || duration) && (
-                        <div className="flex items-center gap-3 mt-auto pt-2">
-                            {views !== undefined && (
-                                <div className="flex items-center gap-1 text-white-3 text-xs">
-                                    <Headphones size={12} className="flex-shrink-0" />
-                                    <span>{views}</span>
-                                </div>
-                            )}
-                            {likes !== undefined && (
-                                <div className="flex items-center gap-1 text-white-3 text-xs">
-                                    <Heart size={12} className="flex-shrink-0" />
-                                    <span>{likes}</span>
-                                </div>
-                            )}
-                            {rating !== undefined && (
-                                <div className="flex items-center gap-1 text-white-3 text-xs">
-                                    <Star size={12} className="flex-shrink-0" />
-                                    <span>{rating?.toFixed(1)}</span>
-                                </div>
-                            )}
+                        <div className="flex items-center justify-between mt-auto pt-2">
+                            <div className="flex items-center gap-3">
+                                {views !== undefined && (
+                                    <div className="flex items-center gap-1 text-white-3 text-xs">
+                                        <Headphones size={12} className="flex-shrink-0" />
+                                        <span>{views}</span>
+                                    </div>
+                                )}
+                                {likes !== undefined && (
+                                    <div className="flex items-center gap-1 text-white-3 text-xs">
+                                        <Heart size={12} className="flex-shrink-0" />
+                                        <span>{likes}</span>
+                                    </div>
+                                )}
+                                {rating !== undefined && (
+                                    <div className="flex items-center gap-1 text-white-3 text-xs">
+                                        <Star size={12} className="flex-shrink-0" />
+                                        <span>{rating?.toFixed(1)}</span>
+                                    </div>
+                                )}
+                            </div>
                             {duration && (
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
                                     <Clock size={12} className="flex-shrink-0" />
