@@ -34,6 +34,23 @@ const PLATFORM_OPTIONS = [
   { value: "other", label: "Other" },
 ];
 
+// Add URL validation helper function
+const validateSocialUrl = (platform: string, url: string): boolean => {
+  if (!url) return true; // Empty URLs are allowed (will be filtered out on submit)
+  
+  const urlPatterns: Record<string, RegExp> = {
+    twitter: /^https?:\/\/(www\.)?(twitter\.com|x\.com)\/.+/i,
+    instagram: /^https?:\/\/(www\.)?instagram\.com\/.+/i,
+    youtube: /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.+/i,
+    facebook: /^https?:\/\/(www\.)?facebook\.com\/.+/i,
+    linkedin: /^https?:\/\/(www\.)?linkedin\.com\/.+/i,
+    github: /^https?:\/\/(www\.)?github\.com\/.+/i,
+    other: /^https?:\/\/.+/i, // Any valid URL for "other"
+  };
+
+  return urlPatterns[platform]?.test(url) || false;
+};
+
 export default function ProfileEditModal({
   clerkId,
   initialName = "",
@@ -47,6 +64,7 @@ export default function ProfileEditModal({
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>(initialSocialLinks);
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const [urlErrors, setUrlErrors] = useState<Record<number, string>>({});
 
   // Prevent auto-focus on any input when modal opens
   useEffect(() => {
@@ -88,10 +106,40 @@ export default function ProfileEditModal({
     const newLinks = [...socialLinks];
     newLinks[index] = { ...newLinks[index], [field]: value };
     setSocialLinks(newLinks);
+    
+    // Clear error when platform changes
+    if (field === "platform") {
+      setUrlErrors(prev => {
+        const updated = {...prev};
+        delete updated[index];
+        return updated;
+      });
+    }
+    
+    // Validate URL when URL changes
+    if (field === "url" && value) {
+      const isValid = validateSocialUrl(newLinks[index].platform, value);
+      setUrlErrors(prev => ({
+        ...prev,
+        [index]: isValid ? "" : `Invalid URL for ${PLATFORM_OPTIONS.find(p => p.value === newLinks[index].platform)?.label}`
+      }));
+    }
   };
 
   const handleSubmit = async () => {
     try {
+      // Check for URL validation errors
+      const hasErrors = Object.values(urlErrors).some(error => error !== "");
+      if (hasErrors) {
+        toast({
+          title: "Invalid social links",
+          description: "Please correct the errors in your social links before saving.",
+          variant: "destructive",
+          duration: 3000,
+        });
+        return;
+      }
+
       // Filter out empty social links
       const filteredLinks = socialLinks.filter(link => link.url.trim() !== "");
 
@@ -219,33 +267,38 @@ export default function ProfileEditModal({
             ) : (
               <div className="space-y-3">
                 {socialLinks.map((link, index) => (
-                  <div key={index} className="flex gap-2">
-                    <select
-                      value={link.platform}
-                      onChange={(e) => handleSocialLinkChange(index, "platform", e.target.value)}
-                      className="bg-black-2 border border-gray-800 rounded-md text-white-1 focus:ring-orange-1 focus:border-orange-1 text-sm h-10 w-1/3"
-                    >
-                      {PLATFORM_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                    <Input
-                      placeholder={`Your ${PLATFORM_OPTIONS.find(p => p.value === link.platform)?.label} URL`}
-                      value={link.url}
-                      onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
-                      className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleRemoveSocialLink(index)}
-                      className="h-10 w-10 text-white-3 hover:text-red-500 hover:bg-white-1/10"
-                    >
-                      <Trash2 size={16} />
-                    </Button>
+                  <div key={index} className="space-y-1">
+                    <div className="flex gap-2">
+                      <select
+                        value={link.platform}
+                        onChange={(e) => handleSocialLinkChange(index, "platform", e.target.value)}
+                        className="bg-black-2 border border-gray-800 rounded-md text-white-1 focus:ring-orange-1 focus:border-orange-1 text-sm h-10 w-1/3"
+                      >
+                        {PLATFORM_OPTIONS.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      <Input
+                        placeholder={`Your ${PLATFORM_OPTIONS.find(p => p.value === link.platform)?.label} URL`}
+                        value={link.url}
+                        onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
+                        className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemoveSocialLink(index)}
+                        className="h-10 w-10 text-white-3 hover:text-red-500 hover:bg-white-1/10"
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                    {urlErrors[index] && (
+                      <p className="text-xs text-red-500 ml-[calc(33.333%+0.5rem)]">{urlErrors[index]}</p>
+                    )}
                   </div>
                 ))}
               </div>
