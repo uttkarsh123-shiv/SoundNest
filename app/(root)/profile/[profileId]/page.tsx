@@ -531,12 +531,20 @@ const ProfilePage = ({
           {user?.bio ? (
             <p className="text-white-2 mb-6">{user.bio}</p>
           ) : (
-            isOwnProfile ? (
+            isOwnProfile && (
               <p className="text-white-3 italic mb-6">Add a bio to tell others about yourself.</p>
-            ) : (
-              <p className="text-white-3 italic mb-6">This user hasn't added a bio yet.</p>
             )
           )}
+
+          {/* Joining Date */}
+          <div className="flex items-center gap-2 mb-6 text-white-2">
+            <Calendar size={18} className="text-orange-1" />
+            <span>Joined {user?._creationTime ? new Date(user._creationTime).toLocaleDateString('en-US', { 
+              month: 'long', 
+              year: 'numeric',
+              day: 'numeric'
+            }) : 'recently'}</span>
+          </div>
 
           {/* Website and Social Links */}
           <div className="flex flex-wrap gap-4">
@@ -580,12 +588,8 @@ const ProfilePage = ({
               );
             })}
 
-            {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && (
-              isOwnProfile ? (
-                <p className="text-white-3 italic">Add your website and social links to help others connect with you.</p>
-              ) : (
-                <p className="text-white-3 italic">No website or social links available.</p>
-              )
+            {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && isOwnProfile && (
+              <p className="text-white-3 italic">Add your website and social links to help others connect with you.</p>
             )}
           </div>
         </div>
