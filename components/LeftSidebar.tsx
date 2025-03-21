@@ -14,7 +14,6 @@ const LeftSidebar = () => {
     const pathname = usePathname();
     const router = useRouter();
     const { signOut } = useClerk();
-
     const { audio } = useAudio();
 
     return (
@@ -27,10 +26,20 @@ const LeftSidebar = () => {
                     <h1 className="text-24 font-extrabold text-white max-lg:hidden">&nbsp; PodTales</h1>
                 </Link>
                 {sidebarLinks.map(({ route, label, imgURL }) => {
-                    const isActive = pathname === route || pathname.startsWith(`${route}/`);
+                    // For profile route, check if the current path is the user's profile
+                    const isProfileRoute = route === "/profile";
+                    const userProfilePath = user ? `/profile/${user.id}` : "/sign-in";
+                    
+                    // Check if current path is active
+                    const isActive = isProfileRoute 
+                        ? pathname === userProfilePath // Only active if it's exactly the user's profile
+                        : pathname === route || pathname.startsWith(`${route}/`);
 
-                    return <Link href={route === "/profile" ? (user ? `/profile/${user?.id}` : "/sign-in") : route} key={label} className={cn("flex gap-3 items-center py-4 max-lg:px-4 justify-center lg:justify-start",
-                        { 'bg-nav-focus border-r-4 border-orange-1': isActive })}>
+                    return <Link 
+                        href={isProfileRoute ? userProfilePath : route} 
+                        key={label} 
+                        className={cn("flex gap-3 items-center py-4 max-lg:px-4 justify-center lg:justify-start",
+                            { 'bg-nav-focus border-r-4 border-orange-1': isActive })}>
                         <Image src={imgURL} alt={label} width={24} height={24} />
                         <p>{label}</p>
                     </Link>
