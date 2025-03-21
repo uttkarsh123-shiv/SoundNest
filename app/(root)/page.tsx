@@ -213,7 +213,8 @@ const Home = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
                   </div>
                   <div className="p-4 space-y-3">
-                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${70 + Math.random() * 25}%` }} />
+                    {/* Changed from dynamic width to fixed width class */}
+                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse w-4/5" />
                     <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
                     <div className="flex justify-between pt-2">
                       <div className="flex items-center gap-1">
@@ -272,7 +273,8 @@ const Home = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent"></div>
                   </div>
                   <div className="p-4 space-y-3">
-                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse" style={{ width: `${70 + Math.random() * 25}%` }} />
+                    {/* Changed from dynamic width to fixed width class */}
+                    <div className="h-5 bg-white-1/10 rounded-md animate-pulse w-4/5" />
                     <div className="h-4 bg-white-1/10 rounded-md animate-pulse w-full" />
                     <div className="flex justify-between pt-2">
                       <div className="flex items-center gap-1">
@@ -378,6 +380,7 @@ const Home = () => {
                     <div className="flex items-center gap-3">
                       <div className="w-16 h-16 bg-white-1/10 rounded-lg animate-pulse" />
                       <div className="space-y-2 flex-1">
+                        {/* Changed from dynamic width to fixed width class */}
                         <div className="h-5 bg-white-1/10 rounded animate-pulse w-3/4" />
                         <div className="h-4 bg-white-1/10 rounded animate-pulse w-1/2" />
                       </div>
