@@ -64,7 +64,11 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                                             alt={podcast.author}
                                             width={40}
                                             height={40}
-                                            className="rounded-full border-2 border-orange-1/50"
+                                            className="rounded-full border-2 border-orange-1/50 cursor-pointer hover:border-orange-1 hover:scale-105 transition-all duration-200"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                router.push(`/profile/${podcast.authorId}`);
+                                            }}
                                         />
                                         <span className="text-white-1 font-medium">{podcast.author}</span>
                                     </div>
@@ -73,7 +77,7 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                                     <div className="flex items-center gap-6">
                                         <button
                                             onClick={() => router.push(`/podcasts/${podcast._id}`)}
-                                            className="bg-orange-1 text-black px-6 py-2 rounded-full font-semibold hover:bg-orange-2 transition flex items-center gap-2"
+                                            className="bg-orange-1 text-black px-6 py-2 rounded-full font-semibold hover:bg-orange-2 transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-orange-1/20 hover:scale-105 active:scale-95"
                                         >
                                             <Play size={18} className="fill-black" />
                                             Listen Now
