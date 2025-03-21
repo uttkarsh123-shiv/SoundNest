@@ -1,14 +1,8 @@
 "use client"
 
-import Searchbar from '@/components/Searchbar'
 import { api } from '@/convex/_generated/api'
-import { podcastTypes, languageOptions } from '@/constants/PodcastFields'
 import { useQuery } from 'convex/react'
-import { Filter, Clock, TrendingUp, Heart, RefreshCw, X, Globe, LayoutGrid, List, Star, Headphones, Languages } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-
 import DiscoverHeader from '@/components/Discover/DiscoverHeader'
 import FilterControls from '@/components/Discover/FilterControls'
 import CategoryFilter from '@/components/Discover/CategoryFilter'
@@ -18,14 +12,23 @@ import PodcastDisplay from '@/components/Discover/PodcastDisplay'
 import PodcastSkeleton from '@/components/Discover/PodcastSkeleton'
 import EmptyState from '@/components/Discover/EmptyState'
 
+// Define a type for the filter options
+type FilterOptionType = 'latest' | 'trending' | 'popular' | 'topRated';
+
 const Discover = ({ searchParams }: { searchParams: { search: string, filter?: string } }) => {
-    const router = useRouter();
-    const [filterOption, setFilterOption] = useState<'latest' | 'trending' | 'popular' | 'topRated'>(
-        searchParams.filter as any === 'latest' ? 'latest' :
-        searchParams.filter as any === 'topRated' ? 'topRated' :
-        searchParams.filter as any === 'popular' ? 'popular' :
-        searchParams.filter as any === 'trending' ? 'trending' : 'trending'
+    // Use a helper function to determine the initial filter option
+    const getInitialFilterOption = (filter: string | undefined): FilterOptionType => {
+        if (filter === 'latest' || filter === 'trending' || 
+            filter === 'popular' || filter === 'topRated') {
+            return filter;
+        }
+        return 'trending'; // Default value
+    };
+
+    const [filterOption, setFilterOption] = useState<FilterOptionType>(
+        getInitialFilterOption(searchParams.filter)
     );
+    
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);

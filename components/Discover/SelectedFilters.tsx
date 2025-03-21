@@ -9,6 +9,9 @@ interface SelectedFiltersProps {
   showLanguageFilter: boolean;
   selectedCategories: string[];
   clearAllFilters: () => void;
+  toggleCategory: (category: string) => void;
+  clearCategories: () => void;
+  showCategoryFilter: boolean;
 }
 
 const SelectedFilters = ({ 
