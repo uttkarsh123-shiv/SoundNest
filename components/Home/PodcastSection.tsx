@@ -1,5 +1,5 @@
 import { PodcastProps } from "@/types";
-import PodcastCard from "@/components/PodcastCard";
+import PodcastCard from "@/components/GridPodcastCard";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import PodcastCardSkeleton from "../PodcastCardSkeleton";
@@ -31,17 +31,13 @@ const PodcastSection = ({ title, icon, podcasts, filterType }: PodcastSectionPro
             </header>
             <div className="podcast_grid">
                 {podcasts ? (
-                    podcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl, views, likeCount, averageRating, audioDuration }) => (
+                    podcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
                         <PodcastCard
                             key={_id}
                             imgUrl={imageUrl as string}
                             title={podcastTitle}
                             description={podcastDescription}
                             podcastId={_id}
-                            views={views}
-                            likes={likeCount || 0}
-                            rating={averageRating}
-                            duration={audioDuration}
                         />
                     ))
                 ) : (

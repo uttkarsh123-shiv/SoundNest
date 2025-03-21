@@ -1,9 +1,9 @@
 "use client";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import FeaturedPodcasts from "@/components/HomePage/FeaturedPodcasts";
-import PodcastSection from "@/components/HomePage/PodcastSection";
-import LatestPodcasts from "@/components/HomePage/LatestPodcasts";
+import FeaturedPodcasts from "@/components/Home/FeaturedPodcasts";
+import PodcastSection from "@/components/Home/PodcastSection";
+import LatestPodcasts from "@/components/Home/LatestPodcasts";
 import { TrendingUp, Star } from "lucide-react";
 
 const Home = () => {
@@ -18,7 +18,7 @@ const Home = () => {
       <FeaturedPodcasts featuredPodcasts={featuredPodcasts} />
 
       {/* Trending */}
-      <PodcastSection 
+      <PodcastSection
         title="Trending Podcasts"
         icon={<TrendingUp size={28} className="text-orange-1" />}
         podcasts={trendingPodcasts}
@@ -26,7 +26,7 @@ const Home = () => {
       />
 
       {/* Top Rated */}
-      <PodcastSection 
+      <PodcastSection
         title="Top Rated Podcasts"
         icon={<Star size={28} className="text-orange-1" />}
         podcasts={topRatedPodcasts}

@@ -1,5 +1,5 @@
 import React from 'react';
-import PodcastCard from '@/components/PodcastCard';
+import PodcastCard from '@/components/GridPodcastCard';
 import { Doc } from '@/convex/_generated/dataModel';
 
 interface PodcastDisplayProps {

@@ -1,7 +1,7 @@
 'use client'
 import EmptyState from '@/components/EmptyState'
 import LoaderSpinner from '@/components/LoaderSpinner'
-import PodcastCard from '@/components/PodcastCard'
+import PodcastCard from '@/components/GridPodcastCard'
 import PodcastDetailPlayer from '@/components/PodcastDetailPlayer'
 import { api } from '@/convex/_generated/api'
 import { useUser } from '@clerk/nextjs'
@@ -49,7 +49,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       // Use sessionStorage to prevent multiple view counts in the same session
       const viewKey = `podcast-view-${podcastId}`;
       const hasViewedInSession = sessionStorage.getItem(viewKey);
-      
+
       if (!hasViewedInSession) {
         updateViewCount({ podcastId }).then(() => {
           setHasUpdatedView(true);

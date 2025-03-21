@@ -121,7 +121,7 @@ export interface PodcastCardProps {
   likes?: number;
   rating?: number;
   duration?: number;
-  podcastType: string | undefined;
+  podcastType?: string | undefined;
   language?: string | undefined;
 }
 
