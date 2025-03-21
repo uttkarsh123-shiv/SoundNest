@@ -257,7 +257,7 @@ export default function ProfileEditModal({
           </div>
 
           {/* Bio */}
-          <div className="space-y-2">
+          <div className="space-y-2 w-full">
             <Label htmlFor="bio" className="text-white-2">Bio</Label>
             <Textarea
               id="bio"
@@ -270,7 +270,7 @@ export default function ProfileEditModal({
                   e.stopPropagation();
                 }
               }}
-              className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
+              className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 w-full min-h-[100px]"
               maxLength={250}
             />
             <p className="text-xs text-white-3 text-right">{bio.length}/250</p>
@@ -323,16 +323,15 @@ export default function ProfileEditModal({
                           </option>
                         ))}
                       </select>
-                      
+
                       {link.platform === "other" ? (
                         <>
                           <Input
                             placeholder="Platform name *"
                             value={link.customPlatform || ""}
                             onChange={(e) => handleSocialLinkChange(index, "customPlatform", e.target.value)}
-                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${
-                              !link.customPlatform || link.customPlatform.trim() === "" ? 'border-red-500' : ''
-                            }`}
+                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${!link.customPlatform || link.customPlatform.trim() === "" ? 'border-red-500' : ''
+                              }`}
                             required
                           />
                           <Button
@@ -365,7 +364,7 @@ export default function ProfileEditModal({
                         </>
                       )}
                     </div>
-                    
+
                     {/* Add URL field on next line for "other" platform */}
                     {link.platform === "other" && (
                       <div className="flex gap-2 mt-2">
@@ -381,7 +380,7 @@ export default function ProfileEditModal({
                         </div>
                       </div>
                     )}
-                    
+
                     {urlErrors[index] && (
                       <p className="text-xs text-red-500 mt-1 ml-[calc(33.333%+0.5rem)]">{urlErrors[index]}</p>
                     )}
