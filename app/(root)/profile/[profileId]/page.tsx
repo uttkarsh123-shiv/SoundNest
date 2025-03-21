@@ -530,7 +530,10 @@ const ProfilePage = ({
               isOwnProfile && (
                 <p 
                   className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
-                  onClick={() => document.getElementById('profile-edit-button')?.click()}
+                  onClick={() => {
+                    const editButton = document.getElementById('profile-edit-button');
+                    if (editButton) editButton.click();
+                  }}
                 >
                   Add a bio to tell others about yourself
                   <span className="bg-white-1/10 p-1 rounded-full">
@@ -596,7 +599,10 @@ const ProfilePage = ({
             {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && isOwnProfile && (
               <p 
                 className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
-                onClick={() => document.getElementById('profile-edit-button')?.click()}
+                onClick={() => {
+                  const editButton = document.getElementById('profile-edit-button');
+                  if (editButton) editButton.click();
+                }}
               >
                 Add your website and social links to help others connect with you
                 <span className="bg-white-1/10 p-1 rounded-full">
