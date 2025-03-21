@@ -31,7 +31,7 @@ const PLATFORM_OPTIONS = [
   { value: "facebook", label: "Facebook" },
   { value: "linkedin", label: "LinkedIn" },
   { value: "github", label: "GitHub" },
-  { value: "social", label: "Other" },
+  { value: "other", label: "Other" },
 ];
 
 export default function ProfileEditModal({
@@ -53,18 +53,18 @@ export default function ProfileEditModal({
     if (open && dialogRef.current) {
       // Set focus to the dialog container itself
       dialogRef.current.focus();
-      
+
       // Add a one-time event listener to capture and prevent focus events
       const preventFocus = (e: FocusEvent) => {
-        if (e.target instanceof HTMLInputElement || 
-            e.target instanceof HTMLTextAreaElement || 
-            e.target instanceof HTMLSelectElement) {
+        if (e.target instanceof HTMLInputElement ||
+          e.target instanceof HTMLTextAreaElement ||
+          e.target instanceof HTMLSelectElement) {
           dialogRef.current?.focus();
         }
       };
-      
+
       document.addEventListener('focusin', preventFocus, { once: true });
-      
+
       return () => {
         document.removeEventListener('focusin', preventFocus);
       };
@@ -132,7 +132,7 @@ export default function ProfileEditModal({
           <span className="font-medium">Edit Profile</span>
         </Button>
       </DialogTrigger>
-      <DialogContent 
+      <DialogContent
         ref={dialogRef}
         className="bg-black-1 border-gray-800 text-white-1 max-w-md md:max-w-lg max-h-[90vh] overflow-y-auto scrollbar-hide"
         onOpenAutoFocus={(e) => {
