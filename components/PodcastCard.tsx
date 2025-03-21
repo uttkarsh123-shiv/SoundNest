@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation'
 import { Headphones, Heart, Star } from 'lucide-react'
 
 const PodcastCard = ({
-    imgUrl, 
-    title, 
-    description, 
+    imgUrl,
+    title,
+    description,
     podcastId,
     views,
     likes,
@@ -15,38 +15,42 @@ const PodcastCard = ({
     const router = useRouter();
 
     return (
-        <div className='cursor-pointer' onClick={() => router.push(`/podcasts/${podcastId}`)}>
-            <figure className="flex flex-col gap-2">
-                <Image
-                    src={imgUrl}
-                    width={174}
-                    height={174}
-                    alt={title}
-                    className="aspect-square h-fit w-full rounded-xl 2xl:size-[150px]"
-                />
-                <div className="flex flex-col w-full 2xl:w-[150px]">
-                    <h1 className="text-16 truncate font-bold text-white-1">{title}</h1>
-                    <h2 className="text-12 truncate font-normal capitalize text-white-4">{description}</h2>
-                    
+        <div 
+            className='cursor-pointer bg-white-1/5 rounded-xl p-3 hover:bg-white-1/10 transition-all duration-200 h-full flex flex-col' 
+            onClick={() => router.push(`/podcasts/${podcastId}`)}
+        >
+            <figure className="flex flex-col gap-3 h-full">
+                <div className="relative w-full aspect-square overflow-hidden rounded-lg">
+                    <Image
+                        src={imgUrl}
+                        alt={title}
+                        fill
+                        className="object-cover rounded-lg hover:scale-105 transition-transform duration-300"
+                    />
+                </div>
+                <div className="flex flex-col flex-1 w-full">
+                    <h1 className="text-base sm:text-lg font-bold text-white-1 line-clamp-1">{title}</h1>
+                    <h2 className="text-xs sm:text-sm font-normal capitalize text-white-4 line-clamp-2 mt-1 flex-grow">{description}</h2>
+
                     {/* Stats display */}
                     {(views !== undefined || likes !== undefined || rating !== undefined) && (
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-3 mt-2">
                             {views !== undefined && (
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
-                                    <Headphones size={12} />
+                                    <Headphones size={12} className="flex-shrink-0" />
                                     <span>{views}</span>
                                 </div>
                             )}
                             {likes !== undefined && (
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
-                                    <Heart size={12} />
+                                    <Heart size={12} className="flex-shrink-0" />
                                     <span>{likes}</span>
                                 </div>
                             )}
                             {rating !== undefined && (
                                 <div className="flex items-center gap-1 text-white-3 text-xs">
-                                    <Star size={12} />
-                                    <span>{rating}</span>
+                                    <Star size={12} className="flex-shrink-0" />
+                                    <span>{rating.toFixed(1)}</span>
                                 </div>
                             )}
                         </div>
