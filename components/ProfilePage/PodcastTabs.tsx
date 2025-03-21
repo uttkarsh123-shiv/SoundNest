@@ -71,7 +71,6 @@ const PodcastTabs = ({
                     title={title}
                     icon={icon}
                     podcasts={currentPodcasts}
-                    useAnimation={true}
                 />
             </Tabs>
         </div>
