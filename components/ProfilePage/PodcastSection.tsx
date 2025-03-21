@@ -1,5 +1,4 @@
 import PodcastCard from "@/components/PodcastCard";
-import EmptyState from "@/components/EmptyState";
 
 interface PodcastSectionProps {
     title: string;
@@ -13,7 +12,6 @@ const PodcastSection = ({
     title,
     icon,
     podcasts,
-    emptyStateMessage,
     useAnimation = false,
 }: PodcastSectionProps) => {
     return (
@@ -26,7 +24,7 @@ const PodcastSection = ({
             </div>
 
             <div className="podcast_grid gap-6">
-                {podcasts.length > 0 ? (
+                {podcasts.length > 0 && (
                     podcasts.map((podcast, index) => (
                         <div
                             key={podcast._id}
@@ -52,8 +50,6 @@ const PodcastSection = ({
                             />
                         </div>
                     ))
-                ) : (
-                    <EmptyState title={emptyStateMessage} />
                 )}
             </div>
         </section>

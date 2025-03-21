@@ -55,7 +55,6 @@ const PodcastTabs = ({
                     title="Popular Podcasts"
                     icon={<Star size={28} className="text-orange-1" />}
                     podcasts={popularPodcasts}
-                    emptyStateMessage="No popular podcasts found"
                 />
             </TabsContent>
 
@@ -64,7 +63,6 @@ const PodcastTabs = ({
                     title="Recent Podcasts"
                     icon={<Clock size={28} className="text-orange-1" />}
                     podcasts={recentPodcasts}
-                    emptyStateMessage="No recent podcasts found"
                     useAnimation={true}
                 />
             </TabsContent>
