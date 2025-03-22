@@ -9,6 +9,7 @@ import { useUser } from '@clerk/nextjs'
 import { useMutation, useQuery } from 'convex/react'
 import { useEffect, useState } from 'react'
 import { Headphones, Clock, Calendar, Mic2, Layers, Star, MessageCircle, Trash2, ChevronDown, ChevronUp, ChartBar } from 'lucide-react'
+import Image from 'next/image'  // Add this import
 
 const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'podcasts'> } }) => {
   const { user } = useUser();
@@ -375,11 +376,13 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
           {user && (
             <div className="mb-6">
               <div className="flex gap-4 bg-black-1/50 p-4 rounded-lg border border-gray-800">
-                <div className="flex-shrink-0">
-                  <img
+                <div className="flex-shrink-0 relative w-10 h-10">
+                  <Image
                     src={user.imageUrl}
                     alt={user.fullName || "User"}
-                    className="w-10 h-10 rounded-full object-cover"
+                    className="rounded-full object-cover"
+                    fill
+                    sizes="40px"
                   />
                 </div>
                 <div className="flex-grow">
@@ -446,11 +449,13 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
               {podcastComments && podcastComments.length > 0 ? (
                 podcastComments.map((comment) => (
                   <div key={comment._id} className="flex gap-4 bg-black-1/50 p-4 rounded-lg border border-gray-800 hover:border-gray-700 transition-colors">
-                    <div className="flex-shrink-0">
-                      <img
+                    <div className="flex-shrink-0 relative w-10 h-10">
+                      <Image
                         src={comment.userImageUrl}
                         alt={comment.userName}
-                        className="w-10 h-10 rounded-full object-cover"
+                        className="rounded-full object-cover"
+                        fill
+                        sizes="40px"
                       />
                     </div>
                     <div className="flex-grow">
