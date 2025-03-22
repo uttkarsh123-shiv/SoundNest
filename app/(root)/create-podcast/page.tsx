@@ -6,11 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
     Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+    FormField
 } from "@/components/ui/form";
 import {
     Select,
@@ -36,6 +32,8 @@ import { Gemini_Prompt } from "@/constants/Gemini_Prompt";
 import { podcastTypes } from "@/constants/PodcastFields";
 import { formSchema } from "@/constants/FormSchema";
 import { cn } from "@/lib/utils";
+import SectionContainer from '@/components/CreatePodcast/SectionContainer';
+import FormFieldWrapper from '@/components/CreatePodcast/FormFieldWrapper';
 
 const CreatePodcast = () => {
     const router = useRouter()
@@ -199,9 +197,12 @@ const CreatePodcast = () => {
             const result = await chatSession.sendMessage(Final_Gemini_Prompt);
             const response = await result.response;
             const text = response.text();
-
+            console.log(text);
             try {
-                const content = JSON.parse(text);
+                // Sanitize the JSON string by removing control characters before parsing
+                const sanitizedText = text.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+                const content = JSON.parse(sanitizedText);
+
                 form.setValue("podcastDescription", content.description);
                 setVoicePrompt(content.script);
 
@@ -266,199 +267,143 @@ const CreatePodcast = () => {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <div className="grid gap-8">
                             {/* Basic Information */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-4 w-1 bg-orange-1 rounded-full" />
-                                    <h2 className="text-lg font-semibold text-white-1">Basic Information</h2>
-                                </div>
+                            <SectionContainer title="Basic Information">
+                                <div className={`flex flex-col gap-6 pt-5`}>
+                                    <FormField
+                                        control={form.control}
+                                        name="podcastTitle"
+                                        render={({ field }) => (
+                                            <FormFieldWrapper label="Podcast Title">
+                                                <Input
+                                                    className="input-class focus-visible:ring-offset-orange-1 h-12"
+                                                    placeholder="Enter your podcast title..."
+                                                    suppressHydrationWarning
+                                                    {...field}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === ' ') {
+                                                            e.stopPropagation();
+                                                        }
+                                                    }}
+                                                    type="text"
+                                                />
+                                            </FormFieldWrapper>
+                                        )}
+                                    />
 
-                                <div className="bg-black-1/30 rounded-xl p-6 border border-gray-800">
-                                    <div className={`flex flex-col gap-6 pt-5`}>
-                                        <FormField
-                                            control={form.control}
-                                            name="podcastTitle"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-                                                        <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
-                                                        Podcast Title
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            className="input-class focus-visible:ring-offset-orange-1 h-12"
-                                                            placeholder="Enter your podcast title..."
-                                                            suppressHydrationWarning
-                                                            {...field}
-                                                            onKeyDown={(e) => {
-                                                                // Prevent default behavior for space key to ensure it's captured
-                                                                if (e.key === ' ') {
-                                                                    e.stopPropagation();
-                                                                }
-                                                            }}
-                                                            type="text"
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage className="text-white-1" />
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="podcastType"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-                                                        <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
-                                                        Podcast Type
-                                                    </FormLabel>
-                                                    <Select
-                                                        onValueChange={field.onChange}
-                                                        defaultValue={field.value}
+                                    <FormField
+                                        control={form.control}
+                                        name="podcastType"
+                                        render={({ field }) => (
+                                            <FormFieldWrapper label="Podcast Type">
+                                                <Select
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}
+                                                >
+                                                    <SelectTrigger
+                                                        className="input-class focus-visible:ring-offset-orange-1 h-12"
                                                     >
-                                                        <FormControl>
-                                                            <SelectTrigger
-                                                                className="input-class focus-visible:ring-offset-orange-1 h-12"
+                                                        <SelectValue placeholder="Select a podcast type" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl">
+                                                        {podcastTypes.map((option) => (
+                                                            <SelectItem
+                                                                key={option.value}
+                                                                value={option.value}
+                                                                className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
                                                             >
-                                                                <SelectValue placeholder="Select a podcast type" />
-                                                            </SelectTrigger>
-                                                        </FormControl>
-                                                        <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl">
-                                                            {podcastTypes.map((option) => (
-                                                                <SelectItem
-                                                                    key={option.value}
-                                                                    value={option.value}
-                                                                    className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
-                                                                >
-                                                                    {option.label}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <FormMessage className="text-white-1" />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
+                                                                {option.label}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormFieldWrapper>
+                                        )}
+                                    />
                                 </div>
-                            </div>
+                            </SectionContainer>
 
                             {/* Content Generation */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-4 w-1 bg-orange-1 rounded-full" />
-                                    <h2 className="text-lg font-semibold text-white-1">Content Generation</h2>
-                                </div>
-
-                                <div className="bg-black-1/30 rounded-xl p-6 border border-gray-800">
-                                    <GenerateAIContent
-                                        title={form.getValues("podcastTitle")}
-                                        setDuration={setDuration}
-                                        duration={duration}
-                                        setTone={setTone}
-                                        tone={tone}
-                                        setTargetAudience={setTargetAudience}
-                                        targetAudience={targetAudience}
-                                        setStyle={setStyle}
-                                        style={style}
-                                        generateAIContent={generateAIContent}
-                                        isGeneratingContent={isGeneratingContent}
-                                        note={note}
-                                        setNote={setNote}
-                                        selectedLanguage={selectedLanguage}
-                                        setSelectedLanguage={setSelectedLanguage}
-                                    />
-                                </div>
-                            </div>
+                            <SectionContainer title="Content Generation">
+                                <GenerateAIContent
+                                    title={form.getValues("podcastTitle")}
+                                    setDuration={setDuration}
+                                    duration={duration}
+                                    setTone={setTone}
+                                    tone={tone}
+                                    setTargetAudience={setTargetAudience}
+                                    targetAudience={targetAudience}
+                                    setStyle={setStyle}
+                                    style={style}
+                                    generateAIContent={generateAIContent}
+                                    isGeneratingContent={isGeneratingContent}
+                                    note={note}
+                                    setNote={setNote}
+                                    selectedLanguage={selectedLanguage}
+                                    setSelectedLanguage={setSelectedLanguage}
+                                />
+                            </SectionContainer>
 
                             {/* Additional Details */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-4 w-1 bg-orange-1 rounded-full" />
-                                    <h2 className="text-lg font-semibold text-white-1">Additional Details</h2>
-                                </div>
-
-                                <div className="bg-black-1/30 rounded-xl p-6 border border-gray-800">
-                                    <div className={`flex flex-col gap-6 pt-5`}>
-                                        <FormField
-                                            control={form.control}
-                                            name="podcastDescription"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-                                                        <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
-                                                        Podcast Description
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Textarea
-                                                            className="input-class min-h-[120px]"
-                                                            placeholder="Write or generate a compelling description for your podcast..."
-                                                            suppressHydrationWarning
-                                                            {...field}
-                                                            onKeyDown={(e) => {
-                                                                // Prevent default behavior for space key to ensure it's captured
-                                                                if (e.key === ' ') {
-                                                                    e.stopPropagation();
-                                                                }
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage className="text-white-1" />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Audio Generation */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-4 w-1 bg-orange-1 rounded-full" />
-                                    <h2 className="text-lg font-semibold text-white-1">Audio Generation</h2>
-                                </div>
-
-                                <div className="bg-black-1/30 rounded-xl p-6 border border-gray-800">
-                                    <GeneratePodcast
-                                        setAudioStorageId={setAudioStorageId}
-                                        audioStorageId={audioStorageId}
-                                        setAudio={setAudioUrl}
-                                        voiceType={voiceType!}
-                                        setVoiceType={setVoiceType}
-                                        audio={audioUrl}
-                                        voicePrompt={voicePrompt}
-                                        setVoicePrompt={setVoicePrompt}
-                                        setAudioDuration={setAudioDuration}
+                            <SectionContainer title="Additional Details">
+                                <div className={`flex flex-col gap-6 pt-5`}>
+                                    <FormField
+                                        control={form.control}
+                                        name="podcastDescription"
+                                        render={({ field }) => (
+                                            <FormFieldWrapper label="Podcast Description">
+                                                <Textarea
+                                                    className="input-class min-h-[120px]"
+                                                    placeholder="Write or generate a compelling description for your podcast..."
+                                                    suppressHydrationWarning
+                                                    {...field}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === ' ') {
+                                                            e.stopPropagation();
+                                                        }
+                                                    }}
+                                                />
+                                            </FormFieldWrapper>
+                                        )}
                                     />
                                 </div>
-                            </div>
+                            </SectionContainer>
+
+                            {/* Audio Generation */}
+                            <SectionContainer title="Audio Generation">
+                                <GeneratePodcast
+                                    setAudioStorageId={setAudioStorageId}
+                                    audioStorageId={audioStorageId}
+                                    setAudio={setAudioUrl}
+                                    voiceType={voiceType!}
+                                    setVoiceType={setVoiceType}
+                                    audio={audioUrl}
+                                    voicePrompt={voicePrompt}
+                                    setVoicePrompt={setVoicePrompt}
+                                    setAudioDuration={setAudioDuration}
+                                />
+                            </SectionContainer>
 
                             {/* Thumbnail Generation */}
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-4 w-1 bg-orange-1 rounded-full" />
-                                        <h2 className="text-lg font-semibold text-white-1">Thumbnail Generation</h2>
-                                    </div>
-                                    {thumbnailPrompts.length > 0 && (
+                            <SectionContainer
+                                title="Thumbnail Generation"
+                                rightElement={
+                                    thumbnailPrompts.length > 0 && (
                                         <span className="text-sm text-gray-1">
                                             {thumbnailPrompts.length} AI suggestions available
                                         </span>
-                                    )}
-                                </div>
-
-                                <div className="bg-black-1/30 rounded-xl p-6 border border-gray-800">
-                                    <GenerateThumbnail
-                                        setImage={setImageUrl}
-                                        setImageStorageId={setImageStorageId}
-                                        image={imageUrl}
-                                        imagePrompt={imagePrompt}
-                                        setImagePrompt={setImagePrompt}
-                                        imageStorageId={imageStorageId}
-                                        thumbnailPrompts={thumbnailPrompts}
-                                    />
-                                </div>
-                            </div>
+                                    )
+                                }
+                            >
+                                <GenerateThumbnail
+                                    setImage={setImageUrl}
+                                    setImageStorageId={setImageStorageId}
+                                    image={imageUrl}
+                                    imagePrompt={imagePrompt}
+                                    setImagePrompt={setImagePrompt}
+                                    imageStorageId={imageStorageId}
+                                    thumbnailPrompts={thumbnailPrompts}
+                                />
+                            </SectionContainer>
 
                             {/* Generate Button */}
                             <div className="flex flex-col gap-4 items-center">
