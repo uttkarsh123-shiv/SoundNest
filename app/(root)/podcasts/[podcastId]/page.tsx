@@ -275,29 +275,29 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                 <h3 className="text-white-1 font-medium mb-3">Rating Distribution</h3>
                 <div className="space-y-2">
                   {ratingDistribution && [5, 4, 3, 2, 1].map((star) => {
-                    const count = ratingDistribution[star] || 0;
-                    const percentage = podcast.ratingCount > 0
-                      ? Math.round((count / podcast.ratingCount) * 100)
-                      : 0;
-
-                    return (
-                      <div key={star} className="flex items-center gap-3">
-                        <div className="flex items-center w-16">
-                          <span className="text-white-2 font-medium">{star}</span>
-                          <Star size={16} className="ml-1 fill-orange-1 text-orange-1" />
-                        </div>
-                        <div className="flex-1 h-4 bg-black-1/50 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-orange-1 rounded-full"
-                            style={{ width: `${percentage}%` }}
-                          />
-                        </div>
-                        <div className="w-24 flex justify-between">
-                          <span className="text-white-3 text-sm">{count} {count === 1 ? 'user' : 'users'}</span>
-                          <span className="text-white-2 text-sm font-medium">{percentage}%</span>
-                        </div>
+                  const count = ratingDistribution[star as keyof typeof ratingDistribution] || 0;
+                  const percentage = podcast.ratingCount && podcast.ratingCount > 0
+                    ? Math.round((count / podcast.ratingCount) * 100)
+                    : 0;
+                  
+                  return (
+                    <div key={star} className="flex items-center gap-3">
+                      <div className="flex items-center w-16">
+                        <span className="text-white-2 font-medium">{star}</span>
+                        <Star size={16} className="ml-1 fill-orange-1 text-orange-1" />
                       </div>
-                    );
+                      <div className="flex-1 h-4 bg-black-1/50 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-orange-1 rounded-full"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                      <div className="w-24 flex justify-between">
+                        <span className="text-white-3 text-sm">{count} {count === 1 ? 'user' : 'users'}</span>
+                        <span className="text-white-2 text-sm font-medium">{percentage}%</span>
+                      </div>
+                    </div>
+                  );
                   })}
                 </div>
               </div>
