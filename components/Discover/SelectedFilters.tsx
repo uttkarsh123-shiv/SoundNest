@@ -17,11 +17,9 @@ interface SelectedFiltersProps {
 const SelectedFilters = ({
   selectedLanguages,
   toggleLanguage,
-  clearLanguages,
   showLanguageFilter,
   selectedCategories,
   toggleCategory,
-  clearCategories,
   showCategoryFilter,
   clearAllFilters
 }: SelectedFiltersProps) => {
