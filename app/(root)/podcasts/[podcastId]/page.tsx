@@ -69,7 +69,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       setUserRating(userRatingData.rating);
       setHasRated(true);
     }
-  }, [podcast, userRatingData, podcastId, updateViewCount]); // Add proper dependencies
+  }, [podcast, userRatingData, podcastId, updateViewCount, hasUpdatedView]);
 
   const handleRatingSubmit = async () => {
     if (!user || !userRating) return;
