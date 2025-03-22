@@ -7,7 +7,7 @@ import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'  // Add this import
 import { useUser } from '@clerk/nextjs'
 import { useMutation, useQuery } from 'convex/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Headphones, Clock, Calendar, Mic2, Layers, Star, MessageCircle, Trash2, ChevronDown, ChevronUp, ChartBar } from 'lucide-react'
 import Image from 'next/image'  // Add this import
 
@@ -71,7 +71,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
     }
   }, [podcast, userRatingData, podcastId, updateViewCount, hasUpdatedView]);
 
-  const handleRatingSubmit = async () => {
+  const handleRatingSubmit = useCallback(async () => {
     if (!user || !userRating) return;
 
     try {
@@ -84,7 +84,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
     } catch (error) {
       console.error("Error submitting rating:", error);
     }
-  };
+  }, [user, userRating, submitRating, podcastId]);
 
   const handleCommentSubmit = async () => {
     if (!user || !comment.trim()) return;
