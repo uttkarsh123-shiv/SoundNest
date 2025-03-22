@@ -251,7 +251,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
                 <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
                 <h2 className="text-20 font-bold text-white-1">Rate this Podcast</h2>
               </div>
-              {podcast?.ratingCount > 0 && (
+              {podcast?.ratingCount && podcast.ratingCount > 0 && (
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full">
                     <Star size={18} stroke="white" />
@@ -270,7 +270,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
               )}
             </div>
 
-            {showRatingAnalysis && podcast?.ratingCount > 0 && (
+            {showRatingAnalysis && podcast?.ratingCount && podcast.ratingCount > 0 && (
               <div className="mb-6 bg-black-1/50 p-4 rounded-lg border border-white-1/10 animate-fadeIn">
                 <h3 className="text-white-1 font-medium mb-3">Rating Distribution</h3>
                 <div className="space-y-2">
