@@ -3,12 +3,14 @@ import Image from 'next/image';
 import { MessageCircle, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import DetailSection from './DetailSection';
 import { Id } from '@/convex/_generated/dataModel';
+import { UserResource } from '@clerk/types';
 
+// Update User interface to match UserResource properties
 interface User {
     id: string;
     imageUrl: string;
-    fullName?: string;
-    username?: string;
+    fullName?: string | null; // Changed to accept null
+    username?: string | null; // Changed to accept null
 }
 
 interface Comment {
@@ -21,7 +23,7 @@ interface Comment {
 }
 
 interface CommentsSectionProps {
-    user: User | null;
+    user: UserResource | User | null | undefined;  // Accept both UserResource and User
     podcastComments: Comment[] | undefined;
     comment: string;
     isOwner: boolean;

@@ -2,12 +2,29 @@ import PodcastCard from '@/components/PodcastCard/GridPodcastCard';
 import EmptyState from '@/components/EmptyState';
 import { Id } from '@/convex/_generated/dataModel';
 
+// Update the interface to match the actual podcast data structure
 interface SimilarPodcastsProps {
   similarPodcasts: Array<{
     _id: Id<"podcasts">;
     podcastTitle: string;
     podcastDescription: string;
-    imageUrl: string | null;
+    imageUrl?: string | null;
+    _creationTime?: number;
+    audioUrl?: string;
+    audioStorageId?: Id<"_storage">;
+    imageStorageId?: Id<"_storage">;
+    views?: number;
+    author?: string;
+    authorId?: string;
+    authorImageUrl?: string;
+    podcastType?: string;
+    voiceType?: string;
+    voicePrompt?: string;
+    imagePrompt?: string;
+    audioDuration?: number;
+    likes?: string[];
+    ratingCount?: number;
+    averageRating?: number;
   }> | undefined;
 }
 
