@@ -165,7 +165,15 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
         <PodcastDetailPlayer
           isOwner={isOwner}
           podcastId={podcast._id}
-          {...podcast}
+          audioUrl={podcast.audioUrl || ''}
+          podcastTitle={podcast.podcastTitle}
+          author={podcast.author || ''}
+          imageUrl={podcast.imageUrl || ''}
+          imageStorageId={podcast.imageStorageId as Id<"_storage">}
+          audioStorageId={podcast.audioStorageId as Id<"_storage">}
+          authorImageUrl={podcast.authorImageUrl || ''}
+          authorId={podcast.authorId}
+          likes={podcast.likes}
         />
       </div>
 
