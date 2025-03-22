@@ -145,13 +145,12 @@ const CreatePodcast = () => {
                 language: selectedLanguage, // Add the selected language
             });
 
+            // Redirect to the podcast detail page
+            router.push(`/podcasts/${newPodcast}`);
             toast({
                 title: 'Podcast created successfully',
                 description: 'Your podcast has been published'
             });
-
-            // Redirect to the podcast detail page
-            router.push(`/podcasts/${newPodcast}`);
 
         } catch (error) {
             console.error('Error creating podcast:', error);
