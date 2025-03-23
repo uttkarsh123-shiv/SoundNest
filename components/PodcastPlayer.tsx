@@ -105,7 +105,7 @@ const PodcastPlayer = () => {
   const toggleFullscreen = () => {
     if (audioRef.current) {
       if (!document.fullscreenElement) {
-        audioRef.current.requestFullscreen().catch(err => {
+        audioRef.current.requestFullscreen().catch(() => {
           toast.error("Error attempting to enable fullscreen mode");
         });
       } else {
