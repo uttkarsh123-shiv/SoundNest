@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { Button } from './ui/button';
 import { Download, Expand, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
@@ -42,21 +41,18 @@ const PreviewControls = ({
           icon: Expand, 
           onClick: () => setIsPreviewOpen(true), 
           label: "Full preview", 
-          delay: "delay-[0ms]",
           isLoading: false 
         },
         { 
           icon: Download, 
           onClick: handleDownload, 
           label: "Download image", 
-          delay: "delay-[50ms]",
           isLoading: isDownloading 
         },
         { 
           icon: Trash2, 
           onClick: handleDelete, 
           label: "Delete image", 
-          delay: "delay-[100ms]",
           isLoading: false 
         },
       ].map((button) => (
@@ -66,7 +62,7 @@ const PreviewControls = ({
           onClick={button.onClick}
           label={button.label}
           isLoading={button.isLoading}
-          className={cn("transition-all duration-500", button.delay)}
+          className="transition-all duration-500"
         />
       ))}
     </div>
@@ -211,4 +207,4 @@ const ImagePreview = ({
   );
 };
 
-export default ImagePreview; 
+export default ImagePreview;
