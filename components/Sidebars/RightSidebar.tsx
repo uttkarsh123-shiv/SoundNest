@@ -11,13 +11,17 @@ import { api } from '@/convex/_generated/api';
 import { useRouter } from 'next/navigation';
 import { useAudio } from '@/providers/AudioProvider';
 import { cn } from '@/lib/utils';
+import { TopPodcastersProps } from '@/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const RightSidebar = () => {
     const { user } = useUser();
+    // Fix: The useQuery hook doesn't return an object with data, isLoading, error properties
+    // Instead it directly returns the data, and we can check for undefined
     const topPodcasters = useQuery(api.users.getTopUserByPodcastCount);
-    const slides = topPodcasters && topPodcasters?.filter((item: any) => item.totalPodcasts > 0)
+    const isLoading = topPodcasters === undefined;
+    const slides = topPodcasters?.filter((item: TopPodcastersProps) => item.totalPodcasts > 0);
     const router = useRouter();
-
     const { audio } = useAudio();
 
     return (
@@ -38,31 +42,62 @@ const RightSidebar = () => {
                     </div>
                 </Link>
             </SignedIn>
+            
+            {/* Fans Like You Section */}
             <section>
                 <Header headerTitle="Fans Like You" />
-                <Carousel fansLikeDetail={slides!} />
+                {isLoading ? (
+                    <div className="flex gap-4 py-2">
+                        <Skeleton className="h-16 w-16 rounded-lg" />
+                        <Skeleton className="h-16 w-16 rounded-lg" />
+                        <Skeleton className="h-16 w-16 rounded-lg" />
+                    </div>
+                ) : !slides || slides.length === 0 ? (
+                    <p className="text-sm text-white-3 italic py-2">No fans data available</p>
+                ) : (
+                    <Carousel fansLikeDetail={slides} />
+                )}
             </section>
+            
+            {/* Top Podcasters Section */}
             <section className="flex flex-col gap-2 pt-7">
                 <Header headerTitle="Top Podcasters" />
-                <div className="flex flex-col gap-6">
-                    {slides?.slice(0, 3).map((podcaster) => (
-                        <div key={podcaster._id} className="flex cursor-pointer justify-between" onClick={() => router.push(`/profile/${podcaster.clerkId}`)}>
-                            <figure className="flex items-center gap-2">
-                                <Image
-                                    src={podcaster.imageUrl}
-                                    alt={podcaster.name}
-                                    width={44}
-                                    height={44}
-                                    className="aspect-square rounded-lg"
-                                />
-                                <h2 className="text-14 font-semibold text-white-1">{podcaster.name}</h2>
-                            </figure>
-                            <div className="flex items-center">
-                                <p className="text-12 font-normal text-white-1">{podcaster.totalPodcasts}&nbsp;&nbsp;{podcaster.totalPodcasts > 1 ? "podcasts" : "podcast"}</p>
+                {isLoading ? (
+                    <div className="flex flex-col gap-4">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="flex items-center gap-2">
+                                <Skeleton className="h-11 w-11 rounded-lg" />
+                                <Skeleton className="h-5 w-32" />
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                ) : !slides || slides.length === 0 ? (
+                    <p className="text-sm text-white-3 italic py-2">No top podcasters available</p>
+                ) : (
+                    <div className="flex flex-col gap-1">
+                        {slides.slice(0, 3).map((podcaster: TopPodcastersProps) => (
+                            <div 
+                                key={podcaster._id} 
+                                className="flex cursor-pointer justify-between hover:bg-black-2/50 p-2 rounded-lg transition-colors" 
+                                onClick={() => router.push(`/profile/${podcaster.clerkId}`)}
+                            >
+                                <figure className="flex items-center gap-2">
+                                    <Image
+                                        src={podcaster.imageUrl}
+                                        alt={podcaster.name}
+                                        width={44}
+                                        height={44}
+                                        className="aspect-square rounded-lg object-cover"
+                                    />
+                                    <h2 className="text-14 font-semibold text-white-1">{podcaster.name}</h2>
+                                </figure>
+                                <div className="flex items-center">
+                                    <p className="text-12 font-normal text-white-1">{podcaster.totalPodcasts}&nbsp;&nbsp;{podcaster.totalPodcasts > 1 ? "podcasts" : "podcast"}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </section>
         </section>
     )

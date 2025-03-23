@@ -6,6 +6,7 @@ import { Headphones, Heart, Play, Star } from "lucide-react";
 import useEmblaCarousel from 'embla-carousel-react';
 import { PodcastProps } from '@/types';
 import FeaturedSkeleton from './FeaturedSkeleton';
+import CarouselDots from '../ui/CarouselDots';
 
 interface FeaturedPodcastsProps {
     featuredPodcasts: PodcastProps[] | undefined;
@@ -124,20 +125,12 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
             </div>
 
             <div className="flex justify-between mt-4">
-                {/* Carousel Controls - Only dots for navigation */}
-                <div className="flex justify-center w-full mt-4">
-                    {featuredPodcasts.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => emblaApi?.scrollTo(index)}
-                            className={`w-3 h-3 rounded-full transition-all mx-1 ${index === selectedIndex
-                                    ? 'bg-orange-1 scale-125'
-                                    : 'bg-[white] hover:bg-white/50'
-                                }`}
-                            aria-label={`Go to slide ${index + 1}`}
-                        />
-                    ))}
-                </div>
+                {/* Replace the old dots implementation with the new component */}
+                <CarouselDots 
+                    totalSlides={featuredPodcasts.length}
+                    selectedIndex={selectedIndex}
+                    onDotClick={(index) => emblaApi?.scrollTo(index)}
+                />
             </div>
         </section>
     );

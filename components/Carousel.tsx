@@ -1,17 +1,18 @@
 import React, { useCallback } from 'react'
 import { EmblaCarouselType } from 'embla-carousel'
-import { DotButton, useDotButton } from './EmblaCarouselDotButton'
 import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
 import { CarouselProps } from '@/types'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import LoaderSpinner from './LoaderSpinner'
+import CarouselDots from './ui/CarouselDots'
 
 const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
   const router = useRouter();
-
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()])
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay
@@ -25,10 +26,29 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
     resetOrStop()
   }, [])
 
-  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
-    emblaApi,
-    onNavButtonClick
-  )
+  // Initialize and update scroll snaps and selected index
+  React.useEffect(() => {
+    if (!emblaApi) return
+
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap())
+    }
+
+    const onInit = () => {
+      setScrollSnaps(emblaApi.scrollSnapList())
+      setSelectedIndex(emblaApi.selectedScrollSnap())
+    }
+
+    emblaApi.on('select', onSelect)
+    emblaApi.on('init', onInit)
+
+    onInit()
+
+    return () => {
+      emblaApi.off('select', onSelect)
+      emblaApi.off('init', onInit)
+    }
+  }, [emblaApi])
 
   const slides = fansLikeDetail && fansLikeDetail?.filter((item: any) => item.totalPodcasts > 0)
 
@@ -56,16 +76,17 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
           </figure>
         ))}
       </div>
-      {/* Dot Button  */}
-      <div className="flex justify-center gap-2">
-        {scrollSnaps.map((_, index) => (
-          <DotButton
-            key={index}
-            onClick={() => onDotButtonClick(index)}
-            selected={index === selectedIndex}
-          />
-        ))}
-      </div>
+      
+      {/* Using the CarouselDots component */}
+      <CarouselDots
+        totalSlides={scrollSnaps.length}
+        selectedIndex={selectedIndex}
+        onDotClick={(index) => {
+          emblaApi?.scrollTo(index)
+          onNavButtonClick(emblaApi as EmblaCarouselType)
+        }}
+        className="gap-2"
+      />
     </section>
   )
 }
