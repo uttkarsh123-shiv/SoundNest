@@ -2,7 +2,6 @@ import Image from "next/image";
 import { User, Mic, Users, Headphones, Heart, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/Profile/StatCard";
-import { PodcastProps } from "@/types";
 
 interface ProfileHeaderProps {
     user: {
@@ -10,9 +9,7 @@ interface ProfileHeaderProps {
         imageUrl?: string;
         _creationTime?: number;
     };
-    podcastsData: {
-        podcasts: PodcastProps[];
-    };
+    podcastCount: number;
     totalViews: number;
     totalLikes: number;
     averageRating: string;
@@ -23,7 +20,7 @@ interface ProfileHeaderProps {
 
 const ProfileHeader = ({
     user,
-    podcastsData,
+    podcastCount,
     totalViews,
     totalLikes,
     averageRating,
@@ -61,7 +58,7 @@ const ProfileHeader = ({
                             </div>
                         )}
                     </div>
-                    {podcastsData.podcasts.length > 0 && (
+                    {podcastCount > 0 && (
                         <Badge className="absolute bottom-1 right-1 bg-orange-1 text-white-1 px-2 py-1 text-xs">
                             Creator
                         </Badge>
@@ -82,7 +79,7 @@ const ProfileHeader = ({
                     <p className="text-white-2 mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
                         <span className="flex items-center gap-2">
                             <Mic size={16} className="text-orange-1" />
-                            <span className="font-medium">{podcastsData.podcasts.length} {podcastsData.podcasts.length === 1 ? 'Podcast' : 'Podcasts'}</span>
+                            <span className="font-medium">{podcastCount} {podcastCount === 1 ? 'Podcast' : 'Podcasts'}</span>
                         </span>
                         {/* Followers count */}
                         {followersCount !== undefined && (

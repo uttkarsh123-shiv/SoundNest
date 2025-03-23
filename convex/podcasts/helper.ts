@@ -1,6 +1,3 @@
-import { v } from "convex/values";
-import { query } from "../_generated/server";
-
 // Helper function to get podcasts by author
 export const getPodcastsByAuthor = async (ctx, authorId) => {
   return await ctx.db
@@ -126,33 +123,3 @@ export const sortPodcasts = (podcasts, sortType) => {
   
   return sortedPodcasts;
 };
-
-// this query will get the podcast by the podcastId.
-export const getPodcastById = query({
-  args: {
-    podcastId: v.id("podcasts"),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db.get(args.podcastId);
-  },
-});
-
-// this query will get the podcast by the authorId.
-export const getPodcastByAuthorId = query({
-  args: {
-    authorId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const podcasts = await ctx.db
-      .query("podcasts")
-      .filter((q) => q.eq(q.field("authorId"), args.authorId))
-      .collect();
-
-    const totalListeners = podcasts.reduce(
-      (sum, podcast) => sum + podcast.views,
-      0
-    );
-
-    return { podcasts, listeners: totalListeners };
-  },
-});

@@ -12,6 +12,7 @@ import ProfileHeader from "@/components/Profile/ProfileHeader";
 import ProfileActionButtons from "@/components/Profile/ProfileActionButtons";
 import FeaturedPodcast from "@/components/Profile/FeaturedPodcast";
 import ProfileAbout from "@/components/Profile/ProfileAbout";
+
 const ProfilePage = ({
   params,
 }: {
@@ -22,16 +23,23 @@ const ProfilePage = ({
   const user = useQuery(api.users.getUserById, {
     clerkId: params.profileId,
   });
-  const podcastsData = useQuery(api.podcasts.getPodcastByAuthorId, {
+
+  // Use the optimized query to get podcast stats in one call
+  const podcastsData = useQuery(api.podcasts.getPodcastStat, {
     authorId: params.profileId,
   });
-  // Fetch popular podcasts using the getFilteredPodcasts query
-  const popularPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, {
+
+  // Use the filtered podcasts query with type and authorId
+  const popularPodcasts = useQuery(api.podcasts.getFilteredPodcasts, {
     type: "popular",
+    authorId: params.profileId,
+    limit: 10, // Limit to improve performance
   });
-  // Fetch recent podcasts using the getFilteredPodcasts query
-  const recentPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, {
+
+  const recentPodcasts = useQuery(api.podcasts.getFilteredPodcasts, {
     type: "latest",
+    authorId: params.profileId,
+    limit: 10, // Limit to improve performance
   });
 
   // Add follow-related queries and mutations with proper error handling
@@ -62,31 +70,21 @@ const ProfilePage = ({
     }
   }, [isUserFollowing]);
 
-  if (!user || !podcastsData || !popularPodcastsData || !recentPodcastsData) return <LoaderSpinner />;
+  if (!user || !podcastsData || !popularPodcasts || !recentPodcasts) return <LoaderSpinner />;
 
   // Check if the profile being viewed is the current user's profile
   const isOwnProfile = userId === params.profileId;
 
-  // Calculate total views, likes, and average rating
-  const totalViews = podcastsData.podcasts.reduce((sum, podcast) => sum + (podcast.views || 0), 0);
-  const totalLikes = podcastsData.podcasts.reduce((sum, podcast) => sum + (podcast.likeCount || 0), 0);
-  const averageRating = podcastsData.podcasts.length > 0
-    ? (podcastsData.podcasts.reduce((sum, podcast) => sum + (podcast.averageRating || 0), 0) / podcastsData.podcasts.length).toFixed(1)
-    : "0.0";
-
-  // Get featured podcast from popularPodcastsData (most viewed)
-  const featuredPodcast = popularPodcastsData.length > 0
-    ? popularPodcastsData.filter(podcast => podcast.authorId === params.profileId)[0]
-    : null;
+  // Get featured podcast - use the most popular one
+  const featuredPodcast = popularPodcasts.length > 0 ? popularPodcasts[0] : null;
 
   // Play random podcast function
   const playRandomPodcast = () => {
-    if (podcastsData.podcasts.length === 0) return;
+    if (podcastsData.podcastCount === 0) return;
 
-    const randomIndex = Math.floor(Math.random() * podcastsData.podcasts.length);
-    const podcast = podcastsData.podcasts[randomIndex];
+    const randomIndex = Math.floor(Math.random() * podcastsData.podcastCount);
+    const podcast = popularPodcasts[randomIndex];
 
-    // Removed setRandomPodcast since the state isn't used elsewhere
     setAudio({
       title: podcast.podcastTitle || "",
       audioUrl: podcast.audioUrl || "",
@@ -156,22 +154,16 @@ const ProfilePage = ({
       });
     }
   };
-  // Sort podcasts for tabs
-  const popularPodcasts = [...podcastsData.podcasts]
-    .sort((a, b) => (b.views || 0) - (a.views || 0));
-
-  const recentPodcasts = [...podcastsData.podcasts]
-    .sort((a, b) => (b._creationTime || 0) - (a._creationTime || 0));
 
   return (
     <section className="mt-9 flex flex-col">
-      {/* Profile Header */}
+      {/* Profile Header - now using pre-calculated stats */}
       <ProfileHeader
         user={user}
-        podcastsData={podcastsData}
-        totalViews={totalViews}
-        totalLikes={totalLikes}
-        averageRating={averageRating}
+        podcastCount={podcastsData.podcastCount}
+        totalViews={podcastsData.totalViews}
+        totalLikes={podcastsData.totalLikes}
+        averageRating={podcastsData.averageRating}
         isFollowing={isFollowing}
         followersCount={followersCount}
         followingCount={followingCount}
@@ -181,7 +173,7 @@ const ProfilePage = ({
       <ProfileActionButtons
         isOwnProfile={isOwnProfile}
         isFollowing={isFollowing}
-        hasPodcasts={podcastsData.podcasts.length > 0}
+        hasPodcasts={podcastsData.podcastCount > 0}
         toggleFollow={toggleFollow}
         playRandomPodcast={playRandomPodcast}
         shareProfile={shareProfile}

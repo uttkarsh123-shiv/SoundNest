@@ -3,32 +3,19 @@ export {
   createPodcast,
   getUrl,
   deletePodcast,
-  updatePodcastViews
-} from './core';
-
-// Query operations
-export {
-  getPodcastById,
-  getPodcastByAuthorId
-} from './queries';
+  updatePodcastViews,
+} from "./core";
 
 // Filtering and sorting operations
-export {
-  getFilteredPodcasts,
-  getSimilarPodcasts
-} from './filters';
+export { getFilteredPodcasts, getPodcastById, getSimilarPodcasts, getPodcastStat } from "./filters";
 
 // Social features
 export {
   likePodcast,
   ratePodcast,
   getUserRating,
-  getRatingDistribution
-} from './social';
+  getRatingDistribution,
+} from "./social";
 
 // Comments functionality
-export {
-  addComment,
-  getPodcastComments,
-  deleteComment
-} from './comments';
+export { addComment, getPodcastComments, deleteComment } from "./comments";
