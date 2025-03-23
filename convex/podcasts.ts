@@ -1,5 +1,6 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { Id } from "./_generated/dataModel";
 
 // create podcast mutation
 export const createPodcast = mutation({
@@ -16,7 +17,9 @@ export const createPodcast = mutation({
     views: v.float64(),
     audioDuration: v.float64(),
     podcastType: v.optional(v.string()),
-    language: v.optional(v.string()), // Add language as an optional parameter
+    language: v.optional(v.string()),
+    likes: v.optional(v.array(v.string())),
+    likeCount: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -412,7 +415,7 @@ export const getRatingDistribution = query({
       .collect();
 
     // Count ratings for each star level (1-5)
-    const distribution = {
+    const distribution: Record<number, number> = {
       1: 0,
       2: 0,
       3: 0,
@@ -422,7 +425,7 @@ export const getRatingDistribution = query({
 
     // Count each rating
     allRatings.forEach((rating) => {
-      const starRating = rating.rating;
+      const starRating = Math.round(rating.rating);
       if (starRating >= 1 && starRating <= 5) {
         distribution[starRating]++;
       }
@@ -478,8 +481,6 @@ export const getPodcastComments = query({
   },
 });
 
-// Add this function to your existing podcasts.ts file
-
 // Delete a comment
 export const deleteComment = mutation({
   args: {
@@ -517,7 +518,7 @@ export const getPodcastsByLanguage = query({
   handler: async (ctx, args) => {
     return await ctx.db
       .query("podcasts")
-      .withIndex("by_language", (q) => q.eq("language", args.language))
+      .filter((q) => q.eq(q.field("language"), args.language))
       .order("desc")
       .collect();
   },
