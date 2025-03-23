@@ -1,7 +1,8 @@
 import React from 'react';
 import GridPodcastCard from '@/components/PodcastCard/GridPodcastCard';
 import ListPodcastCard from '@/components/PodcastCard/ListPodcastCard';
-import ShowMoreLessButtons from '@/components/Discover/ShowMoreLessButtons';
+import ShowMoreLessButtons from '@/components/ShowMoreLessButtons';
+import PodcastCountDisplay from '@/components/PodcastCountDisplay';
 import { PodcastProps } from '@/types';
 
 interface PodcastDisplayProps {
@@ -76,10 +77,11 @@ const PodcastDisplay = ({
       
       {/* Podcast count display */}
       {totalPodcasts !== undefined && visibleCount !== undefined && (
-        <div className="text-center text-white-2 text-sm mt-6 bg-white-1/5 py-3 px-4 rounded-lg inline-block mx-auto">
-          Showing {visibleCount} of {totalPodcasts} {totalPodcasts === 1 ? 'podcast' : 'podcasts'}
-          {selectedFilters && (selectedFilters.categories.length > 0 || selectedFilters.languages.length > 0) && ' with selected filters'}
-        </div>
+        <PodcastCountDisplay
+          visibleCount={visibleCount}
+          totalCount={totalPodcasts}
+          selectedFilters={selectedFilters}
+        />
       )}
     </>
   );

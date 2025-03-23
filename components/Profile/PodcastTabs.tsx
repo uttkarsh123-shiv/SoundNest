@@ -1,9 +1,10 @@
 import { Star, Clock } from "lucide-react";
-import { Tabs,  TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PodcastSection from "@/components/Profile/PodcastSection";
 import EmptyState from "@/components/EmptyState";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PodcastProps } from "@/types";
+import ShowMoreLessButtons from "@/components/ShowMoreLessButtons";
 
 interface PodcastTabsProps {
     popularPodcasts: PodcastProps[];
@@ -19,7 +20,41 @@ const PodcastTabs = ({
     onTabChange
 }: PodcastTabsProps) => {
     const [activeTab, setActiveTab] = useState("popular");
+    const [visiblePodcasts, setVisiblePodcasts] = useState(3); // Initially show 3 podcasts
+    const initialPodcastCount = 3; // Define a constant for the initial count
     
+    // Reset visible podcasts when tab changes - moved outside of conditional
+    useEffect(() => {
+        setVisiblePodcasts(initialPodcastCount);
+    }, [activeTab]);
+
+    const handleTabChange = (value: string) => {
+        setActiveTab(value);
+        if (onTabChange) onTabChange(value);
+    };
+
+    // Load more podcasts
+    const loadMorePodcasts = () => {
+        setVisiblePodcasts(prev => prev + 3);
+    };
+
+    // Show less podcasts
+    const showLessPodcasts = () => {
+        setVisiblePodcasts(initialPodcastCount);
+    };
+
+    // Determine which podcasts to display based on active tab
+    const allPodcasts = activeTab === "popular" ? popularPodcasts : recentPodcasts;
+    const currentPodcasts = allPodcasts.slice(0, visiblePodcasts);
+    const title = activeTab === "popular" ? "Popular Podcasts" : "Recent Podcasts";
+    const icon = activeTab === "popular" ? 
+        <Star size={28} className="text-orange-1" /> : 
+        <Clock size={28} className="text-orange-1" />;
+
+    // Determine if we can show more or less
+    const hasMorePodcasts = allPodcasts.length > visiblePodcasts;
+    const canShowLess = visiblePodcasts > initialPodcastCount;
+
     // If both arrays are empty, show a single empty state
     if (popularPodcasts.length === 0 && recentPodcasts.length === 0) {
         return (
@@ -32,18 +67,6 @@ const PodcastTabs = ({
             </section>
         );
     }
-
-    const handleTabChange = (value: string) => {
-        setActiveTab(value);
-        if (onTabChange) onTabChange(value);
-    };
-
-    // Determine which podcasts to display based on active tab
-    const currentPodcasts = activeTab === "popular" ? popularPodcasts : recentPodcasts;
-    const title = activeTab === "popular" ? "Popular Podcasts" : "Recent Podcasts";
-    const icon = activeTab === "popular" ? 
-        <Star size={28} className="text-orange-1" /> : 
-        <Clock size={28} className="text-orange-1" />;
 
     return (
         <div className="mb-10">
@@ -73,6 +96,23 @@ const PodcastTabs = ({
                     icon={icon}
                     podcasts={currentPodcasts}
                 />
+
+                {/* Show More/Less buttons */}
+                {allPodcasts.length > initialPodcastCount && (
+                    <ShowMoreLessButtons
+                        loadMoreHandler={loadMorePodcasts}
+                        showLessHandler={showLessPodcasts}
+                        hasMore={hasMorePodcasts}
+                        canShowLess={canShowLess}
+                    />
+                )}
+
+                {/* Podcast count display */}
+                {allPodcasts.length > 0 && (
+                    <div className="text-center text-white-2 text-sm mt-4 bg-white-1/5 py-3 px-4 rounded-lg inline-block mx-auto">
+                        Showing {Math.min(visiblePodcasts, allPodcasts.length)} of {allPodcasts.length} {allPodcasts.length === 1 ? 'podcast' : 'podcasts'}
+                    </div>
+                )}
             </Tabs>
         </div>
     );

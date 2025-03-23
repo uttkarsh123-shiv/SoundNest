@@ -93,7 +93,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
     }
 
     const loadMorePodcasts = () => {
-        setVisiblePodcasts(prev => prev + 3); // Load 3 more podcasts
+        setVisiblePodcasts(prev => prev + 6); // Load 6 more podcasts
     }
 
     const showLessPodcasts = () => {
