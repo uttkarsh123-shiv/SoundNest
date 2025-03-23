@@ -1,6 +1,6 @@
-import LeftSidebar from "@/components/LeftSidebar";
+import LeftSidebar from "@/components/Sidebars/LeftSidebar";
 import MobileNav from "@/components/MobileNav";
-import RightSidebar from "@/components/RightSidebar";
+import RightSidebar from "@/components/Sidebars/RightSidebar";
 import Image from "next/image";
 import { Toaster } from "@/components/ui/toaster"
 import PodcastPlayer from "@/components/PodcastPlayer";
