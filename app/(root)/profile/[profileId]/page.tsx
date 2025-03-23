@@ -56,9 +56,7 @@ const ProfilePage = ({
 
   const { setAudio } = useAudio();
   const { toast } = useToast();
-  // Removed randomPodcast state since it's set but never read
   const [isFollowing, setIsFollowing] = useState(false);
-  const [activeTab, setActiveTab] = useState("popular");
   const { userId } = useAuth();
 
   // Update isFollowing state when the query result changes
@@ -410,7 +408,6 @@ const ProfilePage = ({
         popularPodcasts={popularPodcasts}
         recentPodcasts={recentPodcasts}
         isOwnProfile={isOwnProfile}
-        onTabChange={setActiveTab}
       />
 
       {/* About Section */}

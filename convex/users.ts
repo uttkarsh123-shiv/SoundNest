@@ -22,7 +22,7 @@ export const getUserById = query({
 // with the most podcasts will be at the top.
 export const getTopUserByPodcastCount = query({
     args: {},
-    handler: async (ctx, args) => {
+    handler: async (ctx) => {
         const user = await ctx.db.query("users").collect();
 
         const userData = await Promise.all(
@@ -117,9 +117,6 @@ export const deleteUser = internalMutation({
         await ctx.db.delete(user._id);
     },
 });
-
-
-// Add this new query to the existing users.ts file
 
 // Get user with followers and following counts
 export const getUserWithFollowCounts = query({

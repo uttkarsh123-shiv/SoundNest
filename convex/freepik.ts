@@ -97,9 +97,9 @@ export const generateThumbnailAction = action({
 
         } catch (error) {
             console.error("Error in generateThumbnailAction:", {
-                name: error.name,
-                message: error.message,
-                stack: error.stack,
+                name: error instanceof Error ? error.name : 'Unknown Error',
+                message: error instanceof Error ? error.message : 'Unknown error occurred',
+                stack: error instanceof Error ? error.stack : undefined,
                 fullError: error
             });
             throw error;
