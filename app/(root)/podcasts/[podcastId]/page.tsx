@@ -117,7 +117,10 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
     }
   }, [user, deleteComment, podcastId, podcast?.authorId]);
 
-  const similarPodcasts = useQuery(api.podcasts.getPodcastByVoiceType, { podcastId })
+  const similarPodcasts = useQuery(api.podcasts.getSimilarPodcasts, { 
+    podcastId,
+    limit: 9
+  });
 
   // Use useMemo for derived values
   const isOwner = useMemo(() => user?.id === podcast?.authorId, [user?.id, podcast?.authorId]);

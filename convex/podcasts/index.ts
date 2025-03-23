@@ -8,12 +8,12 @@ export {
 
 // Query operations
 export {
-  getPodcastByVoiceType,
   getAllPodcasts,
   getPodcastById,
   getPodcastByAuthorId,
   getPodcastBySearch,
-  getPodcastsByLanguage
+  getPodcastsByLanguage,
+  getSimilarPodcasts
 } from './queries';
 
 // Filtering and sorting operations
