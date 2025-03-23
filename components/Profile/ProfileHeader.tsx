@@ -2,7 +2,7 @@ import Image from "next/image";
 import { User, Mic, Users, Headphones, Heart, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/Profile/StatCard";
-import { Id } from "@/convex/_generated/dataModel";
+import { PodcastProps } from "@/types";
 
 interface ProfileHeaderProps {
     user: {
@@ -11,15 +11,7 @@ interface ProfileHeaderProps {
         _creationTime?: number;
     };
     podcastsData: {
-        podcasts: Array<{
-            _id: Id<"podcasts">;
-            _creationTime: number;
-            podcastTitle: string;
-            podcastDescription?: string;
-            imageUrl?: string;
-            views: number;
-            // Add other properties as needed
-        }>;
+        podcasts: PodcastProps[];
     };
     totalViews: number;
     totalLikes: number;

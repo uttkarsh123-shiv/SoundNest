@@ -1,19 +1,17 @@
 "use client";
 
 import { useQuery, useMutation } from "convex/react";
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Headphones, Heart, Star, User, Calendar, Play, Share2, Globe, Clock, Award, Users, Link, Twitter, Instagram, Youtube, Facebook, Linkedin, Github, Pen } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import { api } from "@/convex/_generated/api";
-import { Button } from "@/components/ui/button";
 import { useAudio } from "@/providers/AudioProvider";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import ProfileEditModal from "@/components/Profile/ProfileEditModal";
 import PodcastTabs from "@/components/Profile/PodcastTabs";
 import ProfileHeader from "@/components/Profile/ProfileHeader";
+import ProfileActionButtons from "@/components/Profile/ProfileActionButtons";
+import FeaturedPodcast from "@/components/Profile/FeaturedPodcast";
+import ProfileAbout from "@/components/Profile/ProfileAbout";
 const ProfilePage = ({
   params,
 }: {
@@ -21,7 +19,6 @@ const ProfilePage = ({
     profileId: string;
   };
 }) => {
-  const router = useRouter(); // Add this line to get the router
   const user = useQuery(api.users.getUserById, {
     clerkId: params.profileId,
   });
@@ -181,154 +178,24 @@ const ProfilePage = ({
       />
 
       {/* Action buttons */}
-      <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
-        {!isOwnProfile && (
-          <Button
-            onClick={toggleFollow}
-            className={`${isFollowing
-              ? 'bg-white-1/5 hover:bg-white-1/10 text-white-1 border border-white-1/10'
-              : 'bg-gradient-to-r from-orange-1 to-orange-600 hover:opacity-90 text-black font-medium'} 
-              flex items-center gap-2 px-5 py-2.5 rounded-full shadow-md transition-all duration-200`}
-          >
-            {isFollowing ? (
-              <>
-                <span className="relative flex h-2 w-2 mr-1">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-1 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-1"></span>
-                </span>
-                Following
-              </>
-            ) : (
-              <>
-                <Heart size={16} className={isFollowing ? "text-orange-1" : ""} />
-                Follow
-              </>
-            )}
-          </Button>
-        )}
-
-        {podcastsData.podcasts.length > 0 && (
-          <Button
-            onClick={playRandomPodcast}
-            className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
-          >
-            <Play size={16} className="text-orange-1" />
-            <span>Play Random</span>
-          </Button>
-        )}
-
-        {isOwnProfile && (
-          <ProfileEditModal
-            clerkId={params.profileId}
-            initialName={user?.name || ""}
-            initialBio={user?.bio || ""}
-            initialWebsite={user?.website || ""}
-            initialSocialLinks={user?.socialLinks || []}
-          />
-        )}
-
-        <Button
-          onClick={shareProfile}
-          className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
-        >
-          <Share2 size={16} className="text-orange-1" />
-          <span>Share Profile</span>
-        </Button>
-      </div>
+      <ProfileActionButtons
+        isOwnProfile={isOwnProfile}
+        isFollowing={isFollowing}
+        hasPodcasts={podcastsData.podcasts.length > 0}
+        toggleFollow={toggleFollow}
+        playRandomPodcast={playRandomPodcast}
+        shareProfile={shareProfile}
+        clerkId={params.profileId}
+        userName={user?.name || ""}
+        userBio={user?.bio || ""}
+        userWebsite={user?.website || ""}
+        userSocialLinks={user?.socialLinks || []}
+      />
 
       {/* Featured Podcast Section */}
-      {featuredPodcast && (
-        <section className="my-10">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="bg-orange-1/10 p-2 rounded-lg">
-              <Award size={20} className="text-orange-1" />
-            </div>
-            <h2 className="text-xl font-bold text-white-1">Featured Podcast</h2>
-          </div>
+      <FeaturedPodcast podcast={featuredPodcast} setAudio={setAudio} />
 
-          <div className="bg-white-1/5 rounded-xl p-4 border border-white-1/10">
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="w-full md:w-1/3 lg:w-1/4 aspect-square relative rounded-lg overflow-hidden">
-                <Image
-                  src={featuredPodcast.imageUrl || '/placeholder.png'}
-                  alt={featuredPodcast.podcastTitle || 'Featured Podcast'}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <Button
-                  className="absolute bottom-3 left-3 bg-orange-1 hover:bg-orange-1/90 rounded-full size-12 flex items-center justify-center p-0"
-                  onClick={() => {
-                    setAudio({
-                      title: featuredPodcast.podcastTitle || "",
-                      audioUrl: featuredPodcast.audioUrl || "",
-                      imageUrl: featuredPodcast.imageUrl || "",
-                      author: featuredPodcast.author || "",
-                      podcastId: featuredPodcast._id,
-                    });
-                  }}
-                >
-                  <Play size={24} className="ml-1" />
-                </Button>
-              </div>
-
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-white-1 mb-2">{featuredPodcast.podcastTitle || 'Featured Podcast'}</h3>
-                <p className="text-white-2 text-sm mb-4 line-clamp-3">
-                  {featuredPodcast.podcastDescription || 'No description available'}
-                </p>
-
-                <div className="flex flex-wrap gap-4 text-sm text-white-2">
-                  <div className="flex items-center gap-1">
-                    <Headphones size={16} className="text-orange-1" />
-                    <span>{featuredPodcast.views?.toLocaleString() || 0} views</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Heart size={16} className="text-orange-1" />
-                    <span>{featuredPodcast.likeCount?.toLocaleString() || 0} likes</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Star size={16} className="text-orange-1" />
-                    <span>{featuredPodcast.averageRating || 0} rating</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock size={16} className="text-orange-1" />
-                    <span>{new Date(featuredPodcast._creationTime).toLocaleDateString()}</span>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex gap-3">
-                  <Button
-                    className="bg-orange-1 hover:bg-orange-1/90 text-white-1"
-                    onClick={() => {
-                      setAudio({
-                        title: featuredPodcast.podcastTitle || "",
-                        audioUrl: featuredPodcast.audioUrl || "",
-                        imageUrl: featuredPodcast.imageUrl || "",
-                        author: featuredPodcast.author || "",
-                        podcastId: featuredPodcast._id,
-                      });
-                    }}
-                  >
-                    <Play size={16} className="mr-2" /> Play Now
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="border-white-1/20 text-white-1 hover:bg-white-1/10"
-                    onClick={() => {
-                      router.push(`/podcasts/${featuredPodcast._id}`);
-                    }}
-                  >
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Tabbed Content Section - Using the new PodcastTabs component */}
+      {/* Tabbed Content Section */}
       <PodcastTabs
         popularPodcasts={popularPodcasts}
         recentPodcasts={recentPodcasts}
@@ -336,106 +203,7 @@ const ProfilePage = ({
       />
 
       {/* About Section */}
-      <section className="mb-10">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="bg-orange-1/10 p-3 rounded-xl">
-            <User size={28} className="text-orange-1" />
-          </div>
-          <h1 className="text-2xl font-bold text-white-1">About {user?.name}</h1>
-        </div>
-
-        <div className="bg-white-1/5 rounded-xl p-6 border border-white-1/10">
-          {/* Bio */}
-          <div className={`flex flex-wrap gap-4 ${(user?.bio || isOwnProfile) ? "mb-6" : ""} `}>
-            {user?.bio ? (
-              <p className="text-white-2">{user.bio}</p>
-            ) : (
-              isOwnProfile && (
-                <p
-                  className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
-                  onClick={() => {
-                    const editButton = document.getElementById('profile-edit-button');
-                    if (editButton) editButton.click();
-                  }}
-                >
-                  Add a bio to tell others about yourself
-                  <span className="bg-white-1/10 p-1 rounded-full">
-                    <Pen size={14} className="text-orange-1" />
-                  </span>
-                </p>
-              )
-            )}
-          </div>
-
-          {/* Joining Date */}
-          <div className={`flex items-center gap-2 ${(user?.website || (user?.socialLinks && user?.socialLinks.length > 0) || isOwnProfile) ? "mb-6" : ""} text-white-2`}>
-            <Calendar size={18} className="text-orange-1" />
-            <span>Joined {user?._creationTime ? new Date(user._creationTime).toLocaleDateString('en-US', {
-              month: 'long',
-              year: 'numeric',
-              day: 'numeric'
-            }) : 'recently'}</span>
-          </div>
-
-          {/* Website and Social Links */}
-          <div className="flex flex-wrap gap-2">
-            {user?.website && (
-              <a
-                href={user.website.startsWith('http') ? user.website : `https://${user.website}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
-              >
-                <Globe size={18} className="text-orange-1" />
-                <span className="text-white-2">Website</span>
-              </a>
-            )}
-
-            {user?.socialLinks && user.socialLinks.length > 0 && user.socialLinks.map((link, index) => {
-              // Get appropriate icon based on platform
-              const getSocialIcon = (platform: string) => {
-                switch (platform.toLowerCase()) {
-                  case 'twitter': return <Twitter size={18} className="text-orange-1" />;
-                  case 'instagram': return <Instagram size={18} className="text-orange-1" />;
-                  case 'youtube': return <Youtube size={18} className="text-orange-1" />;
-                  case 'facebook': return <Facebook size={18} className="text-orange-1" />;
-                  case 'linkedin': return <Linkedin size={18} className="text-orange-1" />;
-                  case 'github': return <Github size={18} className="text-orange-1" />;
-                  default: return <Link size={18} className="text-orange-1" />;
-                }
-              };
-
-              return (
-                <a
-                  key={index}
-                  href={link.url.startsWith('http') ? link.url : `https://${link.url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
-                >
-                  {getSocialIcon(link.platform)}
-                  <span className="text-white-2">{link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}</span>
-                </a>
-              );
-            })}
-
-            {(!user?.website && (!user?.socialLinks || user.socialLinks.length === 0)) && isOwnProfile && (
-              <p
-                className="text-white-3 italic flex items-center gap-2 cursor-pointer hover:text-white-2 transition-colors"
-                onClick={() => {
-                  const editButton = document.getElementById('profile-edit-button');
-                  if (editButton) editButton.click();
-                }}
-              >
-                Add your website and social links to help others connect with you
-                <span className="bg-white-1/10 p-1 rounded-full">
-                  <Pen size={14} className="text-orange-1" />
-                </span>
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
+      <ProfileAbout user={user} isOwnProfile={isOwnProfile} />
     </section>
   );
 };
