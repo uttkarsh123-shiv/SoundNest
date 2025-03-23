@@ -5,8 +5,13 @@ import AudioProvider from "@/providers/AudioProvider";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "PodTales",
-  description: "Your World, Your Voice, Anytime",
+  title: 'PodTales',
+  description: 'Create and share AI-powered podcasts',
+  icons: {
+    icon: '/icons/logo.png',
+    shortcut: '/icons/logo.png',
+    apple: '/icons/logo.png',
+  },
 };
 
 export default function RootLayout({
