@@ -1,5 +1,8 @@
+import { QueryCtx } from "../_generated/server";
+import { PodcastProps } from "@/types";
+
 // Helper function to get podcasts by author
-export const getPodcastsByAuthor = async (ctx, authorId) => {
+export const getPodcastsByAuthor = async (ctx: QueryCtx, authorId: string) => {
   return await ctx.db
     .query("podcasts")
     .filter((q) => q.eq(q.field("authorId"), authorId))
@@ -7,7 +10,7 @@ export const getPodcastsByAuthor = async (ctx, authorId) => {
 };
 
 // Helper function to search podcasts
-export const searchPodcasts = async (ctx, searchTerm) => {
+export const searchPodcasts = async (ctx: QueryCtx, searchTerm: string | undefined) => {
   if (!searchTerm || searchTerm.trim() === "") {
     return await ctx.db.query("podcasts").collect();
   }
@@ -40,7 +43,11 @@ export const searchPodcasts = async (ctx, searchTerm) => {
 };
 
 // Helper function to apply category and language filters
-export const applyFilters = (podcasts, categories, languages) => {
+export const applyFilters = (
+  podcasts: PodcastProps[], 
+  categories: string[] | undefined, 
+  languages: string[] | undefined
+) => {
   if (!categories?.length && !languages?.length) {
     return podcasts;
   }
@@ -57,7 +64,7 @@ export const applyFilters = (podcasts, categories, languages) => {
 };
 
 // Helper function to calculate popularity score
-export const calculatePopularityScore = (podcast) => {
+export const calculatePopularityScore = (podcast: PodcastProps) => {
   const likes = podcast.likeCount || 0;
   const views = podcast.views || 0;
   const ratingCount = podcast.ratingCount || 0;
@@ -68,7 +75,7 @@ export const calculatePopularityScore = (podcast) => {
 };
 
 // Helper function to calculate trending score
-export const calculateTrendingScore = (podcast) => {
+export const calculateTrendingScore = (podcast: PodcastProps) => {
   const likes = podcast.likeCount || 0;
   const views = podcast.views || 0;
   const now = Date.now();
@@ -78,7 +85,7 @@ export const calculateTrendingScore = (podcast) => {
 };
 
 // Helper function to sort podcasts
-export const sortPodcasts = (podcasts, sortType) => {
+export const sortPodcasts = (podcasts: PodcastProps[], sortType: string) => {
   const sortedPodcasts = [...podcasts]; // Create a copy to avoid mutating the original
   
   switch (sortType) {

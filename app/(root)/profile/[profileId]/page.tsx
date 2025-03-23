@@ -184,8 +184,9 @@ const ProfilePage = ({
         userSocialLinks={user?.socialLinks || []}
       />
 
-      {/* Featured Podcast Section */}
-      <FeaturedPodcast podcast={featuredPodcast} setAudio={setAudio} />
+      {featuredPodcast && (
+        <FeaturedPodcast podcast={featuredPodcast} setAudio={setAudio} />
+      )}
 
       {/* Tabbed Content Section */}
       <PodcastTabs

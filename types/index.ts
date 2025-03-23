@@ -46,6 +46,9 @@ export interface PodcastProps {
   likeCount?: number;
   averageRating?: number;
   likes?: string[];
+  language?: string;
+  podcastType?: string;
+  ratingCount?: number;
 }
 
 export interface ProfilePodcastProps {
