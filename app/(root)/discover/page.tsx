@@ -38,69 +38,27 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
 
     const search = searchParams.search || '';
     
-    // Use the search query to get initial podcasts
-    const podcastsData = useQuery(api.podcasts.getPodcastBySearch, { search: search || '' })
-    
-    // Use the getFilteredPodcasts query for sorting
-    const filteredPodcastsData = useQuery(api.podcasts.getFilteredPodcasts, { type: filterOption })
+    // Use the new combined query function
+    const filteredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, {
+        search,
+        type: filterOption,
+        categories: selectedCategories.length > 0 ? selectedCategories : undefined,
+        languages: selectedLanguages.length > 0 ? selectedLanguages : undefined
+    });
 
     useEffect(() => {
-        if (podcastsData && filteredPodcastsData) {
-            setIsLoading(false)
+        if (filteredPodcasts) {
+            setIsLoading(false);
         }
-    }, [podcastsData, filteredPodcastsData])
-
-    // Combine search results with filtering and sorting
-    const filteredPodcasts = React.useMemo(() => {
-        if (!podcastsData || !filteredPodcastsData) return []
-        
-        let resultPodcasts = [];
-        
-        // If there's a search query, get search results but apply the same sorting logic
-        if (search) {
-            // Get the search results
-            const searchResults = [...podcastsData];
-            
-            // Apply the same sorting logic from filteredPodcastsData
-            // Find matching podcasts in filteredPodcastsData to preserve their order
-            const orderedResults = filteredPodcastsData
-                .filter(filteredPodcast => 
-                    searchResults.some(searchPodcast => 
-                        searchPodcast._id === filteredPodcast._id
-                    )
-                );
-                
-            // Add any remaining search results that weren't in the filtered results
-            const remainingResults = searchResults.filter(searchPodcast => 
-                !orderedResults.some(orderedPodcast => 
-                    orderedPodcast._id === searchPodcast._id
-                )
-            );
-            
-            resultPodcasts = [...orderedResults, ...remainingResults];
-        } else {
-            // If no search query, use the filtered podcasts from the API
-            resultPodcasts = filteredPodcastsData;
-        }
-        
-        // Apply category and language filters
-        return resultPodcasts.filter(podcast => {
-            const categoryMatch = selectedCategories.length === 0 || 
-                (podcast.podcastType && selectedCategories.includes(podcast.podcastType));
-            
-            const languageMatch = selectedLanguages.length === 0 || 
-                (podcast.language && selectedLanguages.includes(podcast.language));
-            
-            return categoryMatch && languageMatch;
-        });
-    }, [podcastsData, filteredPodcastsData, search, selectedCategories, selectedLanguages]);
+    }, [filteredPodcasts]);
 
     const toggleCategory = (category: string) => {
         setSelectedCategories(prev => 
             prev.includes(category) 
                 ? prev.filter(c => c !== category) 
                 : [...prev, category]
-        )
+        );
+        setIsLoading(true); // Show loading state when filters change
     }
 
     const toggleLanguage = (language: string) => {
@@ -108,20 +66,23 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
             prev.includes(language) 
                 ? prev.filter(l => l !== language) 
                 : [...prev, language]
-        )
+        );
+        setIsLoading(true); // Show loading state when filters change
     }
 
     const clearCategories = () => {
-        setSelectedCategories([])
+        setSelectedCategories([]);
+        setIsLoading(true); // Show loading state when filters change
     }
 
     const clearLanguages = () => {
-        setSelectedLanguages([])
+        setSelectedLanguages([]);
+        setIsLoading(true); // Show loading state when filters change
     }
 
     const clearAllFilters = () => {
-        clearCategories()
-        clearLanguages()
+        clearCategories();
+        clearLanguages();
     }
 
     return (
@@ -135,7 +96,10 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                     <FilterControls 
                         search={search}
                         filterOption={filterOption}
-                        setFilterOption={setFilterOption}
+                        setFilterOption={(option) => {
+                            setFilterOption(option);
+                            setIsLoading(true); // Show loading state when filter changes
+                        }}
                         showCategoryFilter={showCategoryFilter}
                         setShowCategoryFilter={setShowCategoryFilter}
                         showLanguageFilter={showLanguageFilter}
@@ -183,7 +147,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                     <PodcastSkeleton viewMode={viewMode} />
                 ) : (
                     <>
-                        {filteredPodcasts.length > 0 ? (
+                        {filteredPodcasts && filteredPodcasts.length > 0 ? (
                             <>
                                 <PodcastDisplay 
                                     filteredPodcasts={filteredPodcasts}
