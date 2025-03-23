@@ -1,5 +1,8 @@
 import PodcastCard from '@/components/PodcastCard/GridPodcastCard';
 import EmptyState from '@/components/EmptyState';
+import ShowMoreLessButtons from '@/components/ShowMoreLessButtons';
+import PodcastCountDisplay from '@/components/PodcastCountDisplay';
+import { useState } from 'react';
 import { Id } from '@/convex/_generated/dataModel';
 
 // Update the interface to match the actual podcast data structure
@@ -29,6 +32,27 @@ interface SimilarPodcastsProps {
 }
 
 const SimilarPodcasts = ({ similarPodcasts }: SimilarPodcastsProps) => {
+  const [visibleCount, setVisibleCount] = useState(3); // Initially show 3 podcasts
+  const initialPodcastCount = 3; // Define a constant for the initial count
+
+  // Load more podcasts
+  const loadMorePodcasts = () => {
+    setVisibleCount(prev => prev + 3);
+  };
+
+  // Show less podcasts
+  const showLessPodcasts = () => {
+    setVisibleCount(initialPodcastCount);
+  };
+
+  // Determine if we can show more or less
+  const hasMorePodcasts = similarPodcasts ? similarPodcasts.length > visibleCount : false;
+  const canShowLess = visibleCount > initialPodcastCount;
+
+  // Get the podcasts to display
+  const podcastsToDisplay = similarPodcasts ? similarPodcasts.slice(0, visibleCount) : [];
+  const totalPodcasts = similarPodcasts ? similarPodcasts.length : 0;
+
   return (
     <section className="mt-12 mb-8">
       <div className="flex items-center gap-3 mb-6">
@@ -37,18 +61,38 @@ const SimilarPodcasts = ({ similarPodcasts }: SimilarPodcastsProps) => {
       </div>
 
       {similarPodcasts && similarPodcasts.length > 0 ? (
-        <div className="podcast_grid">
-          {similarPodcasts.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
-            <div key={_id} className="transform transition-all duration-300 hover:-translate-y-2">
-              <PodcastCard
-                imgUrl={imageUrl as string}
-                title={podcastTitle}
-                description={podcastDescription}
-                podcastId={_id}
-              />
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="podcast_grid">
+            {podcastsToDisplay.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
+              <div key={_id} className="transform transition-all duration-300 hover:-translate-y-2">
+                <PodcastCard
+                  imgUrl={imageUrl as string}
+                  title={podcastTitle}
+                  description={podcastDescription}
+                  podcastId={_id}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Show More/Less buttons */}
+          {totalPodcasts > initialPodcastCount && (
+            <ShowMoreLessButtons
+              loadMoreHandler={loadMorePodcasts}
+              showLessHandler={showLessPodcasts}
+              hasMore={hasMorePodcasts}
+              canShowLess={canShowLess}
+            />
+          )}
+
+          {/* Podcast count display */}
+          <div className="flex justify-center mt-4">
+            <PodcastCountDisplay
+              visibleCount={Math.min(visibleCount, totalPodcasts)}
+              totalCount={totalPodcasts}
+            />
+          </div>
+        </>
       ) : (
         <div className="bg-black-1/30 p-8 rounded-xl border border-gray-800">
           <EmptyState
