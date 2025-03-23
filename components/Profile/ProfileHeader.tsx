@@ -8,6 +8,7 @@ interface ProfileHeaderProps {
         name?: string;
         imageUrl?: string;
         _creationTime?: number;
+        isVerified?: boolean;
     };
     podcastCount: number;
     totalViews: number;
@@ -68,7 +69,18 @@ const ProfileHeader = ({
                 {/* Profile Details */}
                 <div className="flex flex-col md:flex-1 mt-3 md:mt-0">
                     <div className="flex items-center gap-3 flex-wrap">
-                        <h1 className="text-3xl sm:text-4xl font-bold text-white-1 drop-shadow-sm tracking-tight">{user?.name || "Podcaster"}</h1>
+                        <h1 className="text-3xl sm:text-4xl font-bold text-white-1 drop-shadow-sm tracking-tight flex items-center">
+                            <span className="truncate max-w-[280px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-full xl:max-w-full">{user?.name || "User"}</span>
+                            {user?.isVerified && (
+                                <Image
+                                    src="/icons/verified.svg"
+                                    alt="Verified"
+                                    width={20}
+                                    height={20}
+                                    className="inline-block ml-1 flex-shrink-0"
+                                />
+                            )}
+                        </h1>
                         {isFollowing && (
                             <Badge variant="outline" className="border-orange-1 text-orange-1">
                                 Following
@@ -76,33 +88,36 @@ const ProfileHeader = ({
                         )}
                     </div>
 
-                    <p className="text-white-2 mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
-                        <span className="flex items-center gap-2">
-                            <Mic size={16} className="text-orange-1" />
-                            <span className="font-medium">{podcastCount} {podcastCount === 1 ? 'Podcast' : 'Podcasts'}</span>
-                        </span>
-                        {/* Followers count */}
-                        {followersCount !== undefined && (
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-6 mt-3">
+                        <p className="text-white-2 flex flex-wrap items-center gap-3 text-sm sm:text-base">
+                            {/* Podcast count */}
                             <span className="flex items-center gap-2">
-                                <User size={16} className="text-orange-1" />
-                                <span>{followersCount} {followersCount === 1 ? 'Follower' : 'Followers'}</span>
+                                <Mic size={16} className="text-orange-1" />
+                                <span className="font-medium">{podcastCount} {podcastCount <= 1 ? 'Podcast' : 'Podcasts'}</span>
                             </span>
-                        )}
-                        {/* Following count */}
-                        {followingCount !== undefined && (
-                            <span className="flex items-center gap-2">
-                                <Users size={16} className="text-orange-1" />
-                                <span>{followingCount} Following</span>
-                            </span>
-                        )}
-                    </p>
-                </div>
+                            {/* Followers count */}
+                            {followersCount !== undefined && (
+                                <span className="flex items-center gap-2">
+                                    <User size={16} className="text-orange-1" />
+                                    <span>{followersCount} {followersCount === 1 ? 'Follower' : 'Followers'}</span>
+                                </span>
+                            )}
+                            {/* Following count */}
+                            {followingCount !== undefined && (
+                                <span className="flex items-center gap-2">
+                                    <Users size={16} className="text-orange-1" />
+                                    <span>{followingCount} Following</span>
+                                </span>
+                            )}
+                        </p>
 
-                {/* Stats Cards - Desktop */}
-                <div className="hidden md:flex gap-4">
-                    <StatCard icon={<Headphones size={20} />} value={totalViews.toLocaleString()} label="Total Views" />
-                    <StatCard icon={<Heart size={20} />} value={totalLikes.toLocaleString()} label="Total Likes" />
-                    <StatCard icon={<Star size={20} />} value={averageRating} label="Avg Rating" />
+                        {/* Stats Cards - Desktop */}
+                        <div className="hidden md:flex gap-4 mt-4 md:mt-0">
+                            <StatCard icon={<Headphones size={20} />} value={totalViews.toLocaleString()} label="Total Views" />
+                            <StatCard icon={<Heart size={20} />} value={totalLikes.toLocaleString()} label="Total Likes" />
+                            <StatCard icon={<Star size={20} />} value={averageRating} label="Avg Rating" />
+                        </div>
+                    </div>
                 </div>
             </div>
 

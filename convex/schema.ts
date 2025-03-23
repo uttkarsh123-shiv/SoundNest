@@ -38,6 +38,7 @@ export default defineSchema({
     followingCount: v.optional(v.number()),
     bio: v.optional(v.string()),
     website: v.optional(v.string()),
+    isVerified: v.optional(v.boolean()), // Add isVerified field
     socialLinks: v.optional(v.array(v.object({
       platform: v.string(),
       url: v.string()
