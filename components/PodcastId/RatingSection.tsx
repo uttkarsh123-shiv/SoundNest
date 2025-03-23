@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Star, ChartBar } from 'lucide-react';
-import DetailSection from './DetailSection';
+import DetailSection from './SectionDetail';
 
 interface RatingSectionProps {
     podcast: {

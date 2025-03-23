@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 
-interface DetailSectionProps {
+interface SectionDetailProps {
   title: string;
   children: ReactNode;
   rightElement?: ReactNode;
 }
 
-const DetailSection = ({ title, children, rightElement }: DetailSectionProps) => {
+const DetailSection = ({ title, children, rightElement }: SectionDetailProps) => {
   return (
     <div className="bg-black-1/30 p-6 rounded-xl border border-gray-800">
       <div className="flex items-center justify-between mb-4">

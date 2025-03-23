@@ -1,5 +1,5 @@
 import { Calendar, Mic2 } from 'lucide-react';
-import DetailSection from './DetailSection';
+import DetailSection from './SectionDetail';
 
 interface PodcastInfoSectionsProps {
   podcast: {
@@ -20,8 +20,8 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
       </DetailSection>
 
       {/* Transcription */}
-      <DetailSection 
-        title="Transcription" 
+      <DetailSection
+        title="Transcription"
         rightElement={
           <div className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full">
             <Mic2 size={20} stroke="white" />

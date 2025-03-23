@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { MessageCircle, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
-import DetailSection from './DetailSection';
+import DetailSection from './SectionDetail';
 import { Id } from '@/convex/_generated/dataModel';
 import { UserResource } from '@clerk/types';
 
