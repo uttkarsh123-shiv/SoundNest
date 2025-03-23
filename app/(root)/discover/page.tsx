@@ -18,7 +18,7 @@ type FilterOptionType = 'latest' | 'trending' | 'popular' | 'topRated';
 const Discover = ({ searchParams }: { searchParams: { search: string, filter?: string } }) => {
     // Use a helper function to determine the initial filter option
     const getInitialFilterOption = (filter: string | undefined): FilterOptionType => {
-        if (filter === 'latest' || filter === 'trending' || 
+        if (filter === 'latest' || filter === 'trending' ||
             filter === 'popular' || filter === 'topRated') {
             return filter;
         }
@@ -28,18 +28,18 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
     const [filterOption, setFilterOption] = useState<FilterOptionType>(
         getInitialFilterOption(searchParams.filter)
     );
-    
+
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showCategoryFilter, setShowCategoryFilter] = useState(false);
     const [showLanguageFilter, setShowLanguageFilter] = useState(false);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [visiblePodcasts, setVisiblePodcasts] = useState(3); // Initially show 3 podcasts
-    const initialPodcastCount = 3; // Define a constant for the initial count
+    const [visiblePodcasts, setVisiblePodcasts] = useState(6);
+    const initialPodcastCount = 6;
 
     const search = searchParams.search || '';
-    
+
     // Use the new combined query function
     const filteredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, {
         search,
@@ -60,18 +60,18 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
     }, [search, filterOption, selectedCategories, selectedLanguages]);
 
     const toggleCategory = (category: string) => {
-        setSelectedCategories(prev => 
-            prev.includes(category) 
-                ? prev.filter(c => c !== category) 
+        setSelectedCategories(prev =>
+            prev.includes(category)
+                ? prev.filter(c => c !== category)
                 : [...prev, category]
         );
         setIsLoading(true); // Show loading state when filters change
     }
 
     const toggleLanguage = (language: string) => {
-        setSelectedLanguages(prev => 
-            prev.includes(language) 
-                ? prev.filter(l => l !== language) 
+        setSelectedLanguages(prev =>
+            prev.includes(language)
+                ? prev.filter(l => l !== language)
                 : [...prev, language]
         );
         setIsLoading(true); // Show loading state when filters change
@@ -108,7 +108,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
             <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-5">
                     {/* Filter controls */}
-                    <FilterControls 
+                    <FilterControls
                         search={search}
                         filterOption={filterOption}
                         setFilterOption={(option) => {
@@ -126,7 +126,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                     />
 
                     {/* Category filter */}
-                    <CategoryFilter 
+                    <CategoryFilter
                         showCategoryFilter={showCategoryFilter}
                         setShowCategoryFilter={setShowCategoryFilter}
                         selectedCategories={selectedCategories}
@@ -135,7 +135,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                     />
 
                     {/* Language filter */}
-                    <LanguageFilter 
+                    <LanguageFilter
                         showLanguageFilter={showLanguageFilter}
                         setShowLanguageFilter={setShowLanguageFilter}
                         selectedLanguages={selectedLanguages}
@@ -144,7 +144,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                     />
 
                     {/* Selected filters display */}
-                    <SelectedFilters 
+                    <SelectedFilters
                         selectedLanguages={selectedLanguages}
                         toggleLanguage={toggleLanguage}
                         clearLanguages={clearLanguages}
@@ -163,7 +163,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                 ) : (
                     <>
                         {filteredPodcasts && filteredPodcasts.length > 0 ? (
-                            <PodcastDisplay 
+                            <PodcastDisplay
                                 filteredPodcasts={filteredPodcasts.slice(0, visiblePodcasts)}
                                 viewMode={viewMode}
                                 loadMorePodcasts={loadMorePodcasts}
@@ -178,7 +178,7 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                                 }}
                             />
                         ) : (
-                            <EmptyState 
+                            <EmptyState
                                 search={search}
                                 selectedCategories={selectedCategories}
                                 selectedLanguages={selectedLanguages}

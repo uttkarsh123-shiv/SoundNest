@@ -1,6 +1,7 @@
 import React from 'react';
 import GridPodcastCard from '@/components/PodcastCard/GridPodcastCard';
 import ListPodcastCard from '@/components/PodcastCard/ListPodcastCard';
+import ShowMoreLessButtons from '@/components/Discover/ShowMoreLessButtons';
 import { PodcastProps } from '@/types';
 
 interface PodcastDisplayProps {
@@ -66,31 +67,12 @@ const PodcastDisplay = ({
       </div>
 
       {/* Show More/Less buttons */}
-      <div className="flex justify-center mt-8 gap-4">
-        {hasMorePodcasts && loadMorePodcasts && (
-          <button 
-            onClick={loadMorePodcasts}
-            className="bg-primary hover:bg-primary/90 text-white py-2 px-6 rounded-full transition-all duration-300 flex items-center gap-2"
-          >
-            Show More
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M6 9l6 6 6-6"/>
-            </svg>
-          </button>
-        )}
-        
-        {canShowLess && showLessPodcasts && (
-          <button 
-            onClick={showLessPodcasts}
-            className="bg-white-1/10 hover:bg-white-1/20 text-white py-2 px-6 rounded-full transition-all duration-300 flex items-center gap-2"
-          >
-            Show Less
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 15l-6-6-6 6"/>
-            </svg>
-          </button>
-        )}
-      </div>
+      <ShowMoreLessButtons
+        loadMoreHandler={loadMorePodcasts}
+        showLessHandler={showLessPodcasts}
+        hasMore={hasMorePodcasts}
+        canShowLess={canShowLess}
+      />
       
       {/* Podcast count display */}
       {totalPodcasts !== undefined && visibleCount !== undefined && (
