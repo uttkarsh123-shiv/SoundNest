@@ -211,10 +211,10 @@ const PodcastPlayer = () => {
         <div className="flex items-center gap-4 min-w-[200px] max-w-[300px]">
           <Link href={`/podcasts/${audio?.podcastId}`}>
             <Image
-              src={audio?.imageUrl || "/images/player1.png"}
+              src={audio?.imageUrl || "/icons/logo.png"}
               width={48}
               height={48}
-              alt="player1"
+              alt="album-cover"
               className="aspect-square rounded-lg hover:opacity-80 transition-opacity"
             />
           </Link>
