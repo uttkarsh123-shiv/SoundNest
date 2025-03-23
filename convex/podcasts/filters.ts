@@ -69,16 +69,25 @@ export const getFilteredPodcasts = query({
     // Step 1: Get initial podcasts based on search, author, or get all
     if (authorId) {
       resultPodcasts = await getPodcastsByAuthor(ctx, authorId);
-    } else {
+    } else if (search) {
       resultPodcasts = await searchPodcasts(ctx, search);
+    } else {
+      // If no search or author specified, get all podcasts
+      resultPodcasts = await ctx.db.query("podcasts").collect();
     }
 
-    // Step 2: Apply category and language filters
-    resultPodcasts = applyFilters(resultPodcasts, categories, languages);
+    // Step 2: Apply category and language filters only if they exist
+    if ((categories && categories.length > 0) || (languages && languages.length > 0)) {
+      resultPodcasts = applyFilters(resultPodcasts, categories, languages);
+    }
 
-    // Step 3: Sort based on type
-    const sortType = type || "latest"; // Default to latest if not specified
-    resultPodcasts = sortPodcasts(resultPodcasts, sortType);
+    // Step 3: Sort based on type only if a type is specified
+    if (type) {
+      resultPodcasts = sortPodcasts(resultPodcasts, type);
+    } else {
+      // Default to latest if not specified
+      resultPodcasts = sortPodcasts(resultPodcasts, "latest");
+    }
 
     // Step 4: Apply limit if specified
     if (limit && limit > 0) {
