@@ -8,17 +8,14 @@ export {
 
 // Query operations
 export {
-  getAllPodcasts,
   getPodcastById,
-  getPodcastByAuthorId,
-  getPodcastBySearch,
-  getPodcastsByLanguage,
-  getSimilarPodcasts
+  getPodcastByAuthorId
 } from './queries';
 
 // Filtering and sorting operations
 export {
-  getFilteredPodcasts
+  getFilteredPodcasts,
+  getSimilarPodcasts
 } from './filters';
 
 // Social features

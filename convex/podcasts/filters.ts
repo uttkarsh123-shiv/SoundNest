@@ -1,131 +1,11 @@
 import { v } from "convex/values";
 import { query } from "../_generated/server";
-
-// Helper function to get podcasts by author
-const getPodcastsByAuthor = async (ctx, authorId) => {
-  return await ctx.db
-    .query("podcasts")
-    .filter((q) => q.eq(q.field("authorId"), authorId))
-    .collect();
-};
-
-// Helper function to search podcasts
-const searchPodcasts = async (ctx, searchTerm) => {
-  if (!searchTerm || searchTerm.trim() === "") {
-    return await ctx.db.query("podcasts").collect();
-  }
-
-  // Try author search first
-  const authorSearch = await ctx.db
-    .query("podcasts")
-    .withSearchIndex("search_author", (q) => q.search("author", searchTerm))
-    .collect();
-
-  if (authorSearch.length > 0) {
-    return authorSearch;
-  }
-
-  // Try title search
-  const titleSearch = await ctx.db
-    .query("podcasts")
-    .withSearchIndex("search_title", (q) => q.search("podcastTitle", searchTerm))
-    .collect();
-
-  if (titleSearch.length > 0) {
-    return titleSearch;
-  }
-
-  // Try description search
-  return await ctx.db
-    .query("podcasts")
-    .withSearchIndex("search_body", (q) => q.search("podcastDescription", searchTerm))
-    .collect();
-};
-
-// Helper function to apply category and language filters
-const applyFilters = (podcasts, categories, languages) => {
-  if (!categories?.length && !languages?.length) {
-    return podcasts;
-  }
-
-  return podcasts.filter(podcast => {
-    const categoryMatch = !categories?.length || 
-      (podcast.podcastType && categories.includes(podcast.podcastType));
-    
-    const languageMatch = !languages?.length || 
-      (podcast.language && languages.includes(podcast.language));
-    
-    return categoryMatch && languageMatch;
-  });
-};
-
-// Helper function to calculate popularity score
-const calculatePopularityScore = (podcast) => {
-  const likes = podcast.likeCount || 0;
-  const views = podcast.views || 0;
-  const ratingCount = podcast.ratingCount || 0;
-  const avgRating = podcast.averageRating || 0;
-
-  const ratingScore = (ratingCount * avgRating) / 5;
-  return ratingScore + likes * 2 + views;
-};
-
-// Helper function to calculate trending score
-const calculateTrendingScore = (podcast) => {
-  const likes = podcast.likeCount || 0;
-  const views = podcast.views || 0;
-  const now = Date.now();
-  const daysSinceRelease = (now - podcast._creationTime) / (1000 * 60 * 60 * 24);
-  
-  return (likes * 2 + views) / Math.pow(daysSinceRelease + 1, 1.2);
-};
-
-// Helper function to sort podcasts
-const sortPodcasts = (podcasts, sortType) => {
-  const sortedPodcasts = [...podcasts]; // Create a copy to avoid mutating the original
-  
-  switch (sortType) {
-    case "popular":
-      sortedPodcasts.sort((a, b) => {
-        return calculatePopularityScore(b) - calculatePopularityScore(a);
-      });
-      break;
-
-    case "topRated":
-      sortedPodcasts.sort((a, b) => {
-        const aRating = a.averageRating || 0;
-        const bRating = b.averageRating || 0;
-        const aCount = a.ratingCount || 0;
-        const bCount = b.ratingCount || 0;
-
-        // If both have ratings, compare by rating
-        if (aCount > 0 && bCount > 0) {
-          return bRating - aRating;
-        }
-
-        // If only one has ratings, prioritize the one with ratings
-        if (aCount > 0) return -1;
-        if (bCount > 0) return 1;
-
-        // If neither has ratings, sort by views as a fallback
-        return (b.views || 0) - (a.views || 0);
-      });
-      break;
-      
-    case "trending":
-      sortedPodcasts.sort((a, b) => {
-        return calculateTrendingScore(b) - calculateTrendingScore(a);
-      });
-      break;
-      
-    case "latest":
-    default:
-      sortedPodcasts.sort((a, b) => b._creationTime - a._creationTime);
-      break;
-  }
-  
-  return sortedPodcasts;
-};
+import { 
+  getPodcastsByAuthor, 
+  searchPodcasts, 
+  applyFilters, 
+  sortPodcasts 
+} from "./queries";
 
 // Universal podcast filtering and sorting function
 export const getFilteredPodcasts = query({
@@ -161,5 +41,112 @@ export const getFilteredPodcasts = query({
     }
     
     return resultPodcasts;
+  },
+});
+
+// Function to get similar podcasts based on multiple parameters
+export const getSimilarPodcasts = query({
+  args: {
+    podcastId: v.id("podcasts"),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const podcast = await ctx.db.get(args.podcastId);
+    if (!podcast) return [];
+    
+    const limit = args.limit || 9; // Default to 8 similar podcasts
+    
+    // Get all podcasts except the current one
+    const allPodcasts = await ctx.db
+      .query("podcasts")
+      .filter((q) => q.neq(q.field("_id"), args.podcastId))
+      .collect();
+    
+    // Calculate similarity scores for each podcast
+    const scoredPodcasts = allPodcasts.map(p => {
+      let score = 0;
+      
+      // Same author (highest weight)
+      if (p.authorId === podcast.authorId) {
+        score += 10;
+      }
+      
+      // Same voice type (high weight)
+      if (p.voiceType === podcast.voiceType) {
+        score += 8;
+      }
+      
+      // Same podcast type (medium weight)
+      if (p.podcastType === podcast.podcastType) {
+        score += 6;
+      }
+      
+      // Same language (medium weight)
+      if (p.language === podcast.language) {
+        score += 6;
+      }
+      
+      // Content similarity - check if titles or descriptions share keywords
+      if (p.podcastTitle && podcast.podcastTitle) {
+        const podcastWords = podcast.podcastTitle.toLowerCase().split(/\s+/);
+        const otherWords = p.podcastTitle.toLowerCase().split(/\s+/);
+        
+        // Count matching words in titles
+        const matchingTitleWords = podcastWords.filter(word => 
+          word.length > 3 && otherWords.includes(word)
+        ).length;
+        
+        if (matchingTitleWords > 0) {
+          score += matchingTitleWords * 2; // 2 points per matching significant word
+        }
+      }
+      
+      // Description similarity
+      if (p.podcastDescription && podcast.podcastDescription) {
+        const podcastDesc = podcast.podcastDescription.toLowerCase().split(/\s+/);
+        const otherDesc = p.podcastDescription.toLowerCase().split(/\s+/);
+        
+        // Count matching words in descriptions (only for words longer than 3 chars)
+        const matchingDescWords = podcastDesc.filter(word => 
+          word.length > 3 && otherDesc.includes(word)
+        ).length;
+        
+        if (matchingDescWords > 0) {
+          score += Math.min(matchingDescWords, 5); // Cap at 5 points to avoid overfitting
+        }
+      }
+      
+      // Popularity boost - give a small boost to popular podcasts
+      if (p.views) {
+        // Logarithmic scaling to avoid domination by very popular podcasts
+        score += Math.min(Math.log10(p.views) * 0.5, 3);
+      }
+      
+      // Rating boost - give a small boost to highly rated podcasts
+      if (p.averageRating && p.averageRating > 4) {
+        score += (p.averageRating - 4) * 2; // Up to 2 points for 5-star podcasts
+      }
+      
+      // Recency boost - give a small boost to newer podcasts
+      if (p._creationTime) {
+        const ageInDays = (Date.now() - p._creationTime) / (1000 * 60 * 60 * 24);
+        if (ageInDays < 30) {
+          score += Math.max(0, (30 - ageInDays) / 10); // Up to 3 points for very new podcasts
+        }
+      }
+      
+      // Add some randomness to avoid always showing the same recommendations
+      score += Math.random() * 2;
+      
+      return { podcast: p, score };
+    });
+    
+    // Sort by score (highest first) and take the top results
+    const sortedPodcasts = scoredPodcasts
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map(item => item.podcast);
+    
+    return sortedPodcasts;
   },
 });
