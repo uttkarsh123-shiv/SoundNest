@@ -6,6 +6,7 @@ import {
   applyFilters,
   sortPodcasts,
 } from "./helper";
+import { PodcastProps } from "@/types";
 
 // this query will get the podcast by the podcastId.
 export const getPodcastById = query({
@@ -28,17 +29,17 @@ export const getPodcastStat = query({
 
     // Calculate aggregate statistics
     const totalViews = podcasts.reduce(
-      (sum, podcast) => sum + (podcast.views || 0),
+      (sum: number, podcast: PodcastProps) => sum + (podcast.views || 0),
       0
     );
     const totalLikes = podcasts.reduce(
-      (sum, podcast) => sum + (podcast.likeCount || 0),
+      (sum: number, podcast: PodcastProps) => sum + (podcast.likeCount || 0),
       0
     );
     const averageRating =
       podcasts.length > 0
         ? podcasts.reduce(
-            (sum, podcast) => sum + (podcast.averageRating || 0),
+            (sum: number, podcast: PodcastProps) => sum + (podcast.averageRating || 0),
             0
           ) / podcasts.length
         : 0;
