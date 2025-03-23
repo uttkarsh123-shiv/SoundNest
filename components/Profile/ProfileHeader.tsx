@@ -45,7 +45,7 @@ const ProfileHeader = ({
             <div className="relative px-6 sm:px-8 pb-8 -mt-24 flex flex-col md:flex-row md:items-end gap-8">
                 {/* Profile Image */}
                 <div className="relative z-10">
-                    <div className="size-36 sm:size-40 rounded-full border-4 border-black shadow-xl overflow-hidden bg-white-1/10 group">
+                    <div className="size-36 sm:size-40 rounded-full shadow-xl overflow-hidden group">
                         {user?.imageUrl ? (
                             <Image
                                 src={user.imageUrl}
