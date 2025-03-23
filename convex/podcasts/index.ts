@@ -7,7 +7,12 @@ export {
 } from "./core";
 
 // Filtering and sorting operations
-export { getFilteredPodcasts, getPodcastById, getSimilarPodcasts, getPodcastStat } from "./filters";
+export {
+  getFilteredPodcasts,
+  getPodcastById,
+  getSimilarPodcasts,
+  getAuthorStat,
+} from "./filters";
 
 // Social features
 export {

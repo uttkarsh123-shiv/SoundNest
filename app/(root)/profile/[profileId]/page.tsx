@@ -25,7 +25,7 @@ const ProfilePage = ({
   });
 
   // Use the optimized query to get podcast stats in one call
-  const podcastsData = useQuery(api.podcasts.getPodcastStat, {
+  const podcastsData = useQuery(api.podcasts.getAuthorStat, {
     authorId: params.profileId,
   });
 

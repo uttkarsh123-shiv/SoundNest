@@ -19,7 +19,7 @@ export const getPodcastById = query({
 });
 
 // Get podcast statistics for a specific author
-export const getPodcastStat = query({
+export const getAuthorStat = query({
   args: {
     authorId: v.string(),
   },
