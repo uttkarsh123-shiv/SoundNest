@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Download, Expand, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { PreviewLoading } from './ui/preview-loading';
+import { PreviewLoading } from '../ui/preview-loading';
 import { ActionButton } from "@/components/ui/action-button";
 
 interface ImagePreviewProps {
@@ -37,23 +37,23 @@ const PreviewControls = ({
       onClick={(e) => e.stopPropagation()}
     >
       {[
-        { 
-          icon: Expand, 
-          onClick: () => setIsPreviewOpen(true), 
-          label: "Full preview", 
-          isLoading: false 
+        {
+          icon: Expand,
+          onClick: () => setIsPreviewOpen(true),
+          label: "Full preview",
+          isLoading: false
         },
-        { 
-          icon: Download, 
-          onClick: handleDownload, 
-          label: "Download image", 
-          isLoading: isDownloading 
+        {
+          icon: Download,
+          onClick: handleDownload,
+          label: "Download image",
+          isLoading: isDownloading
         },
-        { 
-          icon: Trash2, 
-          onClick: handleDelete, 
-          label: "Delete image", 
-          isLoading: false 
+        {
+          icon: Trash2,
+          onClick: handleDelete,
+          label: "Delete image",
+          isLoading: false
         },
       ].map((button) => (
         <ActionButton

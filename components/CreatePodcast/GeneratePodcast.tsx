@@ -1,21 +1,21 @@
 'use client'
 
 import { GeneratePodcastProps } from '@/types'
-import { Label } from './ui/label'
-import { Textarea } from './ui/textarea'
+import { Label } from '../ui/label'
+import { Textarea } from '../ui/textarea'
 import { useState, useRef, useEffect } from 'react';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { Loader, Mic, Play, Square, Trash2 } from 'lucide-react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { v4 as uuidv4 } from 'uuid';
 import { useUploadFiles } from '@xixixao/uploadstuff/react';
 import { toast, useToast } from "@/components/ui/use-toast"
-import { Progress } from './ui/progress';
+import { Progress } from '../ui/progress';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ToggleButtonGroup } from './ui/toggle-button-group';
-import { Input } from './ui/input';
+import { ToggleButtonGroup } from '../ui/toggle-button-group';
+import { Input } from '../ui/input';
 import { voiceCategories } from '@/constants/PodcastFields';
 
 const MAX_CHARACTERS = 2500;

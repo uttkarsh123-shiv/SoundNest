@@ -18,15 +18,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import GeneratePodcast from "@/components/GeneratePodcast";
-import GenerateThumbnail from "@/components/GenerateThumbnail";
+import GeneratePodcast from "@/components/CreatePodcast/GeneratePodcast";
+import GenerateThumbnail from "@/components/CreatePodcast/GenerateThumbnail";
 import { Loader, Podcast } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
-import GenerateAIContent from "@/components/GenerateAIContent";
+import GenerateAIContent from "@/components/CreatePodcast/GenerateAIContent";
 import { chatSession } from "@/service/Gemini";
 import { Gemini_Prompt } from "@/constants/Gemini_Prompt";
 import { podcastTypes } from "@/constants/PodcastFields";
