@@ -84,7 +84,7 @@ export interface LatestPodcastCardProps {
   podcastId: Id<"podcasts">;
 }
 
-export interface PodcastDetailPlayerProps {
+export interface PodcastDetailProps {
   audioUrl: string;
   podcastTitle: string;
   author: string;

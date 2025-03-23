@@ -1,11 +1,11 @@
 'use client'
 import LoaderSpinner from '@/components/LoaderSpinner'
-import PodcastDetailPlayer from '@/components/PodcastDetailPlayer'
-import PodcastHeader from '@/components/PodcastDetails/PodcastHeader'
-import PodcastInfoSections from '@/components/PodcastDetails/PodcastInfoSections'
-import RatingSection from '@/components/PodcastDetails/RatingSection'
-import CommentsSection from '@/components/PodcastDetails/CommentsSection'
-import SimilarPodcasts from '@/components/PodcastDetails/SimilarPodcasts'
+import PodcastDetail from '@/components/PodcastId/PodcastDetail'
+import PodcastHeader from '@/components/PodcastId/PodcastHeader'
+import PodcastInfoSections from '@/components/PodcastId/PodcastInfoSections'
+import RatingSection from '@/components/PodcastId/RatingSection'
+import CommentsSection from '@/components/PodcastId/CommentsSection'
+import SimilarPodcasts from '@/components/PodcastId/SimilarPodcasts'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useUser } from '@clerk/nextjs'
@@ -118,25 +118,25 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
   }, [user, deleteComment, podcastId, podcast?.authorId]);
 
   const similarPodcasts = useQuery(api.podcasts.getPodcastByVoiceType, { podcastId })
-  
+
   // Use useMemo for derived values
   const isOwner = useMemo(() => user?.id === podcast?.authorId, [user?.id, podcast?.authorId]);
-  
+
   if (!similarPodcasts || !podcast) return <LoaderSpinner />
 
   return (
     <section className="flex w-full flex-col">
       {/* Header Section */}
-      <PodcastHeader 
+      <PodcastHeader
         podcastType={podcast.podcastType}
         audioDuration={podcast.audioDuration}
         views={podcast.views}
         averageRating={podcast.averageRating}
       />
 
-      {/* Player Section */}
+      {/* Podcast Detail */}
       <div className="mt-6">
-        <PodcastDetailPlayer
+        <PodcastDetail
           isOwner={isOwner}
           podcastId={podcast._id}
           audioUrl={podcast.audioUrl || ''}
@@ -151,7 +151,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
         />
       </div>
 
-      {/* Details Section */}
+      {/* Podcast Info */}
       <div className="mt-8 space-y-8">
         <PodcastInfoSections podcast={podcast} />
 

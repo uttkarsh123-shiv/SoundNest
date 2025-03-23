@@ -4,18 +4,18 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Play, MoreVertical, Trash2, Heart, Share2, Check } from 'lucide-react';
-import MusicBars from './MusicBars';
+import MusicBars from '../MusicBars';
 
 import { api } from "@/convex/_generated/api";
 import { useAudio } from '@/providers/AudioProvider';
-import { PodcastDetailPlayerProps } from "@/types";
+import { PodcastDetailProps } from "@/types";
 
-import LoaderSpinner from "./LoaderSpinner";
-import { Button } from "./ui/button";
-import { useToast } from "./ui/use-toast";
+import LoaderSpinner from "../LoaderSpinner";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 import { useUser } from "@clerk/nextjs";
 
-const PodcastDetailPlayer = ({
+const PodcastDetail = ({
   audioUrl,
   podcastTitle,
   author,
@@ -27,7 +27,7 @@ const PodcastDetailPlayer = ({
   authorImageUrl,
   authorId,
   likes = [],
-}: PodcastDetailPlayerProps) => {
+}: PodcastDetailProps) => {
   const router = useRouter();
   const { audio, setAudio } = useAudio();
   const { toast } = useToast();
@@ -35,7 +35,7 @@ const PodcastDetailPlayer = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLiked, setIsLiked] = useState(likes?.includes(user?.id || "") || false);
   const [isCopied, setIsCopied] = useState(false);
-  
+
   const deletePodcast = useMutation(api.podcasts.deletePodcast);
   const likePodcast = useMutation(api.podcasts.likePodcast);
 
@@ -61,7 +61,7 @@ const PodcastDetailPlayer = ({
   // Share podcast function
   const sharePodcast = async () => {
     const url = window.location.href;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -77,7 +77,7 @@ const PodcastDetailPlayer = ({
       navigator.clipboard.writeText(url);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
-      
+
       toast({
         title: "Link Copied!",
         description: "Podcast link copied to clipboard",
@@ -133,11 +133,10 @@ const PodcastDetailPlayer = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className={`size-12 rounded-full transition-all duration-200 hover:scale-105 flex items-center justify-center ${
-                  isPlaying 
-                    ? "bg-black text-orange-1 hover:bg-black/90" 
+                className={`size-12 rounded-full transition-all duration-200 hover:scale-105 flex items-center justify-center ${isPlaying
+                    ? "bg-black text-orange-1 hover:bg-black/90"
                     : "bg-orange-1 text-white-1 hover:bg-orange-1/90"
-                }`}
+                  }`}
                 onClick={handlePlay}
               >
                 {isPlaying ? (
@@ -170,7 +169,7 @@ const PodcastDetailPlayer = ({
                     });
                     return;
                   }
-                  
+
                   try {
                     const liked = await likePodcast({ podcastId, userId: user.id });
                     setIsLiked(liked);
@@ -178,14 +177,13 @@ const PodcastDetailPlayer = ({
                     console.error("Error updating like status:", error);
                   }
                 }}
-                className={`flex items-center gap-2 px-3 min-w-[70px] ${
-                  isLiked 
-                    ? "bg-red-500 hover:bg-red-600" 
+                className={`flex items-center gap-2 px-3 min-w-[70px] ${isLiked
+                    ? "bg-red-500 hover:bg-red-600"
                     : "bg-black-1/50 hover:bg-black-1/70"
-                } text-white-1 transition-colors`}
+                  } text-white-1 transition-colors`}
               >
-                <Heart 
-                  size={20} 
+                <Heart
+                  size={20}
                   className={`transition-transform ${isLiked ? "fill-current" : ""}`}
                 />
                 <span className="w-[20px] text-center">
@@ -223,4 +221,4 @@ const PodcastDetailPlayer = ({
   );
 };
 
-export default PodcastDetailPlayer;
+export default PodcastDetail;
