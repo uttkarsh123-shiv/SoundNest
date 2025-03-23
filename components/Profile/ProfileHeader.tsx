@@ -51,7 +51,7 @@ const ProfileHeader = ({
                                 src={user.imageUrl}
                                 alt={user.name || "Profile"}
                                 fill
-                                className="object-cover transition-transform group-hover:scale-110"
+                                className="object-cover transition-transform group-hover:scale-110 rounded-full"
                             />
                         ) : (
                             <div className="flex items-center justify-center h-full">
@@ -59,37 +59,32 @@ const ProfileHeader = ({
                             </div>
                         )}
                     </div>
-                    {podcastCount > 0 && (
-                        <Badge className="absolute bottom-1 right-1 bg-orange-1 text-white-1 px-2 py-1 text-xs">
-                            Creator
-                        </Badge>
-                    )}
                 </div>
 
                 {/* Profile Details */}
                 <div className="flex flex-col md:flex-1 mt-3 md:mt-0">
                     <div className="flex items-center gap-3 flex-wrap">
                         <h1 className="text-3xl sm:text-4xl font-bold text-white-1 drop-shadow-sm tracking-tight flex items-center">
-                            <span className="truncate max-w-[280px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-full xl:max-w-full">{user?.name || "User"}</span>
+                            <span className="truncate max-w-[280px] sm:max-w-[400px]">{user?.name || "User"}</span>
                             {user?.isVerified && (
                                 <Image
                                     src="/icons/verified.svg"
                                     alt="Verified"
                                     width={20}
                                     height={20}
-                                    className="inline-block ml-1 flex-shrink-0"
+                                    className="inline-block ml-2 flex-shrink-0 mt-2"
                                 />
                             )}
                         </h1>
                         {isFollowing && (
-                            <Badge variant="outline" className="border-orange-1 text-orange-1">
+                            <Badge variant="outline" className="border-orange-1 text-orange-1 mt-2">
                                 Following
                             </Badge>
                         )}
                     </div>
 
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-6 mt-3">
-                        <p className="text-white-2 flex flex-wrap items-center gap-3 text-sm sm:text-base">
+                        <div className="text-white-2 flex flex-col gap-2 text-sm sm:text-base">
                             {/* Podcast count */}
                             <span className="flex items-center gap-2">
                                 <Mic size={16} className="text-orange-1" />
@@ -109,7 +104,7 @@ const ProfileHeader = ({
                                     <span>{followingCount} Following</span>
                                 </span>
                             )}
-                        </p>
+                        </div>
 
                         {/* Stats Cards - Desktop */}
                         <div className="hidden md:flex gap-4 mt-4 md:mt-0">
