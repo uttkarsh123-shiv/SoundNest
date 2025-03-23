@@ -7,10 +7,10 @@ import LatestPodcasts from "@/components/Home/LatestPodcasts";
 import { TrendingUp, Star } from "lucide-react";
 
 const Home = () => {
-  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest' })?.slice(0, 3);
-  const featuredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'popular' })?.slice(0, 2);
-  const trendingPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'trending' })?.slice(0, 3);
-  const topRatedPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'topRated' })?.slice(0, 3);
+  const latestPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'latest', limit: 3 });
+  const featuredPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'popular', limit: 2 });
+  const trendingPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'trending', limit: 3 });
+  const topRatedPodcasts = useQuery(api.podcasts.getFilteredPodcasts, { type: 'topRated', limit: 3 });
 
   return (
     <div className="mt-5 flex flex-col md:overflow-hidden">

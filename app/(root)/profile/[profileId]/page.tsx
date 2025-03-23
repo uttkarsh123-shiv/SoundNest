@@ -33,13 +33,11 @@ const ProfilePage = ({
   const popularPodcasts = useQuery(api.podcasts.getFilteredPodcasts, {
     type: "popular",
     authorId: params.profileId,
-    limit: 10, // Limit to improve performance
   });
 
   const recentPodcasts = useQuery(api.podcasts.getFilteredPodcasts, {
     type: "latest",
     authorId: params.profileId,
-    limit: 10, // Limit to improve performance
   });
 
   // Add follow-related queries and mutations with proper error handling

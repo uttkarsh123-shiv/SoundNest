@@ -1,10 +1,10 @@
 import React from 'react';
 import GridPodcastCard from '@/components/PodcastCard/GridPodcastCard';
 import ListPodcastCard from '@/components/PodcastCard/ListPodcastCard';
-import { Doc } from '@/convex/_generated/dataModel';
+import { PodcastProps } from '@/types';
 
 interface PodcastDisplayProps {
-  filteredPodcasts: Doc<"podcasts">[];
+  filteredPodcasts: PodcastProps[];
   viewMode: 'grid' | 'list';
 }
 
