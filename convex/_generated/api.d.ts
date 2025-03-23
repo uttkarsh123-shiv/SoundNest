@@ -21,6 +21,12 @@ import type * as follows from "../follows.js";
 import type * as freepik from "../freepik.js";
 import type * as http from "../http.js";
 import type * as migrations_addLikeFields from "../migrations/addLikeFields.js";
+import type * as podcasts_comments from "../podcasts/comments.js";
+import type * as podcasts_core from "../podcasts/core.js";
+import type * as podcasts_filters from "../podcasts/filters.js";
+import type * as podcasts_index from "../podcasts/index.js";
+import type * as podcasts_queries from "../podcasts/queries.js";
+import type * as podcasts_social from "../podcasts/social.js";
 import type * as podcasts from "../podcasts.js";
 import type * as users from "../users.js";
 
@@ -39,6 +45,12 @@ declare const fullApi: ApiFromModules<{
   freepik: typeof freepik;
   http: typeof http;
   "migrations/addLikeFields": typeof migrations_addLikeFields;
+  "podcasts/comments": typeof podcasts_comments;
+  "podcasts/core": typeof podcasts_core;
+  "podcasts/filters": typeof podcasts_filters;
+  "podcasts/index": typeof podcasts_index;
+  "podcasts/queries": typeof podcasts_queries;
+  "podcasts/social": typeof podcasts_social;
   podcasts: typeof podcasts;
   users: typeof users;
 }>;

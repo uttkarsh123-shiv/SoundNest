@@ -154,11 +154,6 @@ export const getUserWithFollowCounts = query({
   },
 });
 
-// Add this mutation to your existing users.ts file
-
-// Around line 160, you're likely using mutation without importing it
-// Make sure you're using the imported mutation function
-// Look for the updateUserProfile mutation in this file and update it to include the name field
 export const updateUserProfile = mutation({
   args: {
     clerkId: v.string(),
