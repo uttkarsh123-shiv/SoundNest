@@ -158,7 +158,7 @@ export const getFollowers = query({
     // Filter out null values and sort by most recent
     return followerDetails
       .filter(Boolean)
-      .sort((a, b) => b.followedAt - a.followedAt);
+      .sort((a, b) => (b?.followedAt ?? 0) - (a?.followedAt ?? 0));
   },
 });
 
@@ -194,7 +194,7 @@ export const getFollowing = query({
     // Filter out null values and sort by most recent
     return followingDetails
       .filter(Boolean)
-      .sort((a, b) => b.followedAt - a.followedAt);
+      .sort((a, b) => (b?.followedAt ?? 0) - (a?.followedAt ?? 0));
   },
 });
 
@@ -226,10 +226,6 @@ export const getFollowingCount = query({
     return following.length;
   },
 });
-
-// Make sure the file has proper exports for all functions
-import { ConvexError, v } from "convex/values";
-import { mutation, query } from "./_generated/server";
 
 // Check if the current user is following a specific user
 export const isFollowing = query({
