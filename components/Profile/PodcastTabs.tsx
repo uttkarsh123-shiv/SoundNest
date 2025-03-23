@@ -3,10 +3,11 @@ import { Tabs,  TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PodcastSection from "@/components/Profile/PodcastSection";
 import EmptyState from "@/components/EmptyState";
 import { useState } from "react";
+import { PodcastProps } from "@/types";
 
 interface PodcastTabsProps {
-    popularPodcasts: any[];
-    recentPodcasts: any[];
+    popularPodcasts: PodcastProps[];
+    recentPodcasts: PodcastProps[];
     isOwnProfile: boolean;
     onTabChange?: (value: string) => void;
 }

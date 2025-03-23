@@ -1,9 +1,10 @@
 import PodcastCard from "@/components/PodcastCard/GridPodcastCard";
+import { PodcastProps } from "@/types";
 
 interface PodcastSectionProps {
     title: string;
     icon: React.ReactNode;
-    podcasts: any[];
+    podcasts: PodcastProps[];
 }
 
 const PodcastSection = ({
