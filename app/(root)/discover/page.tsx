@@ -35,6 +35,8 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
     const [showCategoryFilter, setShowCategoryFilter] = useState(false);
     const [showLanguageFilter, setShowLanguageFilter] = useState(false);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [visiblePodcasts, setVisiblePodcasts] = useState(3); // Initially show 3 podcasts
+    const initialPodcastCount = 3; // Define a constant for the initial count
 
     const search = searchParams.search || '';
     
@@ -51,6 +53,11 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
             setIsLoading(false);
         }
     }, [filteredPodcasts]);
+
+    // Reset visible podcasts count when filters change
+    useEffect(() => {
+        setVisiblePodcasts(initialPodcastCount);
+    }, [search, filterOption, selectedCategories, selectedLanguages]);
 
     const toggleCategory = (category: string) => {
         setSelectedCategories(prev => 
@@ -83,6 +90,14 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
     const clearAllFilters = () => {
         clearCategories();
         clearLanguages();
+    }
+
+    const loadMorePodcasts = () => {
+        setVisiblePodcasts(prev => prev + 3); // Load 3 more podcasts
+    }
+
+    const showLessPodcasts = () => {
+        setVisiblePodcasts(initialPodcastCount); // Reset to initial count
     }
 
     return (
@@ -148,16 +163,20 @@ const Discover = ({ searchParams }: { searchParams: { search: string, filter?: s
                 ) : (
                     <>
                         {filteredPodcasts && filteredPodcasts.length > 0 ? (
-                            <>
-                                <PodcastDisplay 
-                                    filteredPodcasts={filteredPodcasts}
-                                    viewMode={viewMode}
-                                />
-                                <div className="text-center text-white-2 text-sm mt-6 bg-white-1/5 py-3 px-4 rounded-lg inline-block mx-auto">
-                                    Showing {filteredPodcasts.length} {filteredPodcasts.length === 1 ? 'podcast' : 'podcasts'}
-                                    {(selectedCategories.length > 0 || selectedLanguages.length > 0) && ' with selected filters'}
-                                </div>
-                            </>
+                            <PodcastDisplay 
+                                filteredPodcasts={filteredPodcasts.slice(0, visiblePodcasts)}
+                                viewMode={viewMode}
+                                loadMorePodcasts={loadMorePodcasts}
+                                showLessPodcasts={showLessPodcasts}
+                                hasMorePodcasts={filteredPodcasts.length > visiblePodcasts}
+                                canShowLess={visiblePodcasts > initialPodcastCount}
+                                totalPodcasts={filteredPodcasts.length}
+                                visibleCount={Math.min(visiblePodcasts, filteredPodcasts.length)}
+                                selectedFilters={{
+                                    categories: selectedCategories,
+                                    languages: selectedLanguages
+                                }}
+                            />
                         ) : (
                             <EmptyState 
                                 search={search}
