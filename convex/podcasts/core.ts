@@ -1,6 +1,5 @@
 import { ConvexError, v } from "convex/values";
-import { mutation, query } from "../_generated/server";
-import { Id } from "../_generated/dataModel";
+import { mutation} from "../_generated/server";
 
 // create podcast mutation
 export const createPodcast = mutation({
