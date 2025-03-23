@@ -5,6 +5,7 @@ import EmptyState from "@/components/EmptyState";
 import { useState, useEffect } from "react";
 import { PodcastProps } from "@/types";
 import ShowMoreLessButtons from "@/components/ShowMoreLessButtons";
+import PodcastCountDisplay from "@/components/PodcastCountDisplay";
 
 interface PodcastTabsProps {
     popularPodcasts: PodcastProps[];
@@ -109,8 +110,11 @@ const PodcastTabs = ({
 
                 {/* Podcast count display */}
                 {allPodcasts.length > 0 && (
-                    <div className="text-center text-white-2 text-sm mt-4 bg-white-1/5 py-3 px-4 rounded-lg inline-block mx-auto">
-                        Showing {Math.min(visiblePodcasts, allPodcasts.length)} of {allPodcasts.length} {allPodcasts.length === 1 ? 'podcast' : 'podcasts'}
+                    <div className="flex justify-center mt-4">
+                        <PodcastCountDisplay
+                            visibleCount={Math.min(visiblePodcasts, allPodcasts.length)}
+                            totalCount={allPodcasts.length}
+                        />
                     </div>
                 )}
             </Tabs>
