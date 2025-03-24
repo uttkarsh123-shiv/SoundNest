@@ -1,6 +1,6 @@
 'use client';
 
-import { SignedIn, UserButton, useUser } from '@clerk/nextjs'
+import { SignedIn, UserButton, useUser, SignedOut } from '@clerk/nextjs'
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
@@ -41,6 +41,28 @@ const RightSidebar = () => {
                     </div>
                 </Link>
             </SignedIn>
+            <SignedOut>
+                <Link href="/sign-in" className="flex gap-3 items-center">
+                    <div className="w-10 h-10 rounded-full bg-black-2 flex items-center justify-center">
+                        <Image
+                            src="/icons/profile.svg"
+                            alt="profile"
+                            width={24}
+                            height={24}
+                        />
+                    </div>
+                    <div className="flex w-full items-center justify-between">
+                        <h1 className="text-20 truncate font-semibold text-white-1">Sign In</h1>
+                        <Image
+                            src="/icons/right-arrow.svg"
+                            alt="arrow"
+                            width={24}
+                            height={24}
+                            className="transition-transform duration-300 hover:translate-x-1 group-hover:translate-x-1"
+                        />
+                    </div>
+                </Link>
+            </SignedOut>
 
             {/* Fans Like You Section */}
             <section className="w-full flex flex-col gap-2">
