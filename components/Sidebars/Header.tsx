@@ -9,7 +9,7 @@ const Header = ({ headerTitle, titleClassName }: { headerTitle?: string; titleCl
         <h1 className={cn('text-18 font-bold text-white-1', titleClassName)}>{headerTitle}</h1>
       ) : <div />}
       {/* Empty div is passed as we want to occupy space if header title doesn't exist */}
-      <Link href="/discover" className="text-16 font-semibold text-orange-1">
+      <Link href="/discover" className="text-16 font-semibold text-orange-1 hover:text-orange-400 hover:scale-105 transition-all duration-300">
         See all
       </Link>
     </header>

@@ -5,8 +5,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { CarouselProps } from '@/types'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import LoaderSpinner from './LoaderSpinner'
-import CarouselDots from './ui/CarouselDots'
+import LoaderSpinner from '../LoaderSpinner'
+import CarouselDots from '../ui/CarouselDots'
 
 const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
   const router = useRouter();
@@ -55,7 +55,7 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
   if (!slides) return <LoaderSpinner />
 
   return (
-    <section className="flex w-full flex-col overflow-hidden" ref={emblaRef}>
+    <section className="flex w-full flex-col overflow-hidden pb-1" ref={emblaRef}>
       <div className="flex">
         {slides.slice(0, 4).map((item) => (
           <figure
@@ -76,7 +76,7 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
           </figure>
         ))}
       </div>
-      
+
       {/* Using the CarouselDots component */}
       <CarouselDots
         totalSlides={scrollSnaps.length}
