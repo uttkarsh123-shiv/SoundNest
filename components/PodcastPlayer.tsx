@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { useAudio } from "@/providers/AudioProvider";
 import { Progress } from "../components/ui/progress";
 import { toast } from "sonner";
+import FullscreenPlayer from "./FullscreenPlayer";
 
 const PodcastPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -103,16 +104,7 @@ const PodcastPlayer = () => {
   };
 
   const toggleFullscreen = () => {
-    if (audioRef.current) {
-      if (!document.fullscreenElement) {
-        audioRef.current.requestFullscreen().catch(() => {
-          toast.error("Error attempting to enable fullscreen mode");
-        });
-      } else {
-        document.exitFullscreen();
-      }
-      setIsFullscreen(!isFullscreen);
-    }
+    setIsFullscreen(!isFullscreen);
   };
 
   useEffect(() => {
@@ -186,147 +178,175 @@ const PodcastPlayer = () => {
   };
 
   return (
-    <div
-      className={cn("sticky bottom-0 left-0 flex size-full flex-col", {
-        hidden: !audio?.audioUrl || audio?.audioUrl === "",
-      })}
-    >
-      <div className="relative w-full">
-        <Progress
-          value={(currentTime / duration) * 100}
-          className="h-1 w-full bg-gray-800"
-        />
-      </div>
+    <>
+      <div
+        className={cn("sticky bottom-0 left-0 flex size-full flex-col", {
+          hidden: !audio?.audioUrl || audio?.audioUrl === "",
+        })}
+      >
+        <div className="relative w-full">
+          <Progress
+            value={(currentTime / duration) * 100}
+            className="h-1 w-full bg-gray-800"
+          />
+        </div>
 
-      <section className="glassmorphism-black flex h-20 w-full items-center justify-between px-4 md:px-8">
-        <audio
-          ref={audioRef}
-          src={audio?.audioUrl}
-          className="hidden"
-          onLoadedMetadata={handleLoadedMetadata}
-          onEnded={handleAudioEnded}
-        />
+        <section className="glassmorphism-black flex h-20 w-full items-center justify-between px-4 md:px-8">
+          <audio
+            ref={audioRef}
+            src={audio?.audioUrl}
+            className="hidden"
+            onLoadedMetadata={handleLoadedMetadata}
+            onEnded={handleAudioEnded}
+          />
 
-        {/* Left Section - Album Art and Title */}
-        <div className="flex items-center gap-4 min-w-[200px] max-w-[300px]">
-          <Link href={`/podcasts/${audio?.podcastId}`}>
-            <Image
-              src={audio?.imageUrl || "/icons/logo.png"}
-              width={48}
-              height={48}
-              alt="album-cover"
-              className="aspect-square rounded-lg hover:opacity-80 transition-opacity"
-            />
-          </Link>
-          <div className="flex flex-col overflow-hidden">
-            <h2 className="text-base font-bold text-[#ffffff] hover:text-primary transition-colors">
-              {audio?.title}
-            </h2>
-            <p className="text-xs font-normal text-gray-400 truncate">{audio?.author}</p>
+          {/* Left Section - Album Art and Title */}
+          <div className="flex items-center gap-4 min-w-[200px] max-w-[300px]">
+            <Link href={`/podcasts/${audio?.podcastId}`}>
+              <Image
+                src={audio?.imageUrl || "/icons/logo.png"}
+                width={48}
+                height={48}
+                alt="album-cover"
+                className="aspect-square rounded-lg hover:opacity-80 transition-opacity"
+              />
+            </Link>
+            <div className="flex flex-col overflow-hidden">
+              <h2 className="text-base font-bold text-[#ffffff] hover:text-primary transition-colors">
+                {audio?.title}
+              </h2>
+              <p className="text-xs font-normal text-gray-400 truncate">{audio?.author}</p>
+            </div>
           </div>
-        </div>
 
-        {/* Center Section - Player Controls */}
-        <div className="flex items-center justify-center gap-8 flex-1 max-w-[400px]">
-          <button
-            className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
-            onClick={rewind}
-            title="Rewind 5s (Left Arrow)"
-          >
-            <FastForward className="h-5 w-5 transform rotate-180" stroke="white" />
-          </button>
-
-          <button
-            className="rounded-full bg-primary p-2 text-black hover:bg-primary/80"
-            onClick={togglePlayPause}
-            title="Play/Pause (Space)"
-          >
-            {isPlaying ? (
-              <Pause className="h-5 w-5" stroke="white" />
-            ) : (
-              <Play className="h-5 w-5" stroke="white" />
-            )}
-          </button>
-
-          <button
-            className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
-            onClick={forward}
-            title="Forward 5s (Right Arrow)"
-          >
-            <FastForward className="h-5 w-5" stroke="white" />
-          </button>
-
-          <button
-            onClick={toggleLoop}
-            className={cn(
-              "rounded-full p-2 hover:bg-gray-800",
-              isLooping ? "text-orange-500" : "text-[#ffffff] hover:text-white"
-            )}
-            title="Toggle Loop"
-          >
-            <Repeat className="h-5 w-5" />
-          </button>
-
-          <button
-            onClick={toggleFullscreen}
-            className={cn(
-              "rounded-full p-2 hover:bg-gray-800",
-              isFullscreen ? "text-primary" : "text-gray-400 hover:text-white"
-            )}
-            title="Toggle Fullscreen"
-          >
-            <Maximize2 className="h-5 w-5" stroke="white" />
-          </button>
-        </div>
-
-        {/* Right Section - Volume and Settings */}
-        <div className="flex items-center gap-4 min-w-[200px] justify-end">
-          <div className="flex items-center gap-2">
+          {/* Center Section - Player Controls */}
+          <div className="flex items-center justify-center gap-8 flex-1 max-w-[400px]">
             <button
-              onClick={toggleMute}
-              className="text-white hover:text-primary transition-colors"
-              title="Toggle Mute (M)"
+              className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+              onClick={rewind}
+              title="Rewind 5s (Left Arrow)"
             >
-              {isMuted ? (
-                <VolumeX className="h-5 w-5" stroke="white" />
+              <FastForward className="h-5 w-5 transform rotate-180" stroke="white" />
+            </button>
+
+            <button
+              className="rounded-full bg-primary p-2 text-black hover:bg-primary/80"
+              onClick={togglePlayPause}
+              title="Play/Pause (Space)"
+            >
+              {isPlaying ? (
+                <Pause className="h-5 w-5" stroke="white" />
               ) : (
-                <Volume2 className="h-5 w-5" stroke="white" />
+                <Play className="h-5 w-5" stroke="white" />
               )}
             </button>
-            <Slider
-              defaultValue={[1]}
-              max={1}
-              step={0.1}
-              value={[volume]}
-              onValueChange={handleVolumeChange}
-              className="w-20"
-            />
+
+            <button
+              className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+              onClick={forward}
+              title="Forward 5s (Right Arrow)"
+            >
+              <FastForward className="h-5 w-5" stroke="white" />
+            </button>
+
+            <button
+              onClick={toggleLoop}
+              className={cn(
+                "rounded-full p-2 hover:bg-gray-800",
+                isLooping ? "text-orange-500" : "text-[#ffffff] hover:text-white"
+              )}
+              title="Toggle Loop"
+            >
+              <Repeat className="h-5 w-5" />
+            </button>
+
+            <button
+              onClick={toggleFullscreen}
+              className={cn(
+                "rounded-full p-2 hover:bg-gray-800",
+                isFullscreen ? "text-primary" : "text-gray-400 hover:text-white"
+              )}
+              title="Toggle Fullscreen"
+            >
+              <Maximize2 className="h-5 w-5" stroke="white" />
+            </button>
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="text-white hover:text-primary transition-colors" title="Playback Speed">
-                <Gauge className="h-5 w-5" stroke="white" />
+          {/* Right Section - Volume and Settings */}
+          <div className="flex items-center gap-4 min-w-[200px] justify-end">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleMute}
+                className="text-white hover:text-primary transition-colors"
+                title="Toggle Mute (M)"
+              >
+                {isMuted ? (
+                  <VolumeX className="h-5 w-5" stroke="white" />
+                ) : (
+                  <Volume2 className="h-5 w-5" stroke="white" />
+                )}
               </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {[0.5, 0.75, 1, 1.25, 1.5, 2].map((rate) => (
-                <DropdownMenuItem
-                  key={rate}
-                  onClick={() => handlePlaybackRateChange(rate)}
-                  className={cn(
-                    "cursor-pointer text-gray-600 bg-black-3 hover:bg-black-2",
-                    playbackRate === rate && "text-[#ffffff]"
-                  )}
-                >
-                  {rate}x
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </section>
-    </div>
+              <Slider
+                defaultValue={[1]}
+                max={1}
+                step={0.1}
+                value={[volume]}
+                onValueChange={handleVolumeChange}
+                className="w-20"
+              />
+            </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="text-white hover:text-primary transition-colors" title="Playback Speed">
+                  <Gauge className="h-5 w-5" stroke="white" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {[0.5, 0.75, 1, 1.25, 1.5, 2].map((rate) => (
+                  <DropdownMenuItem
+                    key={rate}
+                    onClick={() => handlePlaybackRateChange(rate)}
+                    className={cn(
+                      "cursor-pointer text-gray-600 bg-black-3 hover:bg-black-2",
+                      playbackRate === rate && "text-[#ffffff]"
+                    )}
+                  >
+                    {rate}x
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </section>
+      </div>
+
+      {/* Fullscreen Player Modal */}
+      <FullscreenPlayer
+        isOpen={isFullscreen}
+        onClose={toggleFullscreen}
+        audioRef={audioRef}
+        isPlaying={isPlaying}
+        togglePlayPause={togglePlayPause}
+        duration={duration}
+        currentTime={currentTime}
+        isMuted={isMuted}
+        toggleMute={toggleMute}
+        volume={volume}
+        handleVolumeChange={handleVolumeChange}
+        playbackRate={playbackRate}
+        handlePlaybackRateChange={handlePlaybackRateChange}
+        forward={forward}
+        rewind={rewind}
+        isLooping={isLooping}
+        toggleLoop={toggleLoop}
+        audioDetails={audio ? {
+          title: audio.title,
+          author: audio.author,
+          imageUrl: audio.imageUrl
+        } : null}
+      />
+    </>
   );
 };
 
