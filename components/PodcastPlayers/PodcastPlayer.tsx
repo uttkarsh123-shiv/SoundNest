@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Slider } from "./ui/slider";
+import { Slider } from "../ui/slider";
 import {
   Play,
   Pause,
@@ -18,10 +18,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useAudio } from "@/providers/AudioProvider";
-import { Progress } from "../components/ui/progress";
+import { Progress } from "../ui/progress";
 import { toast } from "sonner";
 import FullscreenPlayer from "./FullscreenPlayer";
 

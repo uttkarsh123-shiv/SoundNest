@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Slider } from "./ui/slider";
+import { Slider } from "../ui/slider";
 import {
     Play,
     Pause,
@@ -20,10 +20,10 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { formatTime } from "@/lib/formatTime";
-import { Dialog, DialogContent } from "./ui/dialog";
+import { Dialog, DialogContent } from "../ui/dialog";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
