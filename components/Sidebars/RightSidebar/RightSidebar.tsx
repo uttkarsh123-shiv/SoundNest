@@ -59,8 +59,8 @@ const RightSidebar = () => {
                                 <Image
                                     src="/icons/profile.svg"
                                     alt="profile"
-                                    width={24}
-                                    height={24}
+                                    width={26}
+                                    height={26}
                                 />
                             </div>
                             <h1 className="text-16 truncate font-semibold text-white-1">Sign In</h1>
