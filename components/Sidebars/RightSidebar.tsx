@@ -80,7 +80,7 @@ const RightSidebar = () => {
                         {slides.slice(0, 3).map((podcaster: TopPodcastersProps) => (
                             <div
                                 key={podcaster._id}
-                                className="flex cursor-pointer justify-between hover:bg-black-2/50 p-2 rounded-lg transition-colors"
+                                className="flex cursor-pointer justify-between hover:bg-black-2/50 hover:scale-[1.02] p-2 rounded-lg transition-all duration-300 ease-in-out"
                                 onClick={() => router.push(`/profile/${podcaster.clerkId}`)}
                             >
                                 <figure className="flex items-center gap-2">
