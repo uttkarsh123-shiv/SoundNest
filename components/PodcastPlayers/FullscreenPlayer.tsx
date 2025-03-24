@@ -6,14 +6,10 @@ import {
     Play,
     Pause,
     Gauge,
-    Repeat,
     SkipBack,
     SkipForward,
-    Heart,
-    Share2,
     X
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { formatTime } from "@/lib/formatTime";
 import { Dialog, DialogContent } from "../ui/dialog";
 import PodcastInfo from "./PodcastInfo";
@@ -23,7 +19,7 @@ import { toast } from "sonner";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
-import LikeShareControls from "./LikeShareControls";
+import LikeShareControls from "./LikeShareLoopControls";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
@@ -82,9 +78,6 @@ const FullscreenPlayer = ({
         api.podcasts.getPodcastById,
         audioDetails?.podcastId ? { podcastId: audioDetails.podcastId } : "skip"
     );
-
-    // Like mutation
-    const likePodcast = useMutation(api.podcasts.likePodcast);
 
     // Update isLiked state when podcast data is loaded
     useEffect(() => {
@@ -183,59 +176,6 @@ const FullscreenPlayer = ({
         setTimeout(() => {
             onClose();
         }, 100);
-    };
-
-    // Handle like functionality
-    const handleLike = async () => {
-        if (!audioDetails?.podcastId || !user) {
-            toast.error("You must be logged in to like podcasts");
-            return;
-        }
-
-        try {
-            await likePodcast({
-                podcastId: audioDetails.podcastId,
-                userId: user.id
-            });
-
-            setIsLiked(!isLiked);
-            toast.success(isLiked ? "Removed from favorites" : "Added to favorites");
-        } catch (error) {
-            toast.error("Failed to update like status");
-            console.error("Error liking podcast:", error);
-        }
-    };
-
-    // Handle share functionality
-    const handleShare = async () => {
-        if (!audioDetails) return;
-
-        // Create share data
-        const shareData = {
-            title: audioDetails.title,
-            text: `Listen to ${audioDetails.title} by ${audioDetails.author} on PodTales`,
-            url: audioDetails.podcastId
-                ? `${window.location.origin}/podcasts/${audioDetails.podcastId}`
-                : window.location.origin
-        };
-
-        // Check if Web Share API is available
-        if (navigator.share && navigator.canShare(shareData)) {
-            try {
-                await navigator.share(shareData);
-                toast.success("Shared successfully");
-            } catch (error) {
-                if ((error as Error).name !== 'AbortError') {
-                    toast.error("Error sharing content");
-                    console.error("Error sharing:", error);
-                }
-            }
-        } else {
-            // Fallback for browsers that don't support Web Share API
-            navigator.clipboard.writeText(shareData.url)
-                .then(() => toast.success("Link copied to clipboard"))
-                .catch(() => toast.error("Failed to copy link"));
-        }
     };
 
     if (!isOpen || !audioDetails) return null;

@@ -7,7 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
-interface LikeShareControlsProps {
+interface LikeShareLoopControlsProps {
     podcastId?: string;
     title: string;
     author: string;
@@ -18,7 +18,7 @@ interface LikeShareControlsProps {
     showLoopControl?: boolean;
 }
 
-const LikeShareControls = ({
+const LikeShareLoopControls = ({
     podcastId,
     title,
     author,
@@ -27,7 +27,7 @@ const LikeShareControls = ({
     isLooping = false,
     toggleLoop,
     showLoopControl = true,
-}: LikeShareControlsProps) => {
+}: LikeShareLoopControlsProps) => {
     const [isLiked, setIsLiked] = useState(false);
     const { user } = useUser();
     const isFullscreen = variant === "fullscreen";
@@ -58,7 +58,6 @@ const LikeShareControls = ({
         try {
             // Optimistic UI update
             setIsLiked(!isLiked);
-            toast.success(!isLiked ? "Added to favorites" : "Removed from favorites");
             
             // Make API call
             await likePodcast({
@@ -90,7 +89,6 @@ const LikeShareControls = ({
         if (navigator.share && navigator.canShare(shareData)) {
             try {
                 await navigator.share(shareData);
-                toast.success("Shared successfully");
             } catch (error) {
                 if ((error as Error).name !== 'AbortError') {
                     toast.error("Error sharing content");
@@ -159,4 +157,4 @@ const LikeShareControls = ({
     );
 };
 
-export default LikeShareControls;
+export default LikeShareLoopControls;

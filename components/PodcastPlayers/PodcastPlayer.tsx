@@ -1,12 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import {
-  Play,
-  Pause,
-  FastForward,
-  Repeat,
-  Maximize2
-} from "lucide-react";
+import { Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAudio } from "@/providers/AudioProvider";
 import { Progress } from "../ui/progress";
@@ -14,7 +8,8 @@ import FullscreenPlayer from "./FullscreenPlayer";
 import PodcastInfo from "./PodcastInfo";
 import PlaybackSpeedControl from "./PlaybackSpeedControl";
 import VolumeControl from "./VolumeControl";
-import LikeShareControls from "./LikeShareControls";
+import LikeShareControls from "./LikeShareLoopControls";
+import PlaybackControls from "./PlaybackControls";
 
 const PodcastPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -194,41 +189,21 @@ const PodcastPlayer = () => {
 
           {/* Center Section - Player Controls */}
           <div className="flex items-center justify-center gap-8 flex-1 max-w-[400px]">
-            <button
-              className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
-              onClick={rewind}
-              title="Rewind 5s (Left Arrow)"
-            >
-              <FastForward className="h-5 w-5 transform rotate-180" stroke="white" />
-            </button>
-
-            <button
-              className="rounded-full bg-primary p-2 text-black hover:bg-primary/80"
-              onClick={togglePlayPause}
-              title="Play/Pause (Space)"
-            >
-              {isPlaying ? (
-                <Pause className="h-5 w-5" stroke="white" />
-              ) : (
-                <Play className="h-5 w-5" stroke="white" />
-              )}
-            </button>
-
-            <button
-              className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
-              onClick={forward}
-              title="Forward 5s (Right Arrow)"
-            >
-              <FastForward className="h-5 w-5" stroke="white" />
-            </button>
+            <PlaybackControls
+              isPlaying={isPlaying}
+              togglePlayPause={togglePlayPause}
+              forward={forward}
+              rewind={rewind}
+              variant="compact"
+            />
 
             <LikeShareControls
-                podcastId={audio?.podcastId}
-                title={audio?.title || ""}
-                author={audio?.author || ""}
-                variant="compact"
-                isLooping={isLooping}
-                toggleLoop={toggleLoop}
+              podcastId={audio?.podcastId}
+              title={audio?.title || ""}
+              author={audio?.author || ""}
+              variant="compact"
+              isLooping={isLooping}
+              toggleLoop={toggleLoop}
             />
 
             <button
