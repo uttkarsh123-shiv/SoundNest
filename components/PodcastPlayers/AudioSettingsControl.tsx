@@ -65,31 +65,29 @@ const AudioSettingsControl = ({
             </div>
 
             {/* Playback Speed Control */}
-            <div className="relative z-[9999]">
+            <div className={cn("relative", isFullscreen ? "z-[9999]" : "z-[100]")}>
                 <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                         <button
                             className={cn(
-                                "text-white hover:text-primary transition-colors relative",
+                                "flex items-center gap-1 text-gray-400 hover:text-white transition-colors",
                                 isFullscreen && "hover:text-orange-1"
                             )}
                             title="Playback Speed"
                         >
                             <Gauge className={cn("h-5 w-5", isFullscreen && "h-6 w-6")} stroke="white" />
-                            <span className="absolute -bottom-2 -right-2 text-[8px] bg-orange-1 text-white rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
+                            <span className={cn("text-xs", isFullscreen && "text-sm")}>
                                 {playbackRate}x
                             </span>
                         </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent 
-                        className="z-[9999] bg-black border border-gray-700 shadow-lg rounded-md p-1 min-w-[80px] mt-2"
-                        align="end"
-                        sideOffset={5}
-                        forceMount
-                        style={{ 
-                            backgroundColor: "#1b1f29",
-                            color: "white"
-                        }}
+                        side="top" 
+                        align="end" 
+                        className={cn(
+                            "bg-black-2 border border-white-1/10 z-[9999]",
+                            isFullscreen && "mt-2"
+                        )}
                     >
                         {speedOptions.map((rate) => (
                             <DropdownMenuItem
