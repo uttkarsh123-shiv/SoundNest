@@ -7,7 +7,7 @@ import { Progress } from "../ui/progress";
 import FullscreenPlayer from "./FullscreenPlayer";
 import PodcastInfo from "./PodcastInfo";
 import AudioSettingsControl from "./AudioSettingsControl";
-import LikeShareControls from "./LikeShareLoopControls";
+import LikeShareLoopControls from "./LikeShareLoopControls";
 import PlaybackControls from "./PlaybackControls";
 
 const PodcastPlayer = () => {
@@ -185,9 +185,8 @@ const PodcastPlayer = () => {
             className="min-w-[200px] max-w-[300px]"
           />
 
-
           {/* Center Section - Player Controls */}
-          <div className="flex items-center justify-center gap-8 flex-1 max-w-[400px]">
+          <div className="flex items-center justify-center flex-1">
             <PlaybackControls
               isPlaying={isPlaying}
               togglePlayPause={togglePlayPause}
@@ -195,8 +194,11 @@ const PodcastPlayer = () => {
               rewind={rewind}
               variant="compact"
             />
+          </div>
 
-            <LikeShareControls
+          {/* Middle-Right Section - Like/Share Controls */}
+          <div className="flex items-center justify-center">
+            <LikeShareLoopControls
               podcastId={audio?.podcastId}
               title={audio?.title || ""}
               author={audio?.author || ""}
@@ -204,7 +206,20 @@ const PodcastPlayer = () => {
               isLooping={isLooping}
               toggleLoop={toggleLoop}
             />
+          </div>
 
+          {/* Right Section - Audio Settings */}
+          <div className="flex items-center min-w-[200px] justify-end gap-4">
+            <AudioSettingsControl
+                isMuted={isMuted}
+                toggleMute={toggleMute}
+                volume={volume}
+                handleVolumeChange={handleVolumeChange}
+                playbackRate={playbackRate}
+                handlePlaybackRateChange={handlePlaybackRateChange}
+                variant="compact"
+            />
+            
             <button
               onClick={toggleFullscreen}
               className={cn(
@@ -216,19 +231,6 @@ const PodcastPlayer = () => {
               <Maximize2 className="h-5 w-5" stroke="white" />
             </button>
           </div>
-
-          {/* Right Section - Volume and Settings */}
-          <div className="flex items-center min-w-[200px] justify-end">
-            <AudioSettingsControl
-                isMuted={isMuted}
-                toggleMute={toggleMute}
-                volume={volume}
-                handleVolumeChange={handleVolumeChange}
-                playbackRate={playbackRate}
-                handlePlaybackRateChange={handlePlaybackRateChange}
-                variant="compact"
-            />
-        </div>
         </section>
       </div>
 
