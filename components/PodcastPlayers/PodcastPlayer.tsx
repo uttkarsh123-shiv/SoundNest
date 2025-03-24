@@ -195,17 +195,6 @@ const PodcastPlayer = () => {
           {/* Center Section - Player Controls */}
           <div className="flex items-center justify-center gap-8 flex-1 max-w-[400px]">
             <button
-              onClick={toggleLoop}
-              className={cn(
-                "rounded-full p-2 hover:bg-gray-800",
-                isLooping ? "text-orange-500" : "text-[#ffffff] hover:text-white"
-              )}
-              title="Toggle Loop"
-            >
-              <Repeat className="h-5 w-5" />
-            </button>
-            
-            <button
               className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
               onClick={rewind}
               title="Rewind 5s (Left Arrow)"
@@ -238,6 +227,8 @@ const PodcastPlayer = () => {
                 title={audio?.title || ""}
                 author={audio?.author || ""}
                 variant="compact"
+                isLooping={isLooping}
+                toggleLoop={toggleLoop}
             />
 
             <button

@@ -365,25 +365,14 @@ const FullscreenPlayer = ({
 
                                 {/* Additional controls */}
                                 <div className="flex items-center justify-between w-full mt-4">
-                                    <div className="flex items-center gap-6">
-                                        <button
-                                            onClick={toggleLoop}
-                                            className={cn(
-                                                "rounded-full p-2 hover:bg-gray-800/50 transition-colors",
-                                                isLooping ? "text-orange-1" : "text-white-1 hover:text-white"
-                                            )}
-                                            title="Toggle Loop (L)"
-                                        >
-                                            <Repeat className="h-6 w-6" />
-                                        </button>
-
-                                        <LikeShareControls
-                                            podcastId={audioDetails.podcastId}
-                                            title={audioDetails.title}
-                                            author={audioDetails.author}
-                                            variant="fullscreen"
-                                        />
-                                    </div>
+                                    <LikeShareControls
+                                        podcastId={audioDetails.podcastId}
+                                        title={audioDetails.title}
+                                        author={audioDetails.author}
+                                        variant="fullscreen"
+                                        isLooping={isLooping}
+                                        toggleLoop={toggleLoop}
+                                    />
 
                                     <div className="flex items-center gap-4">
                                         <VolumeControl

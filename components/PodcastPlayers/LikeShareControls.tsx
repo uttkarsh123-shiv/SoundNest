@@ -1,5 +1,5 @@
 "use client";
-import { Heart, Share2 } from "lucide-react";
+import { Heart, Share2, Repeat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "convex/react";
@@ -13,6 +13,9 @@ interface LikeShareControlsProps {
     author: string;
     variant?: "compact" | "fullscreen";
     className?: string;
+    isLooping?: boolean;
+    toggleLoop?: () => void;
+    showLoopControl?: boolean;
 }
 
 const LikeShareControls = ({
@@ -21,6 +24,9 @@ const LikeShareControls = ({
     author,
     variant = "compact",
     className,
+    isLooping = false,
+    toggleLoop,
+    showLoopControl = true,
 }: LikeShareControlsProps) => {
     const [isLiked, setIsLiked] = useState(false);
     const { user } = useUser();
@@ -52,6 +58,7 @@ const LikeShareControls = ({
         try {
             // Optimistic UI update
             setIsLiked(!isLiked);
+            toast.success(!isLiked ? "Added to favorites" : "Removed from favorites");
             
             // Make API call
             await likePodcast({
@@ -83,6 +90,7 @@ const LikeShareControls = ({
         if (navigator.share && navigator.canShare(shareData)) {
             try {
                 await navigator.share(shareData);
+                toast.success("Shared successfully");
             } catch (error) {
                 if ((error as Error).name !== 'AbortError') {
                     toast.error("Error sharing content");
@@ -98,7 +106,23 @@ const LikeShareControls = ({
     };
 
     return (
-        <div className={cn("flex items-center gap-4", isFullscreen ? "gap-6" : "gap-4", className)}>
+        <div className={cn("flex items-center", isFullscreen ? "gap-6" : "gap-4", className)}>
+            {showLoopControl && toggleLoop && (
+                <button
+                    onClick={toggleLoop}
+                    className={cn(
+                        "rounded-full p-2 transition-colors",
+                        isFullscreen ? "hover:bg-gray-800/50" : "hover:bg-gray-800",
+                        isLooping 
+                            ? isFullscreen ? "text-orange-1" : "text-orange-500" 
+                            : isFullscreen ? "text-white-1 hover:text-white" : "text-[#ffffff] hover:text-white"
+                    )}
+                    title={`Toggle Loop ${isFullscreen ? "(L)" : ""}`}
+                >
+                    <Repeat className={isFullscreen ? "h-6 w-6" : "h-5 w-5"} />
+                </button>
+            )}
+            
             <button
                 onClick={handleLike}
                 className={cn(
