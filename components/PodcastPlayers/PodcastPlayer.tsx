@@ -10,11 +10,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useAudio } from "@/providers/AudioProvider";
 import { Progress } from "../ui/progress";
-import { toast } from "sonner";
 import FullscreenPlayer from "./FullscreenPlayer";
 import PodcastInfo from "./PodcastInfo";
 import PlaybackSpeedControl from "./PlaybackSpeedControl";
 import VolumeControl from "./VolumeControl";
+import LikeShareControls from "./LikeShareControls";
 
 const PodcastPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -90,7 +90,6 @@ const PodcastPlayer = () => {
     if (audioRef.current) {
       audioRef.current.loop = !isLooping;
       setIsLooping(!isLooping);
-      toast.success(isLooping ? "Loop disabled" : "Loop enabled");
     }
   };
 
@@ -205,7 +204,7 @@ const PodcastPlayer = () => {
             >
               <Repeat className="h-5 w-5" />
             </button>
-
+            
             <button
               className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
               onClick={rewind}
@@ -233,6 +232,13 @@ const PodcastPlayer = () => {
             >
               <FastForward className="h-5 w-5" stroke="white" />
             </button>
+
+            <LikeShareControls
+                podcastId={audio?.podcastId}
+                title={audio?.title || ""}
+                author={audio?.author || ""}
+                variant="compact"
+            />
 
             <button
               onClick={toggleFullscreen}

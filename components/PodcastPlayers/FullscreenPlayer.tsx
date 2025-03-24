@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
+import LikeShareControls from "./LikeShareControls";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
@@ -376,25 +377,12 @@ const FullscreenPlayer = ({
                                             <Repeat className="h-6 w-6" />
                                         </button>
 
-                                        <button
-                                            onClick={handleLike}
-                                            className={cn(
-                                                "rounded-full p-2 hover:bg-gray-800/50 transition-colors",
-                                                isLiked ? "text-orange-1" : "text-white-1 hover:text-orange-1"
-                                            )}
-                                            title="Like Podcast"
-                                            disabled={!user}
-                                        >
-                                            <Heart className={cn("h-6 w-6", isLiked && "fill-orange-1")} />
-                                        </button>
-
-                                        <button
-                                            onClick={handleShare}
-                                            className="rounded-full p-2 text-white-1 hover:bg-gray-800/50 hover:text-orange-1 transition-colors"
-                                            title="Share Podcast"
-                                        >
-                                            <Share2 className="h-6 w-6" />
-                                        </button>
+                                        <LikeShareControls
+                                            podcastId={audioDetails.podcastId}
+                                            title={audioDetails.title}
+                                            author={audioDetails.author}
+                                            variant="fullscreen"
+                                        />
                                     </div>
 
                                     <div className="flex items-center gap-4">
