@@ -13,10 +13,8 @@ import {
 import { formatTime } from "@/lib/formatTime";
 import { Dialog, DialogContent } from "../ui/dialog";
 import PodcastInfo from "./PodcastInfo";
-import VolumeControl from "./VolumeControl";
-import PlaybackSpeedControl from "./PlaybackSpeedControl";
-import { toast } from "sonner";
-import { useMutation, useQuery } from "convex/react";
+import AudioSettingsControl from "./AudioSettingsControl";
+import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import LikeShareControls from "./LikeShareLoopControls";
@@ -314,21 +312,15 @@ const FullscreenPlayer = ({
                                         toggleLoop={toggleLoop}
                                     />
 
-                                    <div className="flex items-center gap-4">
-                                        <VolumeControl
-                                            isMuted={isMuted}
-                                            toggleMute={toggleMute}
-                                            volume={volume}
-                                            handleVolumeChange={handleVolumeChange}
-                                            variant="fullscreen"
-                                        />
-
-                                        <PlaybackSpeedControl
-                                            playbackRate={playbackRate}
-                                            handlePlaybackRateChange={handlePlaybackRateChange}
-                                            variant="fullscreen"
-                                        />
-                                    </div>
+                                    <AudioSettingsControl
+                                        isMuted={isMuted}
+                                        toggleMute={toggleMute}
+                                        volume={volume}
+                                        handleVolumeChange={handleVolumeChange}
+                                        playbackRate={playbackRate}
+                                        handlePlaybackRateChange={handlePlaybackRateChange}
+                                        variant="fullscreen"
+                                    />
                                 </div>
                             </div>
                         </div>

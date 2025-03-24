@@ -6,8 +6,7 @@ import { useAudio } from "@/providers/AudioProvider";
 import { Progress } from "../ui/progress";
 import FullscreenPlayer from "./FullscreenPlayer";
 import PodcastInfo from "./PodcastInfo";
-import PlaybackSpeedControl from "./PlaybackSpeedControl";
-import VolumeControl from "./VolumeControl";
+import AudioSettingsControl from "./AudioSettingsControl";
 import LikeShareControls from "./LikeShareLoopControls";
 import PlaybackControls from "./PlaybackControls";
 
@@ -219,21 +218,17 @@ const PodcastPlayer = () => {
           </div>
 
           {/* Right Section - Volume and Settings */}
-          <div className="flex items-center gap-4 min-w-[200px] justify-end">
-            <VolumeControl
-              isMuted={isMuted}
-              toggleMute={toggleMute}
-              volume={volume}
-              handleVolumeChange={handleVolumeChange}
-              variant="compact"
+          <div className="flex items-center min-w-[200px] justify-end">
+            <AudioSettingsControl
+                isMuted={isMuted}
+                toggleMute={toggleMute}
+                volume={volume}
+                handleVolumeChange={handleVolumeChange}
+                playbackRate={playbackRate}
+                handlePlaybackRateChange={handlePlaybackRateChange}
+                variant="compact"
             />
-
-            <PlaybackSpeedControl
-              playbackRate={playbackRate}
-              handlePlaybackRateChange={handlePlaybackRateChange}
-              variant="compact"
-            />
-          </div>
+        </div>
         </section>
       </div>
 
