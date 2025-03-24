@@ -166,7 +166,7 @@ const PodcastPlayer = () => {
           />
         </div>
 
-        <section className="glassmorphism-black flex h-20 w-full items-center justify-between px-4 md:px-8">
+        <section className="glassmorphism-black flex h-20 w-full items-center px-4 md:px-8">
           <audio
             ref={audioRef}
             src={audio?.audioUrl}
@@ -182,35 +182,36 @@ const PodcastPlayer = () => {
             imageUrl={audio?.imageUrl || ""}
             podcastId={audio?.podcastId}
             variant="compact"
-            className="min-w-[200px] max-w-[300px]"
+            className="w-1/2"
           />
 
-          {/* Center Section - Player Controls */}
-          <div className="flex items-center justify-center flex-1">
-            <PlaybackControls
-              isPlaying={isPlaying}
-              togglePlayPause={togglePlayPause}
-              forward={forward}
-              rewind={rewind}
-              variant="compact"
-            />
-          </div>
+          <div className="flex flex-1 justify-between">
+            {/* Center Section - Player Controls */}
+            <div className="flex items-center justify-center">
+              <PlaybackControls
+                isPlaying={isPlaying}
+                togglePlayPause={togglePlayPause}
+                forward={forward}
+                rewind={rewind}
+                variant="compact"
+              />
+            </div>
 
-          {/* Middle-Right Section - Like/Share Controls */}
-          <div className="flex items-center justify-center">
-            <LikeShareLoopControls
-              podcastId={audio?.podcastId}
-              title={audio?.title || ""}
-              author={audio?.author || ""}
-              variant="compact"
-              isLooping={isLooping}
-              toggleLoop={toggleLoop}
-            />
-          </div>
+            {/* Middle-Right Section - Like/Share Controls */}
+            <div className="flex items-center justify-center">
+              <LikeShareLoopControls
+                podcastId={audio?.podcastId}
+                title={audio?.title || ""}
+                author={audio?.author || ""}
+                variant="compact"
+                isLooping={isLooping}
+                toggleLoop={toggleLoop}
+              />
+            </div>
 
-          {/* Right Section - Audio Settings */}
-          <div className="flex items-center min-w-[200px] justify-end gap-4">
-            <AudioSettingsControl
+            {/* Right Section - Audio Settings */}
+            <div className="flex items-center min-w-[200px] justify-end gap-4">
+              <AudioSettingsControl
                 isMuted={isMuted}
                 toggleMute={toggleMute}
                 volume={volume}
@@ -218,18 +219,19 @@ const PodcastPlayer = () => {
                 playbackRate={playbackRate}
                 handlePlaybackRateChange={handlePlaybackRateChange}
                 variant="compact"
-            />
-            
-            <button
-              onClick={toggleFullscreen}
-              className={cn(
-                "rounded-full p-2 hover:bg-gray-800",
-                isFullscreen ? "text-primary" : "text-gray-400 hover:text-white"
-              )}
-              title="Toggle Fullscreen"
-            >
-              <Maximize2 className="h-5 w-5" stroke="white" />
-            </button>
+              />
+
+              <button
+                onClick={toggleFullscreen}
+                className={cn(
+                  "rounded-full p-2 hover:bg-gray-800",
+                  isFullscreen ? "text-primary" : "text-gray-400 hover:text-white"
+                )}
+                title="Toggle Fullscreen"
+              >
+                <Maximize2 className="h-5 w-5" stroke="white" />
+              </button>
+            </div>
           </div>
         </section>
       </div>
