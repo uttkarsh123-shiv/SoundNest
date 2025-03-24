@@ -5,8 +5,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { CarouselProps } from '@/types'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import LoaderSpinner from '../LoaderSpinner'
-import CarouselDots from '../ui/CarouselDots'
+import LoaderSpinner from '../../LoaderSpinner'
+import CarouselDots from '../../ui/CarouselDots'
 
 const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
   const router = useRouter();
