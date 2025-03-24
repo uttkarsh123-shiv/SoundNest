@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const RightSidebar = () => {
     const { user } = useUser();
-    const topPodcasters = useQuery(api.users.getTopUserByPodcastCount);
+    const topPodcasters = useQuery(api.users.getTopUsers);
     const isLoading = topPodcasters === undefined;
     const slides = topPodcasters?.filter((item: TopPodcastersProps) => item.totalPodcasts > 0);
     const router = useRouter();

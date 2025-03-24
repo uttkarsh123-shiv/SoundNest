@@ -17,26 +17,50 @@ export const getUserById = query({
     },
 });
 
-// this query is used to get the top user by podcast count. first the podcast is
-//  sorted by views and then the user is sorted by total podcasts, so the user 
-// with the most podcasts will be at the top.
-export const getTopUserByPodcastCount = query({
+// Enhanced query to get top users by multiple parameters
+export const getTopUsers = query({
     args: {},
     handler: async (ctx) => {
-        const user = await ctx.db.query("users").collect();
+        const users = await ctx.db.query("users").collect();
 
         const userData = await Promise.all(
-            user.map(async (u) => {
+            users.map(async (u) => {
                 const podcasts = await ctx.db
                     .query("podcasts")
                     .filter((q) => q.eq(q.field("authorId"), u.clerkId))
                     .collect();
 
-                const sortedPodcasts = podcasts.sort((a, b) => b.views - a.views);
+                // Get followers count
+                const followers = await ctx.db
+                    .query("follows")
+                    .withIndex("by_following", (q) => q.eq("following", u.clerkId))
+                    .collect();
+
+                // Calculate total views and likes across all podcasts
+                const totalViews = podcasts.reduce((sum, p) => sum + (p.views || 0), 0);
+                const totalLikes = podcasts.reduce((sum, p) => sum + (p.likeCount || 0), 0);
+                
+                // Calculate average rating if available
+                const podcastsWithRatings = podcasts.filter(p => p.averageRating && p.ratingCount && p.ratingCount > 0);
+                const avgRating = podcastsWithRatings.length > 0 
+                    ? podcastsWithRatings.reduce((sum, p) => sum + (p.averageRating || 0), 0) / podcastsWithRatings.length
+                    : 0;
+                
+                // Sort podcasts by a combined score of views, likes and recency
+                const sortedPodcasts = podcasts.sort((a, b) => {
+                    const aScore = (a.views || 0) * 0.5 + (a.likeCount || 0) * 2;
+                    const bScore = (b.views || 0) * 0.5 + (b.likeCount || 0) * 2;
+                    return bScore - aScore;
+                });
 
                 return {
                     ...u,
                     totalPodcasts: podcasts.length,
+                    totalViews,
+                    totalLikes,
+                    averageRating: avgRating,
+                    followersCount: followers.length,
+                    // Maintain the same structure for compatibility with RightSidebar
                     podcast: sortedPodcasts.map((p) => ({
                         podcastTitle: p.podcastTitle,
                         podcastId: p._id,
@@ -45,7 +69,24 @@ export const getTopUserByPodcastCount = query({
             })
         );
 
-        return userData.sort((a, b) => b.totalPodcasts - a.totalPodcasts);
+        // Calculate a combined score for each user based on multiple factors
+        const scoredUsers = userData.map(user => {
+            const podcastCountScore = user.totalPodcasts * 10;
+            const viewsScore = user.totalViews * 0.2;
+            const likesScore = user.totalLikes * 2;
+            const ratingScore = user.averageRating * 15;
+            const followersScore = user.followersCount * 5; // Add followers score
+            
+            const totalScore = podcastCountScore + viewsScore + likesScore + ratingScore + followersScore;
+            
+            return {
+                ...user,
+                score: totalScore
+            };
+        });
+
+        // Sort by the combined score instead of just podcast count
+        return scoredUsers.sort((a, b) => b.score - a.score);
     },
 });
 
@@ -116,39 +157,6 @@ export const deleteUser = internalMutation({
 
         await ctx.db.delete(user._id);
     },
-});
-
-// Get user with followers and following counts
-export const getUserWithFollowCounts = query({
-  args: { clerkId: v.string() },
-  handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
-      .unique();
-
-    if (!user) {
-      throw new ConvexError("User not found");
-    }
-
-    // Get followers count
-    const followers = await ctx.db
-      .query("follows")
-      .withIndex("by_following", (q) => q.eq("following", args.clerkId))
-      .collect();
-
-    // Get following count
-    const following = await ctx.db
-      .query("follows")
-      .withIndex("by_follower", (q) => q.eq("follower", args.clerkId))
-      .collect();
-
-    return {
-      ...user,
-      followersCount: followers.length,
-      followingCount: following.length
-    };
-  },
 });
 
 export const updateUserProfile = mutation({
