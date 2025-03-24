@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Slider } from "../ui/slider";
 import {
@@ -158,15 +156,6 @@ const PodcastPlayer = () => {
       setIsPlaying(false);
     }
   }, [audio]);
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, []);
 
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
@@ -336,7 +325,8 @@ const PodcastPlayer = () => {
         audioDetails={audio ? {
           title: audio.title,
           author: audio.author,
-          imageUrl: audio.imageUrl
+          imageUrl: audio.imageUrl,
+          podcastId: audio.podcastId
         } : null}
       />
     </>
