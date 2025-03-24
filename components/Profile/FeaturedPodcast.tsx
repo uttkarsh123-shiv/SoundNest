@@ -66,7 +66,7 @@ const FeaturedPodcast = ({ podcast, setAudio }: FeaturedPodcastProps) => {
                             </div>
                             <div className="flex items-center gap-1">
                                 <Star size={16} className="text-orange-1" />
-                                <span>{podcast.averageRating || 0} rating</span>
+                                <span>{podcast.averageRating ? Number(podcast.averageRating).toFixed(1) : "0.0"} rating</span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <Clock size={16} className="text-orange-1" />

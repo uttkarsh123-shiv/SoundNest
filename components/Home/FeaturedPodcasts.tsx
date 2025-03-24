@@ -112,7 +112,7 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Star size={20} className="text-white-1" />
-                                            <span className="text-white-1">{podcast?.averageRating || "0.0"}</span>
+                                            <span className="text-white-1">{podcast?.averageRating ? Number(podcast.averageRating).toFixed(1) : "0.0"}</span>
                                         </div>
                                     </div>
                                 </div>
