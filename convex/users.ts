@@ -64,6 +64,7 @@ export const getTopUsers = query({
                     podcast: sortedPodcasts.map((p) => ({
                         podcastTitle: p.podcastTitle,
                         podcastId: p._id,
+                        podcastImage: p.imageUrl || u.imageUrl // Add podcast image
                     })),
                 };
             })
