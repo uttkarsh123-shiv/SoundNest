@@ -24,6 +24,7 @@ import { useAudio } from "@/providers/AudioProvider";
 import { Progress } from "../ui/progress";
 import { toast } from "sonner";
 import FullscreenPlayer from "./FullscreenPlayer";
+import PodcastInfo from "./PodcastInfo";
 
 const PodcastPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -201,23 +202,15 @@ const PodcastPlayer = () => {
           />
 
           {/* Left Section - Album Art and Title */}
-          <div className="flex items-center gap-4 min-w-[200px] max-w-[300px]">
-            <Link href={`/podcasts/${audio?.podcastId}`}>
-              <Image
-                src={audio?.imageUrl || "/icons/logo.png"}
-                width={48}
-                height={48}
-                alt="album-cover"
-                className="aspect-square rounded-lg hover:opacity-80 transition-opacity"
-              />
-            </Link>
-            <div className="flex flex-col overflow-hidden">
-              <h2 className="text-base font-bold text-[#ffffff] hover:text-primary transition-colors">
-                {audio?.title}
-              </h2>
-              <p className="text-xs font-normal text-gray-400 truncate">{audio?.author}</p>
-            </div>
-          </div>
+          <PodcastInfo
+            title={audio?.title || ""}
+            author={audio?.author || ""}
+            imageUrl={audio?.imageUrl || ""}
+            podcastId={audio?.podcastId}
+            variant="compact"
+            className="min-w-[200px] max-w-[300px]"
+          />
+
 
           {/* Center Section - Player Controls */}
           <div className="flex items-center justify-center gap-8 flex-1 max-w-[400px]">

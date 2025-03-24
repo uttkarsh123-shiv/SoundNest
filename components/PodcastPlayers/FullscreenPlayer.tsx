@@ -24,6 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { formatTime } from "@/lib/formatTime";
 import { Dialog, DialogContent } from "../ui/dialog";
+import PodcastInfo from "./PodcastInfo";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
@@ -202,22 +203,38 @@ const FullscreenPlayer = ({
 
                         {/* Main content */}
                         <div className="flex-1 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 py-4">
-                            {/* Left side - Album art */}
-                            <div className="relative w-64 h-64 md:w-96 md:h-96 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(255,165,0,0.2)]">
-                                <Image
-                                    src={audioDetails.imageUrl || "/icons/logo.png"}
-                                    alt="album-cover"
-                                    fill
-                                    className="object-cover"
-                                    priority
+                            {/* Left side - Album art and info for mobile */}
+                            <div className="md:hidden w-full flex flex-col items-center gap-6">
+                                <PodcastInfo
+                                    title={audioDetails.title}
+                                    author={audioDetails.author}
+                                    imageUrl={audioDetails.imageUrl}
+                                    podcastId={audioDetails.podcastId}
+                                    variant="fullscreen"
+                                    showLink={false}
+                                    className="flex flex-col items-center"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                             </div>
-
+                            
+                            {/* Left side - Album art for desktop */}
+                            <div className="hidden md:block">
+                                <PodcastInfo
+                                    title={audioDetails.title}
+                                    author={audioDetails.author}
+                                    imageUrl={audioDetails.imageUrl}
+                                    podcastId={audioDetails.podcastId}
+                                    variant="fullscreen"
+                                    showLink={false}
+                                    className="flex-col items-center"
+                                    titleClassName="hidden"
+                                    authorClassName="hidden"
+                                />
+                            </div>
+                        
                             {/* Right side - Controls and info */}
                             <div className="flex flex-col items-center md:items-start max-w-xl w-full gap-8">
-                                {/* Podcast info */}
-                                <div className="text-center md:text-left w-full">
+                                {/* Podcast info - only visible on desktop */}
+                                <div className="hidden md:block text-left w-full">
                                     <h1 className="text-3xl font-bold text-white-1 mb-2 line-clamp-2">{audioDetails.title}</h1>
                                     <p className="text-xl text-gray-400">{audioDetails.author}</p>
                                 </div>
