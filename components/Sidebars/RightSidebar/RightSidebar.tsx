@@ -13,6 +13,17 @@ import { useAudio } from '@/providers/AudioProvider';
 import { cn } from '@/lib/utils';
 import { TopPodcastersProps } from '@/types';
 
+// Reusable arrow component
+const RightArrow = () => (
+    <Image
+        src="/icons/right-arrow.svg"
+        alt="arrow"
+        width={24}
+        height={24}
+        className="transition-transform duration-300 hover:translate-x-1 group-hover:translate-x-1"
+    />
+);
+
 const RightSidebar = () => {
     const { user } = useUser();
     const topPodcasters = useQuery(api.users.getTopUsers);
@@ -31,19 +42,13 @@ const RightSidebar = () => {
                     <UserButton />
                     <div className="flex w-full items-center justify-between">
                         <h1 className="text-20 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
-                        <Image
-                            src="/icons/right-arrow.svg"
-                            alt="arrow"
-                            width={24}
-                            height={24}
-                            className="transition-transform duration-300 hover:translate-x-1 group-hover:translate-x-1"
-                        />
+                        <RightArrow />
                     </div>
                 </Link>
             </SignedIn>
             <SignedOut>
                 <Link href="/sign-in" className="flex gap-3 items-center">
-                    <div className="w-10 h-10 rounded-full bg-black-2 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-black-2 flex items-center justify-center overflow-hidden">
                         <Image
                             src="/icons/profile.svg"
                             alt="profile"
@@ -53,13 +58,7 @@ const RightSidebar = () => {
                     </div>
                     <div className="flex w-full items-center justify-between">
                         <h1 className="text-20 truncate font-semibold text-white-1">Sign In</h1>
-                        <Image
-                            src="/icons/right-arrow.svg"
-                            alt="arrow"
-                            width={24}
-                            height={24}
-                            className="transition-transform duration-300 hover:translate-x-1 group-hover:translate-x-1"
-                        />
+                        <RightArrow />
                     </div>
                 </Link>
             </SignedOut>
@@ -69,18 +68,23 @@ const RightSidebar = () => {
                 <Header headerTitle="Fans Like You" />
                 {isLoading ? (
                     <section className="flex w-full flex-col overflow-hidden pb-1">
-                                <figure className="carousel_box relative">
+                        <div className="flex">
+                            {[1, 2, 3, 4].map((i) => (
+                                <figure key={i} className="carousel_box relative">
                                     <div className="absolute inset-0 rounded-xl bg-white-1/5 border border-white-1/10 animate-pulse"></div>
-                                    <div className="glassmorphism-black relative flex flex-col rounded-b-xl p-2 mt-auto">
+                                    <div className="glassmorphism-black relative flex flex-col rounded-b-xl p-2">
                                         <div className="h-4 bg-white-1/10 rounded animate-pulse w-full mb-1"></div>
                                         <div className="h-3 bg-white-1/5 rounded animate-pulse w-3/4"></div>
                                     </div>
                                 </figure>
-                        <div className="flex justify-center mt-3 gap-2">
+                            ))}
+                        </div>
+                        <div className="flex justify-center w-full mt-4 gap-2">
                             {[1, 2, 3].map((i) => (
-                                <div 
-                                    key={i} 
-                                    className={`w-2 h-2 rounded-full ${i === 1 ? 'bg-orange-1/50' : 'bg-white-1/30'}`}
+                                <div
+                                    key={i}
+                                    className={`w-3 h-3 rounded-full mx-1 ${i === 1 ? 'bg-orange-1 scale-125' : 'bg-[white]/30'
+                                        }`}
                                 />
                             ))}
                         </div>
@@ -98,15 +102,18 @@ const RightSidebar = () => {
             <section className="flex flex-col gap-2">
                 <Header headerTitle="Top Podcasters" />
                 {isLoading ? (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col">
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="flex items-center gap-2 p-2 rounded-lg">
-                                <div className="relative w-11 h-11 rounded-lg bg-white-1/5 border border-white-1/10 overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent animate-pulse"></div>
-                                </div>
-                                <div className="flex flex-col gap-1 flex-1">
-                                    <div className="h-4 bg-white-1/10 rounded animate-pulse w-24"></div>
-                                    <div className="h-3 bg-white-1/5 rounded animate-pulse w-16"></div>
+                            <div
+                                key={i}
+                                className="flex cursor-pointer justify-between p-2 rounded-lg hover:bg-black-2/50 transition-all duration-300 ease-in-out"
+                            >
+                                <figure className="flex items-center gap-2">
+                                    <div className="w-11 h-11 rounded-lg bg-white-1/5 border border-white-1/10 animate-pulse"></div>
+                                    <div className="h-5 bg-white-1/10 rounded animate-pulse w-24"></div>
+                                </figure>
+                                <div className="flex items-center">
+                                    <div className="h-4 bg-white-1/5 rounded animate-pulse w-16"></div>
                                 </div>
                             </div>
                         ))}
