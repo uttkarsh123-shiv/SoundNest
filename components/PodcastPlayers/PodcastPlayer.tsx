@@ -182,7 +182,7 @@ const PodcastPlayer = () => {
             imageUrl={audio?.imageUrl || ""}
             podcastId={audio?.podcastId}
             variant="compact"
-            className="w-1/2"
+            className="w-[45%]"
           />
 
           <div className="flex flex-1 justify-between">
@@ -197,8 +197,8 @@ const PodcastPlayer = () => {
               />
             </div>
 
-            {/* Middle-Right Section - Like/Share Controls */}
-            <div className="flex items-center justify-center">
+            {/* Right Section - Audio Settings */}
+            <div className="flex items-center min-w-[200px] justify-end gap-4">
               <LikeShareLoopControls
                 podcastId={audio?.podcastId}
                 title={audio?.title || ""}
@@ -207,10 +207,7 @@ const PodcastPlayer = () => {
                 isLooping={isLooping}
                 toggleLoop={toggleLoop}
               />
-            </div>
-
-            {/* Right Section - Audio Settings */}
-            <div className="flex items-center min-w-[200px] justify-end gap-4">
+              
               <AudioSettingsControl
                 isMuted={isMuted}
                 toggleMute={toggleMute}
