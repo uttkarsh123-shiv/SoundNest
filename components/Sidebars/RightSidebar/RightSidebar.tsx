@@ -39,25 +39,22 @@ const RightSidebar = () => {
             {/* Profile Section */}
             {isLoading ? (
                 <div className="flex gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white-1/5 border border-white-1/10 animate-pulse"></div>
-                    <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-3 w-full">
+                        <div className="w-10 h-10 rounded-full bg-white-1/5 border border-white-1/10 animate-pulse"></div>
                         <div className="h-5 bg-white-1/10 rounded animate-pulse w-32"></div>
-                        <RightArrow />
                     </div>
+                    <RightArrow />
                 </div>
             ) : (
-                <>
+                <Link href={`/profile/${user?.id}`} className="flex gap-3">
                     <SignedIn>
-                        <Link href={`/profile/${user?.id}`} className="flex gap-3">
+                        <div className="flex items-center gap-3 w-full">
                             <UserButton />
-                            <div className="flex w-full items-center justify-between">
-                                <h1 className="text-20 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
-                                <RightArrow />
-                            </div>
-                        </Link>
+                            <h1 className="text-20 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
+                        </div>
                     </SignedIn>
                     <SignedOut>
-                        <Link href="/sign-in" className="flex gap-3 items-center">
+                        <div className="flex items-center gap-3 w-full">
                             <div className="w-10 h-10 rounded-full bg-black-2 flex items-center justify-center overflow-hidden">
                                 <Image
                                     src="/icons/profile.svg"
@@ -66,13 +63,11 @@ const RightSidebar = () => {
                                     height={24}
                                 />
                             </div>
-                            <div className="flex w-full items-center justify-between">
-                                <h1 className="text-16 truncate font-semibold text-white-1">Sign In</h1>
-                                <RightArrow />
-                            </div>
-                        </Link>
+                            <h1 className="text-16 truncate font-semibold text-white-1">Sign In</h1>
+                        </div>
                     </SignedOut>
-                </>
+                    <RightArrow />
+                </Link>
             )}
 
             {/* Fans Like You Section */}
