@@ -23,7 +23,7 @@ const RightSidebar = () => {
     const { audio } = useAudio();
 
     return (
-        <section className={cn('right_sidebar gap-6 h-[calc(100vh-5px)]', {
+        <section className={cn('right_sidebar gap-8 h-[calc(100vh-5px)]', {
             'h-[calc(100vh-80px)]': audio?.audioUrl
         })}>
             {/* Profile Section */}
@@ -31,7 +31,7 @@ const RightSidebar = () => {
                 <Link href={`/profile/${user?.id}`} className="flex gap-3">
                     <UserButton />
                     <div className="flex w-full items-center justify-between">
-                        <h1 className="text-16 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
+                        <h1 className="text-20 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
                         <Image
                             src="/icons/right-arrow.svg"
                             alt="arrow"
@@ -91,7 +91,7 @@ const RightSidebar = () => {
                                         height={44}
                                         className="aspect-square rounded-lg object-cover"
                                     />
-                                    <h2 className="text-14 font-semibold text-white-1">{podcaster.name}</h2>
+                                    <h2 className="truncate text-14 font-semibold text-white-1 max-w-[100px]">{podcaster.name}</h2>
                                 </figure>
                                 <div className="flex items-center">
                                     <p className="text-12 font-normal text-white-1">{podcaster.totalPodcasts}&nbsp;&nbsp;{podcaster.totalPodcasts > 1 ? "podcasts" : "podcast"}</p>
