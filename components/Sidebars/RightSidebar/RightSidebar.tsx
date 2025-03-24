@@ -37,31 +37,43 @@ const RightSidebar = () => {
             'h-[calc(100vh-80px)]': audio?.audioUrl
         })}>
             {/* Profile Section */}
-            <SignedIn>
-                <Link href={`/profile/${user?.id}`} className="flex gap-3">
-                    <UserButton />
+            {isLoading ? (
+                <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white-1/5 border border-white-1/10 animate-pulse"></div>
                     <div className="flex w-full items-center justify-between">
-                        <h1 className="text-20 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
+                        <div className="h-5 bg-white-1/10 rounded animate-pulse w-32"></div>
                         <RightArrow />
                     </div>
-                </Link>
-            </SignedIn>
-            <SignedOut>
-                <Link href="/sign-in" className="flex gap-3 items-center">
-                    <div className="w-10 h-10 rounded-full bg-black-2 flex items-center justify-center overflow-hidden">
-                        <Image
-                            src="/icons/profile.svg"
-                            alt="profile"
-                            width={24}
-                            height={24}
-                        />
-                    </div>
-                    <div className="flex w-full items-center justify-between">
-                        <h1 className="text-20 truncate font-semibold text-white-1">Sign In</h1>
-                        <RightArrow />
-                    </div>
-                </Link>
-            </SignedOut>
+                </div>
+            ) : (
+                <>
+                    <SignedIn>
+                        <Link href={`/profile/${user?.id}`} className="flex gap-3">
+                            <UserButton />
+                            <div className="flex w-full items-center justify-between">
+                                <h1 className="text-20 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
+                                <RightArrow />
+                            </div>
+                        </Link>
+                    </SignedIn>
+                    <SignedOut>
+                        <Link href="/sign-in" className="flex gap-3 items-center">
+                            <div className="w-10 h-10 rounded-full bg-black-2 flex items-center justify-center overflow-hidden">
+                                <Image
+                                    src="/icons/profile.svg"
+                                    alt="profile"
+                                    width={24}
+                                    height={24}
+                                />
+                            </div>
+                            <div className="flex w-full items-center justify-between">
+                                <h1 className="text-20 truncate font-semibold text-white-1">Sign In</h1>
+                                <RightArrow />
+                            </div>
+                        </Link>
+                    </SignedOut>
+                </>
+            )}
 
             {/* Fans Like You Section */}
             <section className="w-full flex flex-col gap-2">
@@ -69,15 +81,13 @@ const RightSidebar = () => {
                 {isLoading ? (
                     <section className="flex w-full flex-col overflow-hidden pb-1">
                         <div className="flex">
-                            {[1, 2, 3, 4].map((i) => (
-                                <figure key={i} className="carousel_box relative">
-                                    <div className="absolute inset-0 rounded-xl bg-white-1/5 border border-white-1/10 animate-pulse"></div>
-                                    <div className="glassmorphism-black relative flex flex-col rounded-b-xl p-2">
-                                        <div className="h-4 bg-white-1/10 rounded animate-pulse w-full mb-1"></div>
-                                        <div className="h-3 bg-white-1/5 rounded animate-pulse w-3/4"></div>
-                                    </div>
-                                </figure>
-                            ))}
+                            <figure className="carousel_box relative">
+                                <div className="absolute inset-0 rounded-xl bg-white-1/5 border border-white-1/10 animate-pulse"></div>
+                                <div className="glassmorphism-black relative flex flex-col rounded-b-xl p-2">
+                                    <div className="h-4 bg-white-1/10 rounded animate-pulse w-full mb-1"></div>
+                                    <div className="h-3 bg-white-1/5 rounded animate-pulse w-3/4"></div>
+                                </div>
+                            </figure>
                         </div>
                         <div className="flex justify-center w-full mt-4 gap-2">
                             {[1, 2, 3].map((i) => (
