@@ -35,11 +35,11 @@ const PodcastInfo = ({
   const imageContainerClass = isCompact
     ? "aspect-square rounded-lg"
     : "relative w-64 h-64 md:w-96 md:h-96 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(255,165,0,0.2)]";
-  
+
   const titleClass = isCompact
     ? "text-base font-bold text-[#ffffff] hover:text-primary transition-colors"
     : "text-3xl font-bold text-white-1 mb-2 line-clamp-2";
-  
+
   const authorClass = isCompact
     ? "text-xs font-normal text-gray-400 truncate"
     : "text-xl text-gray-400";

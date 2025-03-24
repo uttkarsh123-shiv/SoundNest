@@ -1,28 +1,20 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Slider } from "../ui/slider";
 import {
   Play,
   Pause,
-  Volume2,
-  VolumeX,
-  Gauge,
   FastForward,
   Repeat,
   Maximize2
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useAudio } from "@/providers/AudioProvider";
 import { Progress } from "../ui/progress";
 import { toast } from "sonner";
 import FullscreenPlayer from "./FullscreenPlayer";
 import PodcastInfo from "./PodcastInfo";
+import PlaybackSpeedControl from "./PlaybackSpeedControl";
+import VolumeControl from "./VolumeControl";
 
 const PodcastPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -213,7 +205,7 @@ const PodcastPlayer = () => {
             >
               <Repeat className="h-5 w-5" />
             </button>
-            
+
             <button
               className="rounded-full p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
               onClick={rewind}
@@ -256,49 +248,19 @@ const PodcastPlayer = () => {
 
           {/* Right Section - Volume and Settings */}
           <div className="flex items-center gap-4 min-w-[200px] justify-end">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleMute}
-                className="text-white hover:text-primary transition-colors"
-                title="Toggle Mute (M)"
-              >
-                {isMuted ? (
-                  <VolumeX className="h-5 w-5" stroke="white" />
-                ) : (
-                  <Volume2 className="h-5 w-5" stroke="white" />
-                )}
-              </button>
-              <Slider
-                defaultValue={[1]}
-                max={1}
-                step={0.1}
-                value={[volume]}
-                onValueChange={handleVolumeChange}
-                className="w-20"
-              />
-            </div>
+            <VolumeControl
+              isMuted={isMuted}
+              toggleMute={toggleMute}
+              volume={volume}
+              handleVolumeChange={handleVolumeChange}
+              variant="compact"
+            />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="text-white hover:text-primary transition-colors" title="Playback Speed">
-                  <Gauge className="h-5 w-5" stroke="white" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {[0.5, 0.75, 1, 1.25, 1.5, 2].map((rate) => (
-                  <DropdownMenuItem
-                    key={rate}
-                    onClick={() => handlePlaybackRateChange(rate)}
-                    className={cn(
-                      "cursor-pointer text-gray-600 bg-black-3 hover:bg-black-2",
-                      playbackRate === rate && "text-[#ffffff]"
-                    )}
-                  >
-                    {rate}x
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <PlaybackSpeedControl
+              playbackRate={playbackRate}
+              handlePlaybackRateChange={handlePlaybackRateChange}
+              variant="compact"
+            />
           </div>
         </section>
       </div>

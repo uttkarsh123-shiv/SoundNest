@@ -5,8 +5,6 @@ import { Slider } from "../ui/slider";
 import {
     Play,
     Pause,
-    Volume2,
-    VolumeX,
     Gauge,
     Repeat,
     SkipBack,
@@ -15,16 +13,12 @@ import {
     Share2,
     X
 } from "lucide-react";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { formatTime } from "@/lib/formatTime";
 import { Dialog, DialogContent } from "../ui/dialog";
 import PodcastInfo from "./PodcastInfo";
+import VolumeControl from "./VolumeControl";
+import PlaybackSpeedControl from "./PlaybackSpeedControl";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
@@ -215,7 +209,7 @@ const FullscreenPlayer = ({
                                     className="flex flex-col items-center"
                                 />
                             </div>
-                            
+
                             {/* Left side - Album art for desktop */}
                             <div className="hidden md:block">
                                 <PodcastInfo
@@ -230,7 +224,7 @@ const FullscreenPlayer = ({
                                     authorClassName="hidden"
                                 />
                             </div>
-                        
+
                             {/* Right side - Controls and info */}
                             <div className="flex flex-col items-center md:items-start max-w-xl w-full gap-8">
                                 {/* Podcast info - only visible on desktop */}
@@ -315,49 +309,19 @@ const FullscreenPlayer = ({
                                     </div>
 
                                     <div className="flex items-center gap-4">
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                onClick={toggleMute}
-                                                className="text-white hover:text-orange-1 transition-colors"
-                                                title="Toggle Mute (M)"
-                                            >
-                                                {isMuted ? (
-                                                    <VolumeX className="h-6 w-6" stroke="white" />
-                                                ) : (
-                                                    <Volume2 className="h-6 w-6" stroke="white" />
-                                                )}
-                                            </button>
-                                            <Slider
-                                                defaultValue={[1]}
-                                                max={1}
-                                                step={0.1}
-                                                value={[volume]}
-                                                onValueChange={handleVolumeChange}
-                                                className="w-24"
-                                            />
-                                        </div>
+                                        <VolumeControl
+                                            isMuted={isMuted}
+                                            toggleMute={toggleMute}
+                                            volume={volume}
+                                            handleVolumeChange={handleVolumeChange}
+                                            variant="fullscreen"
+                                        />
 
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <button className="text-white hover:text-orange-1 transition-colors" title="Playback Speed">
-                                                    <Gauge className="h-6 w-6" stroke="white" />
-                                                </button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                {[0.5, 0.75, 1, 1.25, 1.5, 2].map((rate) => (
-                                                    <DropdownMenuItem
-                                                        key={rate}
-                                                        onClick={() => handlePlaybackRateChange(rate)}
-                                                        className={cn(
-                                                            "cursor-pointer text-gray-600 bg-black-3 hover:bg-black-2",
-                                                            playbackRate === rate && "text-white-1"
-                                                        )}
-                                                    >
-                                                        {rate}x
-                                                    </DropdownMenuItem>
-                                                ))}
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
+                                        <PlaybackSpeedControl
+                                            playbackRate={playbackRate}
+                                            handlePlaybackRateChange={handlePlaybackRateChange}
+                                            variant="fullscreen"
+                                        />
                                     </div>
                                 </div>
                             </div>
