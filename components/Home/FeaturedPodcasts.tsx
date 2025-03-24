@@ -7,6 +7,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { PodcastProps } from '@/types';
 import FeaturedSkeleton from './FeaturedSkeleton';
 import CarouselDots from '../ui/CarouselDots';
+import UserImage from '../ui/UserImage';
 
 interface FeaturedPodcastsProps {
     featuredPodcasts: PodcastProps[] | undefined;
@@ -23,20 +24,20 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
         if (!emblaApi) return;
 
         let autoplay: NodeJS.Timeout | null = null;
-        
+
         const startAutoplay = () => {
             autoplay = setInterval(() => {
                 emblaApi.scrollNext();
             }, 4000);
         };
-        
+
         const stopAutoplay = () => {
             if (autoplay) {
                 clearInterval(autoplay);
                 autoplay = null;
             }
         };
-        
+
         if (!isPaused) {
             startAutoplay();
         }
@@ -60,8 +61,8 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
 
     return (
         <section className="relative w-full h-[300px]">
-            <div 
-                className="overflow-hidden rounded-2xl" 
+            <div
+                className="overflow-hidden rounded-2xl"
                 ref={emblaRef}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
@@ -70,15 +71,12 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                     {featuredPodcasts.map((podcast) => (
                         <div key={podcast._id} className="relative w-full flex-[0_0_100%]">
                             <div className="relative w-full h-[300px] rounded-2xl overflow-hidden shadow-lg">
-                                <div className="absolute inset-0">
-                                    <Image
-                                        src={podcast.imageUrl!}
-                                        alt={podcast.podcastTitle}
-                                        fill
-                                        className="object-cover opacity-60 blur-[1px]"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/50" />
-                                </div>
+                                <UserImage
+                                    imageUrl={podcast.imageUrl!}
+                                    title={podcast.podcastTitle}
+                                    blurred={true}
+                                    overlay={true}
+                                />
                                 <div className="relative h-full flex flex-col justify-end p-6 gap-4">
                                     <div className="flex items-center gap-3">
                                         <Image
@@ -126,7 +124,7 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
 
             <div className="flex justify-between mt-4">
                 {/* Replace the old dots implementation with the new component */}
-                <CarouselDots 
+                <CarouselDots
                     totalSlides={featuredPodcasts.length}
                     selectedIndex={selectedIndex}
                     onDotClick={(index) => emblaApi?.scrollTo(index)}
