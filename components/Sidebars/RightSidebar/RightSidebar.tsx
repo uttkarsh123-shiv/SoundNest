@@ -67,7 +67,7 @@ const RightSidebar = () => {
                                 />
                             </div>
                             <div className="flex w-full items-center justify-between">
-                                <h1 className="text-20 truncate font-semibold text-white-1">Sign In</h1>
+                                <h1 className="text-16 truncate font-semibold text-white-1">Sign In</h1>
                                 <RightArrow />
                             </div>
                         </Link>
