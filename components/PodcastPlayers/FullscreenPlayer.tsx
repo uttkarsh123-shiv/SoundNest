@@ -157,21 +157,22 @@ const FullscreenPlayer = ({
             if (!open) handleClose();
         }}>
             <DialogContent 
-                className="z-50 max-w-full w-full h-full p-0 border-0 bg-black/90 transition-all duration-500 ease-in-out" 
+                className="fixed z-50 max-w-full w-full h-full p-0 border-0 bg-black transition-all duration-500 ease-in-out" 
                 ref={playerRef}
+                style={{
+                    backgroundImage: `url(${audioDetails.imageUrl || "/icons/logo.png"})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundBlendMode: 'multiply',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                }}
             >
                 <div className="flex flex-col h-screen w-screen animate-fadeIn">
                     {/* Background with blur and gradient */}
                     <div className="absolute inset-0 z-0 transition-opacity duration-500 ease-in-out">
                         <div className="relative w-full h-full">
-                            <Image
-                                src={audioDetails.imageUrl || "/icons/logo.png"}
-                                alt="background"
-                                fill
-                                className="object-cover opacity-20 transition-transform duration-700 ease-in-out scale-105 animate-slowZoom"
-                                priority
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/90 to-black/95 backdrop-blur-xl animate-fadeIn" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-black/98 via-black/95 to-black/98 backdrop-blur-xl animate-fadeIn" />
                         </div>
                     </div>
 
