@@ -16,8 +16,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const RightSidebar = () => {
     const { user } = useUser();
-    // Fix: The useQuery hook doesn't return an object with data, isLoading, error properties
-    // Instead it directly returns the data, and we can check for undefined
     const topPodcasters = useQuery(api.users.getTopUserByPodcastCount);
     const isLoading = topPodcasters === undefined;
     const slides = topPodcasters?.filter((item: TopPodcastersProps) => item.totalPodcasts > 0);
@@ -25,11 +23,12 @@ const RightSidebar = () => {
     const { audio } = useAudio();
 
     return (
-        <section className={cn('right_sidebar h-[calc(100vh-5px)]', {
+        <section className={cn('right_sidebar gap-6 h-[calc(100vh-5px)]', {
             'h-[calc(100vh-80px)]': audio?.audioUrl
         })}>
+            {/* Profile Section */}
             <SignedIn>
-                <Link href={`/profile/${user?.id}`} className="flex gap-3 pb-7">
+                <Link href={`/profile/${user?.id}`} className="flex gap-3">
                     <UserButton />
                     <div className="flex w-full items-center justify-between">
                         <h1 className="text-16 truncate font-semibold text-white-1">{user?.firstName} {user?.lastName}</h1>
@@ -43,9 +42,9 @@ const RightSidebar = () => {
                     </div>
                 </Link>
             </SignedIn>
-            
+
             {/* Fans Like You Section */}
-            <section className="w-full">
+            <section className="w-full flex flex-col gap-2">
                 <Header headerTitle="Fans Like You" />
                 {isLoading ? (
                     <div className="flex gap-4 py-2 w-full">
@@ -61,9 +60,9 @@ const RightSidebar = () => {
                     </div>
                 )}
             </section>
-            
+
             {/* Top Podcasters Section */}
-            <section className="flex flex-col gap-2 pt-7">
+            <section className="flex flex-col gap-2">
                 <Header headerTitle="Top Podcasters" />
                 {isLoading ? (
                     <div className="flex flex-col gap-4">
@@ -77,11 +76,11 @@ const RightSidebar = () => {
                 ) : !slides || slides.length === 0 ? (
                     <p className="text-sm text-white-3 italic py-2">No top podcasters available</p>
                 ) : (
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col">
                         {slides.slice(0, 3).map((podcaster: TopPodcastersProps) => (
-                            <div 
-                                key={podcaster._id} 
-                                className="flex cursor-pointer justify-between hover:bg-black-2/50 p-2 rounded-lg transition-colors" 
+                            <div
+                                key={podcaster._id}
+                                className="flex cursor-pointer justify-between hover:bg-black-2/50 p-2 rounded-lg transition-colors"
                                 onClick={() => router.push(`/profile/${podcaster.clerkId}`)}
                             >
                                 <figure className="flex items-center gap-2">

@@ -22,12 +22,12 @@ const LeftSidebar = () => {
         })}>
             <nav className='flex flex-col gap-6 w-full'>
                 <Link href="/" className="flex cursor-pointer items-center pb-6 max-lg:justify-center group">
-                    <div className="relative overflow-hidden rounded-full">
+                    <div className="relative rounded-full">
                         <Image
                             src="/icons/logo.png"
                             alt="logo"
-                            width={100}
-                            height={100}
+                            width={80}
+                            height={80}
                             className="transition-transform duration-300 group-hover:scale-110"
                         />
                     </div>
