@@ -77,14 +77,18 @@ const AudioSettingsControl = ({
                         <Gauge className={cn("h-5 w-5", isFullscreen && "h-6 w-6")} stroke="white" />
                     </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent 
+                    className="z-50 bg-black-3 border border-gray-700"
+                    align="end"
+                    sideOffset={5}
+                >
                     {speedOptions.map((rate) => (
                         <DropdownMenuItem
                             key={rate}
                             onClick={() => handlePlaybackRateChange(rate)}
                             className={cn(
-                                "cursor-pointer text-gray-600 bg-black-3 hover:bg-black-2",
-                                playbackRate === rate && (isFullscreen ? "text-white-1" : "text-[#ffffff]")
+                                "cursor-pointer text-gray-300 hover:bg-black-2",
+                                playbackRate === rate && "text-orange-1 font-medium"
                             )}
                         >
                             {rate}x
