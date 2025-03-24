@@ -95,41 +95,29 @@ const FullscreenPlayer = ({
         }
     };
 
+    // Removed the fullscreen functionality and replaced with expanded player
     const enterFullscreen = () => {
-        if (playerRef.current && !document.fullscreenElement) {
-            playerRef.current.requestFullscreen().then(() => {
-                setIsRealFullscreen(true);
-            }).catch(err => {
-                console.error("Couldn't enter fullscreen mode:", err);
-            });
-        }
+        // No longer requesting browser fullscreen
+        setIsRealFullscreen(true);
     };
 
-    const exitFullscreen = () => {
-        if (document.fullscreenElement) {
-            document.exitFullscreen().then(() => {
-                setIsRealFullscreen(false);
-            }).catch(err => {
-                console.error("Couldn't exit fullscreen mode:", err);
-            });
-        }
+    // Handle closing with improved animation
+    const handleClose = () => {
+        // Add fade-out animation
+        playerRef.current?.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+        
+        // Then close the dialog with a delay to ensure animations complete
+        setTimeout(() => {
+            onClose();
+        }, 300);
     };
 
     useEffect(() => {
-        const handleFullscreenChange = () => {
-            setIsRealFullscreen(!!document.fullscreenElement);
-            if (!document.fullscreenElement && isRealFullscreen) {
-                // User exited fullscreen using browser controls
-                onClose();
-            }
-        };
-
         const handleKeyDown = (e: KeyboardEvent) => {
             if (!isOpen) return;
 
             if (e.code === "Escape") {
-                exitFullscreen();
-                onClose();
+                handleClose();
             } else if (e.code === "Space") {
                 e.preventDefault();
                 togglePlayPause();
@@ -144,16 +132,14 @@ const FullscreenPlayer = ({
             }
         };
 
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('keydown', handleKeyDown);
 
         return () => {
-            document.removeEventListener('fullscreenchange', handleFullscreenChange);
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [isOpen, isRealFullscreen, onClose, togglePlayPause, rewind, forward, toggleMute, toggleLoop]);
+    }, [isOpen, onClose, togglePlayPause, rewind, forward, toggleMute, toggleLoop]);
 
-    // Enter fullscreen when the component is opened
+    // Enter expanded mode when the component is opened
     useEffect(() => {
         if (isOpen && !isRealFullscreen) {
             // Small delay to ensure the dialog is rendered
@@ -164,42 +150,33 @@ const FullscreenPlayer = ({
         }
     }, [isOpen, isRealFullscreen]);
 
-    // Handle closing
-    const handleClose = () => {
-        // First exit fullscreen if we're in fullscreen mode
-        if (document.fullscreenElement) {
-            exitFullscreen();
-        }
-        // Then close the dialog with a small delay to ensure fullscreen exit completes
-        setTimeout(() => {
-            onClose();
-        }, 100);
-    };
-
     if (!isOpen || !audioDetails) return null;
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => {
             if (!open) handleClose();
         }}>
-            <DialogContent className="max-w-full w-full h-full p-0 border-0 bg-transparent" ref={playerRef}>
-                <div className="flex flex-col h-screen w-screen">
+            <DialogContent 
+                className="z-50 max-w-full w-full h-full p-0 border-0 bg-black/90 transition-all duration-500 ease-in-out" 
+                ref={playerRef}
+            >
+                <div className="flex flex-col h-screen w-screen animate-fadeIn">
                     {/* Background with blur and gradient */}
-                    <div className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 z-0 transition-opacity duration-500 ease-in-out">
                         <div className="relative w-full h-full">
                             <Image
                                 src={audioDetails.imageUrl || "/icons/logo.png"}
                                 alt="background"
                                 fill
-                                className="object-cover opacity-30"
+                                className="object-cover opacity-20 transition-transform duration-700 ease-in-out scale-105 animate-slowZoom"
                                 priority
                             />
-                            <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90 backdrop-blur-2xl" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/90 to-black/95 backdrop-blur-xl animate-fadeIn" />
                         </div>
                     </div>
 
                     {/* Content */}
-                    <div className="relative z-10 flex flex-col h-full p-4 md:p-8 lg:p-12">
+                    <div className="relative z-10 flex flex-col h-full p-4 md:p-8 lg:p-12 animate-slideUp">
                         {/* Header with close button */}
                         <div className="flex justify-between items-center mb-4 md:mb-8">
                             <div className="flex items-center gap-2">
