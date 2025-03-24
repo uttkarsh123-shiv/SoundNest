@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { useAudio } from '@/providers/AudioProvider';
 import { cn } from '@/lib/utils';
 import { TopPodcastersProps } from '@/types';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const RightSidebar = () => {
     const { user } = useUser();
@@ -47,11 +46,23 @@ const RightSidebar = () => {
             <section className="w-full flex flex-col gap-2">
                 <Header headerTitle="Fans Like You" />
                 {isLoading ? (
-                    <div className="flex gap-4 py-2 w-full">
-                        <Skeleton className="h-16 w-20 rounded-lg" />
-                        <Skeleton className="h-16 w-20 rounded-lg" />
-                        <Skeleton className="h-16 w-20 rounded-lg" />
-                    </div>
+                    <section className="flex w-full flex-col overflow-hidden pb-1">
+                                <figure className="carousel_box relative">
+                                    <div className="absolute inset-0 rounded-xl bg-white-1/5 border border-white-1/10 animate-pulse"></div>
+                                    <div className="glassmorphism-black relative flex flex-col rounded-b-xl p-2 mt-auto">
+                                        <div className="h-4 bg-white-1/10 rounded animate-pulse w-full mb-1"></div>
+                                        <div className="h-3 bg-white-1/5 rounded animate-pulse w-3/4"></div>
+                                    </div>
+                                </figure>
+                        <div className="flex justify-center mt-3 gap-2">
+                            {[1, 2, 3].map((i) => (
+                                <div 
+                                    key={i} 
+                                    className={`w-2 h-2 rounded-full ${i === 1 ? 'bg-orange-1/50' : 'bg-white-1/30'}`}
+                                />
+                            ))}
+                        </div>
+                    </section>
                 ) : !slides || slides.length === 0 ? (
                     <p className="text-sm text-white-3 italic py-2">No fans data available</p>
                 ) : (
@@ -67,9 +78,14 @@ const RightSidebar = () => {
                 {isLoading ? (
                     <div className="flex flex-col gap-4">
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="flex items-center gap-2">
-                                <Skeleton className="h-11 w-11 rounded-lg" />
-                                <Skeleton className="h-5 w-32" />
+                            <div key={i} className="flex items-center gap-2 p-2 rounded-lg">
+                                <div className="relative w-11 h-11 rounded-lg bg-white-1/5 border border-white-1/10 overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white-1/5 to-transparent animate-pulse"></div>
+                                </div>
+                                <div className="flex flex-col gap-1 flex-1">
+                                    <div className="h-4 bg-white-1/10 rounded animate-pulse w-24"></div>
+                                    <div className="h-3 bg-white-1/5 rounded animate-pulse w-16"></div>
+                                </div>
                             </div>
                         ))}
                     </div>
