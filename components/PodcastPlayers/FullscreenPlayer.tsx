@@ -19,6 +19,10 @@ import { Dialog, DialogContent } from "../ui/dialog";
 import PodcastInfo from "./PodcastInfo";
 import VolumeControl from "./VolumeControl";
 import PlaybackSpeedControl from "./PlaybackSpeedControl";
+import { toast } from "sonner";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
@@ -69,6 +73,24 @@ const FullscreenPlayer = ({
     const [seekValue, setSeekValue] = useState(0);
     const playerRef = useRef<HTMLDivElement>(null);
     const [isRealFullscreen, setIsRealFullscreen] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
+    const { user } = useUser();
+
+    // Get podcast details including likes
+    const podcast = useQuery(
+        api.podcasts.getPodcastById,
+        audioDetails?.podcastId ? { podcastId: audioDetails.podcastId } : "skip"
+    );
+
+    // Like mutation
+    const likePodcast = useMutation(api.podcasts.likePodcast);
+
+    // Update isLiked state when podcast data is loaded
+    useEffect(() => {
+        if (podcast && user) {
+            setIsLiked(podcast.likes?.includes(user.id) || false);
+        }
+    }, [podcast, user]);
 
     useEffect(() => {
         setSeekValue((currentTime / duration) * 100 || 0);
@@ -152,14 +174,75 @@ const FullscreenPlayer = ({
 
     // Handle closing
     const handleClose = () => {
-        exitFullscreen();
-        onClose();
+        // First exit fullscreen if we're in fullscreen mode
+        if (document.fullscreenElement) {
+            exitFullscreen();
+        }
+        // Then close the dialog with a small delay to ensure fullscreen exit completes
+        setTimeout(() => {
+            onClose();
+        }, 100);
+    };
+
+    // Handle like functionality
+    const handleLike = async () => {
+        if (!audioDetails?.podcastId || !user) {
+            toast.error("You must be logged in to like podcasts");
+            return;
+        }
+
+        try {
+            await likePodcast({
+                podcastId: audioDetails.podcastId,
+                userId: user.id
+            });
+
+            setIsLiked(!isLiked);
+            toast.success(isLiked ? "Removed from favorites" : "Added to favorites");
+        } catch (error) {
+            toast.error("Failed to update like status");
+            console.error("Error liking podcast:", error);
+        }
+    };
+
+    // Handle share functionality
+    const handleShare = async () => {
+        if (!audioDetails) return;
+
+        // Create share data
+        const shareData = {
+            title: audioDetails.title,
+            text: `Listen to ${audioDetails.title} by ${audioDetails.author} on PodTales`,
+            url: audioDetails.podcastId
+                ? `${window.location.origin}/podcasts/${audioDetails.podcastId}`
+                : window.location.origin
+        };
+
+        // Check if Web Share API is available
+        if (navigator.share && navigator.canShare(shareData)) {
+            try {
+                await navigator.share(shareData);
+                toast.success("Shared successfully");
+            } catch (error) {
+                if ((error as Error).name !== 'AbortError') {
+                    toast.error("Error sharing content");
+                    console.error("Error sharing:", error);
+                }
+            }
+        } else {
+            // Fallback for browsers that don't support Web Share API
+            navigator.clipboard.writeText(shareData.url)
+                .then(() => toast.success("Link copied to clipboard"))
+                .catch(() => toast.error("Failed to copy link"));
+        }
     };
 
     if (!isOpen || !audioDetails) return null;
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleClose}>
+        <Dialog open={isOpen} onOpenChange={(open) => {
+            if (!open) handleClose();
+        }}>
             <DialogContent className="max-w-full w-full h-full p-0 border-0 bg-transparent" ref={playerRef}>
                 <div className="flex flex-col h-screen w-screen">
                     {/* Background with blur and gradient */}
@@ -294,13 +377,19 @@ const FullscreenPlayer = ({
                                         </button>
 
                                         <button
-                                            className="rounded-full p-2 text-white-1 hover:bg-gray-800/50 hover:text-orange-1 transition-colors"
+                                            onClick={handleLike}
+                                            className={cn(
+                                                "rounded-full p-2 hover:bg-gray-800/50 transition-colors",
+                                                isLiked ? "text-orange-1" : "text-white-1 hover:text-orange-1"
+                                            )}
                                             title="Like Podcast"
+                                            disabled={!user}
                                         >
-                                            <Heart className="h-6 w-6" />
+                                            <Heart className={cn("h-6 w-6", isLiked && "fill-orange-1")} />
                                         </button>
 
                                         <button
+                                            onClick={handleShare}
                                             className="rounded-full p-2 text-white-1 hover:bg-gray-800/50 hover:text-orange-1 transition-colors"
                                             title="Share Podcast"
                                         >
