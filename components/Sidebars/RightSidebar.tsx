@@ -38,24 +38,27 @@ const RightSidebar = () => {
                             alt="arrow"
                             width={24}
                             height={24}
+                            className="transition-transform duration-300 hover:translate-x-1 group-hover:translate-x-1"
                         />
                     </div>
                 </Link>
             </SignedIn>
             
             {/* Fans Like You Section */}
-            <section>
+            <section className="w-full">
                 <Header headerTitle="Fans Like You" />
                 {isLoading ? (
-                    <div className="flex gap-4 py-2">
-                        <Skeleton className="h-16 w-16 rounded-lg" />
-                        <Skeleton className="h-16 w-16 rounded-lg" />
-                        <Skeleton className="h-16 w-16 rounded-lg" />
+                    <div className="flex gap-4 py-2 w-full">
+                        <Skeleton className="h-16 w-20 rounded-lg" />
+                        <Skeleton className="h-16 w-20 rounded-lg" />
+                        <Skeleton className="h-16 w-20 rounded-lg" />
                     </div>
                 ) : !slides || slides.length === 0 ? (
                     <p className="text-sm text-white-3 italic py-2">No fans data available</p>
                 ) : (
-                    <Carousel fansLikeDetail={slides} />
+                    <div className="w-full">
+                        <Carousel fansLikeDetail={slides} />
+                    </div>
                 )}
             </section>
             
