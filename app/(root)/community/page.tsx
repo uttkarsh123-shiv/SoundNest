@@ -35,16 +35,6 @@ const Community = () => {
 
   const filteredUsers = getFilteredUsers();
 
-  if (!userId && (activeTab === "followers" || activeTab === "following")) {
-    return (
-      <EmptyState
-        title="Authentication Required"
-        description="Please sign in to view your connections"
-        icon={<Users size={48} className="text-orange-1" />}
-      />
-    );
-  }
-
   if ((activeTab === "followers" && followers === undefined) || 
       (activeTab === "following" && following === undefined) ||
       (activeTab === "topPodcasters" && topUsers === undefined)) {
@@ -135,7 +125,7 @@ const Community = () => {
               <div className="flex-1">
                 <h3 className="font-semibold text-white-1 text-lg flex items-center gap-1">
                   {user.name}
-                  {activeTab === "topPodcasters" && user.isVerified && (
+                  {user.isVerified && (
                     <Image 
                       src="/icons/verified.svg"
                       alt="Verified"

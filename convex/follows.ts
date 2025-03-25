@@ -23,7 +23,7 @@ export const followUser = mutation({
     // Check if the follow relationship already exists
     const existingFollow = await ctx.db
       .query("follows")
-      .withIndex("by_follower_and_following", (q) => 
+      .withIndex("by_follower_and_following", (q) =>
         q.eq("follower", followerId).eq("following", args.followingId)
       )
       .unique();
@@ -45,10 +45,10 @@ export const followUser = mutation({
       .query("users")
       .filter((q) => q.eq(q.field("clerkId"), followerId))
       .unique();
-    
+
     if (followerUser) {
       await ctx.db.patch(followerUser._id, {
-        followingCount: (followerUser.followingCount || 0) + 1
+        followingCount: (followerUser.followingCount || 0) + 1,
       });
     }
 
@@ -57,10 +57,10 @@ export const followUser = mutation({
       .query("users")
       .filter((q) => q.eq(q.field("clerkId"), args.followingId))
       .unique();
-    
+
     if (followingUser) {
       await ctx.db.patch(followingUser._id, {
-        followersCount: (followingUser.followersCount || 0) + 1
+        followersCount: (followingUser.followersCount || 0) + 1,
       });
     }
 
@@ -85,7 +85,7 @@ export const unfollowUser = mutation({
     // Find the follow relationship
     const existingFollow = await ctx.db
       .query("follows")
-      .withIndex("by_follower_and_following", (q) => 
+      .withIndex("by_follower_and_following", (q) =>
         q.eq("follower", followerId).eq("following", args.followingId)
       )
       .unique();
@@ -103,10 +103,14 @@ export const unfollowUser = mutation({
       .query("users")
       .filter((q) => q.eq(q.field("clerkId"), followerId))
       .unique();
-    
-    if (followerUser && followerUser.followingCount && followerUser.followingCount > 0) {
+
+    if (
+      followerUser &&
+      followerUser.followingCount &&
+      followerUser.followingCount > 0
+    ) {
       await ctx.db.patch(followerUser._id, {
-        followingCount: followerUser.followingCount - 1
+        followingCount: followerUser.followingCount - 1,
       });
     }
 
@@ -115,10 +119,14 @@ export const unfollowUser = mutation({
       .query("users")
       .filter((q) => q.eq(q.field("clerkId"), args.followingId))
       .unique();
-    
-    if (followingUser && followingUser.followersCount && followingUser.followersCount > 0) {
+
+    if (
+      followingUser &&
+      followingUser.followersCount &&
+      followingUser.followersCount > 0
+    ) {
       await ctx.db.patch(followingUser._id, {
-        followersCount: followingUser.followersCount - 1
+        followersCount: followingUser.followersCount - 1,
       });
     }
 
@@ -136,7 +144,7 @@ export const getFollowers = query({
       .query("follows")
       .withIndex("by_following", (q) => q.eq("following", args.userId))
       .collect();
-    
+
     // Get detailed user information for each follower
     const followerDetails = await Promise.all(
       follows.map(async (follow) => {
@@ -144,17 +152,20 @@ export const getFollowers = query({
           .query("users")
           .filter((q) => q.eq(q.field("clerkId"), follow.follower))
           .unique();
-        
-        return user ? {
-          _id: user._id,
-          name: user.name,
-          imageUrl: user.imageUrl,
-          clerkId: user.clerkId,
-          followedAt: follow.createdAt
-        } : null;
+
+        return user
+          ? {
+              _id: user._id,
+              name: user.name,
+              imageUrl: user.imageUrl,
+              clerkId: user.clerkId,
+              followedAt: follow.createdAt,
+              isVerified: user.isVerified,
+            }
+          : null;
       })
     );
-    
+
     // Filter out null values and sort by most recent
     return followerDetails
       .filter(Boolean)
@@ -172,7 +183,7 @@ export const getFollowing = query({
       .query("follows")
       .withIndex("by_follower", (q) => q.eq("follower", args.userId))
       .collect();
-    
+
     // Get detailed user information for each following
     const followingDetails = await Promise.all(
       follows.map(async (follow) => {
@@ -180,17 +191,20 @@ export const getFollowing = query({
           .query("users")
           .filter((q) => q.eq(q.field("clerkId"), follow.following))
           .unique();
-        
-        return user ? {
-          _id: user._id,
-          name: user.name,
-          imageUrl: user.imageUrl,
-          clerkId: user.clerkId,
-          followedAt: follow.createdAt
-        } : null;
+
+        return user
+          ? {
+              _id: user._id,
+              name: user.name,
+              imageUrl: user.imageUrl,
+              clerkId: user.clerkId,
+              followedAt: follow.createdAt,
+              isVerified: user.isVerified,
+            }
+          : null;
       })
     );
-    
+
     // Filter out null values and sort by most recent
     return followingDetails
       .filter(Boolean)
@@ -244,7 +258,7 @@ export const isFollowing = query({
     // Find the follow relationship
     const existingFollow = await ctx.db
       .query("follows")
-      .withIndex("by_follower_and_following", (q) => 
+      .withIndex("by_follower_and_following", (q) =>
         q.eq("follower", followerId).eq("following", args.followingId)
       )
       .unique();
