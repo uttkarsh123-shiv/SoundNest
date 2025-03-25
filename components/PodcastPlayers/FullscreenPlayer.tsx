@@ -2,21 +2,18 @@
 import { useEffect, useRef, useState } from "react";
 import { Slider } from "../ui/slider";
 import {
-    Play,
-    Pause,
     Gauge,
-    SkipBack,
-    SkipForward,
     X,
 } from "lucide-react";
 import { formatTime } from "@/lib/formatTime";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import PodcastInfo from "./PodcastInfo";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import LikeShareControls from "./LikeShareLoopControls";
 import AudioSettingsControl from "./AudioSettingsControl";
+import PlaybackControls from "./PlaybackControls";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
@@ -247,36 +244,15 @@ const FullscreenPlayer = ({
                                     </div>
                                 </div>
 
-                                {/* Main Controls */}
-                                <div className="flex items-center justify-center gap-8 w-full">
-                                    <button
-                                        className="rounded-full p-3 text-gray-400 hover:bg-gray-800/50 hover:text-white transition-colors"
-                                        onClick={rewind}
-                                        title="Rewind 5s (Left Arrow)"
-                                    >
-                                        <SkipBack className="h-8 w-8" stroke="white" />
-                                    </button>
-
-                                    <button
-                                        className="rounded-full bg-orange-1 p-5 text-white hover:bg-orange-1/90 transition-colors"
-                                        onClick={togglePlayPause}
-                                        title="Play/Pause (Space)"
-                                    >
-                                        {isPlaying ? (
-                                            <Pause className="h-10 w-10" stroke="white" />
-                                        ) : (
-                                            <Play className="h-10 w-10" stroke="white" />
-                                        )}
-                                    </button>
-
-                                    <button
-                                        className="rounded-full p-3 text-gray-400 hover:bg-gray-800/50 hover:text-white transition-colors"
-                                        onClick={forward}
-                                        title="Forward 5s (Right Arrow)"
-                                    >
-                                        <SkipForward className="h-8 w-8" stroke="white" />
-                                    </button>
-                                </div>
+                                {/* Main Controls - Using PlaybackControls component */}
+                                <PlaybackControls
+                                    isPlaying={isPlaying}
+                                    togglePlayPause={togglePlayPause}
+                                    forward={forward}
+                                    rewind={rewind}
+                                    variant="fullscreen"
+                                    className="w-full"
+                                />
 
                                 {/* Additional controls */}
                                 <div className="flex items-center justify-between w-full mt-4">
