@@ -7,17 +7,21 @@ import {
     Pause,
     Gauge,
     SkipBack,
+
     SkipForward,
-    X
+    X,
+    Volume2,
+    VolumeX
 } from "lucide-react";
 import { formatTime } from "@/lib/formatTime";
 import { Dialog, DialogContent } from "../ui/dialog";
 import PodcastInfo from "./PodcastInfo";
-import AudioSettingsControl from "./AudioSettingsControl";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import LikeShareControls from "./LikeShareLoopControls";
+import FullscreenSpeedControl from "./FullscreenSpeedControl";
+import AudioSettingsControl from "./AudioSettingsControl";
 
 interface FullscreenPlayerProps {
     isOpen: boolean;
@@ -290,15 +294,39 @@ const FullscreenPlayer = ({
                                         toggleLoop={toggleLoop}
                                     />
 
-                                    <AudioSettingsControl
-                                        isMuted={isMuted}
-                                        toggleMute={toggleMute}
-                                        volume={volume}
-                                        handleVolumeChange={handleVolumeChange}
-                                        playbackRate={playbackRate}
-                                        handlePlaybackRateChange={handlePlaybackRateChange}
-                                        variant="fullscreen"
-                                    />
+                                    <div className="relative z-[9999]">
+                                        {/* Replace AudioSettingsControl with direct implementation */}
+                                        <div className="flex items-center gap-4">
+                                            {/* Volume Control */}
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={toggleMute}
+                                                    className="text-white hover:text-orange-1 transition-colors"
+                                                    title="Toggle Mute (M)"
+                                                >
+                                                    {isMuted ? (
+                                                        <VolumeX className="h-6 w-6" stroke="white" />
+                                                    ) : (
+                                                        <Volume2 className="h-6 w-6" stroke="white" />
+                                                    )}
+                                                </button>
+                                                <Slider
+                                                    defaultValue={[1]}
+                                                    max={1}
+                                                    step={0.1}
+                                                    value={[volume]}
+                                                    onValueChange={handleVolumeChange}
+                                                    className="w-24"
+                                                />
+                                            </div>
+
+                                            {/* Use FullscreenSpeedControl directly */}
+                                            <FullscreenSpeedControl
+                                                playbackRate={playbackRate}
+                                                handlePlaybackRateChange={handlePlaybackRateChange}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
