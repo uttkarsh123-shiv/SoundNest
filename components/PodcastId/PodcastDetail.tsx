@@ -34,6 +34,7 @@ const PodcastDetail = ({
   const { user } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes.length || 0);
   const [isCopied, setIsCopied] = useState(false);
 
   const deletePodcast = useMutation(api.podcasts.deletePodcast);
@@ -49,6 +50,7 @@ const PodcastDetail = ({
   useEffect(() => {
     if (podcast && user) {
       setIsLiked(podcast.likes?.includes(user.id) || false);
+      setLikeCount(podcast.likes?.length || 0);
     }
   }, [podcast, user]);
 
@@ -72,16 +74,20 @@ const PodcastDetail = ({
     }
 
     try {
-      // Optimistic UI update
-      setIsLiked(!isLiked);
+      // Optimistic UI update for like status and count
+      const newLikedState = !isLiked;
+      setIsLiked(newLikedState);
+      setLikeCount(prevCount => newLikedState ? prevCount + 1 : prevCount - 1);
+      
       // Make API call
       await likePodcast({ 
         podcastId, 
         userId: user.id 
       });
     } catch (error) {
-      // Revert optimistic update on error
+      // Revert optimistic updates on error
       setIsLiked(isLiked);
+      setLikeCount(prevCount => isLiked ? prevCount + 1 : prevCount - 1);
       toast({
         title: "Failed to update like status",
         variant: "destructive",
@@ -214,7 +220,7 @@ const PodcastDetail = ({
                   className={`transition-transform ${isLiked ? "fill-current" : ""}`}
                 />
                 <span className="w-[20px] text-center">
-                  {likes.length || 0}
+                  {likeCount}
                 </span>
               </Button>
 
