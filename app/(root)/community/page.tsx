@@ -2,10 +2,11 @@
 import { useState } from "react";
 import { useQuery } from "convex/react";
 import { useAuth } from "@clerk/nextjs";
+import { TrendingUp, User, UserCheck } from "lucide-react";
 
 import { api } from "@/convex/_generated/api";
 import LoaderSpinner from "@/components/LoaderSpinner";
-import TabSelector from "@/components/Community/TabSelector";
+import TabSelector, { TabType } from "@/components/ui/TabSelector";
 import SearchBar from "@/components/Community/SearchBar";
 import UsersList from "@/components/Community/UsersList";
 
@@ -42,15 +43,39 @@ const Community = () => {
     return <LoaderSpinner />;
   }
 
+  // Handle tab change with type safety
+  const handleTabChange = (tab: TabType) => {
+    if (tab === "followers" || tab === "following" || tab === "topPodcasters") {
+      setActiveTab(tab);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <h1 className="text-3xl font-bold text-white-1">Community</h1>
         <TabSelector 
           activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
-          followersCount={followers?.length} 
-          followingCount={following?.length} 
+          setActiveTab={handleTabChange}
+          tabs={[
+            { 
+              id: "topPodcasters", 
+              label: "Top Podcasters", 
+              icon: <TrendingUp size={16} /> 
+            },
+            { 
+              id: "followers", 
+              label: "Followers", 
+              icon: <User size={16} />, 
+              count: followers?.length 
+            },
+            { 
+              id: "following", 
+              label: "Following", 
+              icon: <UserCheck size={16} />, 
+              count: following?.length 
+            }
+          ]}
         />
       </div>
 
