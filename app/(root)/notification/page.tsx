@@ -1,7 +1,7 @@
 "use client";
-import { useQuery } from "convex/react";
-import { useEffect, useState } from "react";
-import { Bell, User, Calendar, Headphones } from "lucide-react";
+import { useQuery, useMutation } from "convex/react";
+import { useState } from "react";
+import { Bell, User, Calendar, Headphones, Check } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
@@ -21,29 +21,39 @@ const NotificationPage = () => {
     userId ? { userId } : "skip"
   );
 
-  // Mark notifications as read when viewed
-  useEffect(() => {
-    if (userId && notifications && notifications.length > 0) {
-      // Find unread notifications
-      const unreadNotifications = notifications.filter(
-        (notification) => !notification.isRead
-      );
-      
-      if (unreadNotifications.length > 0) {
-        // Mark them as read
-        unreadNotifications.forEach((notification) => {
-          // Call the markAsRead mutation for each notification
-          // This would be implemented in your Convex backend
-        });
-      }
-    }
-  }, [notifications, userId]);
+  // Get the mutation to mark notifications as read
+  const markNotificationAsRead = useMutation(api.notifications.markNotificationAsRead);
+  const markAllNotificationsAsRead = useMutation(api.notifications.markAllNotificationsAsRead);
+
+  // Remove the useEffect that automatically marks notifications as read
 
   // Filter notifications based on active tab
   const filteredNotifications = notifications?.filter((notification) => {
     if (activeTab === "all") return true;
     return !notification.isRead;
   });
+
+  // Handle notification click - mark as read and navigate
+  const handleNotificationClick = (notification: any) => {
+    // Mark as read if not already read
+    if (!notification.isRead) {
+      markNotificationAsRead({ notificationId: notification._id });
+    }
+    
+    // Navigate based on notification type
+    if (notification.type === "new_podcast" && notification.podcastId) {
+      router.push(`/podcasts/${notification.podcastId}`);
+    } else if (notification.type === "follow") {
+      router.push(`/profile/${notification.creatorId}`);
+    }
+  };
+
+  // Handle marking all notifications as read
+  const handleMarkAllAsRead = () => {
+    if (userId) {
+      markAllNotificationsAsRead({ userId });
+    }
+  };
 
   if (!userId) {
     return (
@@ -57,31 +67,45 @@ const NotificationPage = () => {
 
   if (!notifications) return <LoaderSpinner />;
 
+  // Count unread notifications
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-white-1">Notifications</h1>
-        <div className="flex bg-black-1/50 rounded-full p-1">
-          <button
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeTab === "all"
-                ? "bg-orange-1 text-white-1"
-                : "text-white-2 hover:text-white-1"
-            }`}
-            onClick={() => setActiveTab("all")}
-          >
-            All
-          </button>
-          <button
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeTab === "unread"
-                ? "bg-orange-1 text-white-1"
-                : "text-white-2 hover:text-white-1"
-            }`}
-            onClick={() => setActiveTab("unread")}
-          >
-            Unread
-          </button>
+        <div className="flex items-center gap-4">
+          {unreadCount > 0 && (
+            <button 
+              onClick={handleMarkAllAsRead}
+              className="flex items-center gap-1 text-sm text-white-2 hover:text-orange-1 transition-colors"
+            >
+              <Check size={16} />
+              Mark all as read
+            </button>
+          )}
+          <div className="flex bg-black-1/50 rounded-full p-1">
+            <button
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeTab === "all"
+                  ? "bg-orange-1 text-white-1"
+                  : "text-white-2 hover:text-white-1"
+              }`}
+              onClick={() => setActiveTab("all")}
+            >
+              All
+            </button>
+            <button
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeTab === "unread"
+                  ? "bg-orange-1 text-white-1"
+                  : "text-white-2 hover:text-white-1"
+              }`}
+              onClick={() => setActiveTab("unread")}
+            >
+              Unread {unreadCount > 0 && `(${unreadCount})`}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -93,14 +117,7 @@ const NotificationPage = () => {
               className={`bg-black-1/30 border ${
                 notification.isRead ? "border-gray-800" : "border-orange-1/50"
               } rounded-xl p-4 transition-all hover:bg-black-1/50 cursor-pointer`}
-              onClick={() => {
-                // Navigate based on notification type
-                if (notification.type === "new_podcast" && notification.podcastId) {
-                  router.push(`/podcast/${notification.podcastId}`);
-                } else if (notification.type === "follow") {
-                  router.push(`/profile/${notification.creatorId}`);
-                }
-              }}
+              onClick={() => handleNotificationClick(notification)}
             >
               <div className="flex items-start gap-4">
                 {/* Notification icon */}

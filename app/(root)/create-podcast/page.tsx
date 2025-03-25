@@ -109,19 +109,19 @@ const CreatePodcast = () => {
                 return;
             }
 
-            if (!imageUrl || !imageStorageId) {
+            // Check if audio is required
+            if (!audioUrl || !audioStorageId) {
                 toast({
-                    title: 'Please upload or generate a thumbnail',
+                    title: 'Please generate audio for your podcast',
                     variant: 'destructive'
                 });
                 setIsSubmitting(false);
                 return;
             }
 
-            // Check if audio is required
-            if (!audioUrl || !audioStorageId) {
+            if (!imageUrl || !imageStorageId) {
                 toast({
-                    title: 'Please generate audio for your podcast',
+                    title: 'Please upload or generate a thumbnail',
                     variant: 'destructive'
                 });
                 setIsSubmitting(false);
