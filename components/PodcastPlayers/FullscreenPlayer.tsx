@@ -109,7 +109,7 @@ const FullscreenPlayer = ({
     const handleClose = () => {
         // Add fade-out animation
         playerRef.current?.classList.add('opacity-0', 'transition-opacity', 'duration-300');
-        
+
         // Then close the dialog with a delay to ensure animations complete
         setTimeout(() => {
             onClose();
@@ -160,8 +160,8 @@ const FullscreenPlayer = ({
         <Dialog open={isOpen} onOpenChange={(open) => {
             if (!open) handleClose();
         }}>
-            <DialogContent 
-                className="fixed z-50 max-w-full w-full h-full p-0 border-0 bg-black transition-all duration-500 ease-in-out" 
+            <DialogContent
+                className="fixed z-50 max-w-full w-full h-full p-0 border-0 bg-black transition-all duration-500 ease-in-out"
                 ref={playerRef}
                 style={{
                     backgroundImage: `url(${audioDetails.imageUrl || "/icons/logo.png"})`,
@@ -295,37 +295,15 @@ const FullscreenPlayer = ({
                                     />
 
                                     <div className="relative z-[9999]">
-                                        {/* Replace AudioSettingsControl with direct implementation */}
-                                        <div className="flex items-center gap-4">
-                                            {/* Volume Control */}
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    onClick={toggleMute}
-                                                    className="text-white hover:text-orange-1 transition-colors"
-                                                    title="Toggle Mute (M)"
-                                                >
-                                                    {isMuted ? (
-                                                        <VolumeX className="h-6 w-6" stroke="white" />
-                                                    ) : (
-                                                        <Volume2 className="h-6 w-6" stroke="white" />
-                                                    )}
-                                                </button>
-                                                <Slider
-                                                    defaultValue={[1]}
-                                                    max={1}
-                                                    step={0.1}
-                                                    value={[volume]}
-                                                    onValueChange={handleVolumeChange}
-                                                    className="w-24"
-                                                />
-                                            </div>
-
-                                            {/* Use FullscreenSpeedControl directly */}
-                                            <FullscreenSpeedControl
-                                                playbackRate={playbackRate}
-                                                handlePlaybackRateChange={handlePlaybackRateChange}
-                                            />
-                                        </div>
+                                        <AudioSettingsControl
+                                            isMuted={isMuted}
+                                            toggleMute={toggleMute}
+                                            volume={volume}
+                                            handleVolumeChange={handleVolumeChange}
+                                            playbackRate={playbackRate}
+                                            handlePlaybackRateChange={handlePlaybackRateChange}
+                                            variant="fullscreen"
+                                        />
                                     </div>
                                 </div>
                             </div>
