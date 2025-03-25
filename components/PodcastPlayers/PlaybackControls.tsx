@@ -1,5 +1,5 @@
 "use client";
-import { Play, Pause, FastForward, SkipBack, SkipForward } from "lucide-react";
+import { Play, Pause, FastForward } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PlaybackControlsProps {
@@ -33,11 +33,10 @@ const PlaybackControls = ({
                 onClick={rewind}
                 title="Rewind 5s (Left Arrow)"
             >
-                {isFullscreen ? (
-                    <SkipBack className="h-8 w-8" stroke="white" />
-                ) : (
-                    <FastForward className="h-5 w-5 transform rotate-180" stroke="white" />
-                )}
+                <FastForward
+                    className={cn("transform rotate-180", isFullscreen ? "h-8 w-8" : "h-5 w-5")}
+                    stroke="white"
+                />
             </button>
 
             <button
@@ -75,11 +74,10 @@ const PlaybackControls = ({
                 onClick={forward}
                 title="Forward 5s (Right Arrow)"
             >
-                {isFullscreen ? (
-                    <SkipForward className="h-8 w-8" stroke="white" />
-                ) : (
-                    <FastForward className="h-5 w-5" stroke="white" />
-                )}
+                <FastForward
+                    className={isFullscreen ? "h-8 w-8" : "h-5 w-5"}
+                    stroke="white"
+                />
             </button>
         </div>
     );
