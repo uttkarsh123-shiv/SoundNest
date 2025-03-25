@@ -59,16 +59,6 @@ const NotificationPage = () => {
     }
   };
 
-  if (!userId) {
-    return (
-      <EmptyState
-        title="Authentication Required"
-        description="Please sign in to view your notifications"
-        icon={<Bell size={48} className="text-orange-1" />}
-      />
-    );
-  }
-
   if (!notifications) return <LoaderSpinner />;
 
   // Count unread notifications
