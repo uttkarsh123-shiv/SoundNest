@@ -1,8 +1,8 @@
 "use client";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Play, MoreVertical, Trash2, Heart, Share2, Check } from 'lucide-react';
 import MusicBars from '../MusicBars';
 
@@ -33,11 +33,24 @@ const PodcastDetail = ({
   const { toast } = useToast();
   const { user } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isLiked, setIsLiked] = useState(likes?.includes(user?.id || "") || false);
+  const [isLiked, setIsLiked] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
   const deletePodcast = useMutation(api.podcasts.deletePodcast);
   const likePodcast = useMutation(api.podcasts.likePodcast);
+  
+  // Get updated podcast details including likes
+  const podcast = useQuery(
+    api.podcasts.getPodcastById,
+    podcastId ? { podcastId } : "skip"
+  );
+
+  // Update isLiked state when podcast data is loaded or user changes
+  useEffect(() => {
+    if (podcast && user) {
+      setIsLiked(podcast.likes?.includes(user.id) || false);
+    }
+  }, [podcast, user]);
 
   const handleDelete = async () => {
     try {
@@ -45,6 +58,35 @@ const PodcastDetail = ({
       router.push("/");
     } catch (error) {
       console.error("Error deleting podcast", error);
+    }
+  };
+
+  // Handle like functionality with optimistic updates
+  const handleLike = async () => {
+    if (!user) {
+      toast({
+        title: "Please sign in to like podcasts",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Optimistic UI update
+      setIsLiked(!isLiked);
+      // Make API call
+      await likePodcast({ 
+        podcastId, 
+        userId: user.id 
+      });
+    } catch (error) {
+      // Revert optimistic update on error
+      setIsLiked(isLiked);
+      toast({
+        title: "Failed to update like status",
+        variant: "destructive",
+      });
+      console.error("Error liking podcast:", error);
     }
   };
 
@@ -161,22 +203,7 @@ const PodcastDetail = ({
               </button>
 
               <Button
-                onClick={async () => {
-                  if (!user) {
-                    toast({
-                      title: "Please sign in to like podcasts",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-
-                  try {
-                    const liked = await likePodcast({ podcastId, userId: user.id });
-                    setIsLiked(liked);
-                  } catch (error) {
-                    console.error("Error updating like status:", error);
-                  }
-                }}
+                onClick={handleLike}
                 className={`flex items-center gap-2 px-3 min-w-[70px] ${isLiked
                     ? "bg-red-500 hover:bg-red-600"
                     : "bg-black-1/50 hover:bg-black-1/70"

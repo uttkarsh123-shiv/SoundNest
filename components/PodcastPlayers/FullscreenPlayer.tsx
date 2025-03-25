@@ -6,7 +6,7 @@ import {
     X,
 } from "lucide-react";
 import { formatTime } from "@/lib/formatTime";
-import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "../ui/dialog";
 import PodcastInfo from "./PodcastInfo";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -164,6 +164,14 @@ const FullscreenPlayer = ({
                     backgroundColor: 'rgba(0, 0, 0, 0.9)',
                 }}
             >
+                <DialogTitle className="sr-only">
+                    Now Playing: {audioDetails.title} by {audioDetails.author}
+                </DialogTitle>
+
+                <DialogDescription className="sr-only">
+                    Full screen player for {audioDetails.title} by {audioDetails.author}. Use space to play or pause, arrow keys to seek, M to mute, and Escape to exit.
+                </DialogDescription>
+
                 <div className="flex flex-col h-screen w-screen animate-fadeIn">
                     {/* Background with blur and gradient */}
                     <div className="absolute inset-0 z-0 transition-opacity duration-500 ease-in-out">
