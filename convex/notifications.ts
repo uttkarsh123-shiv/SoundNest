@@ -106,3 +106,34 @@ export const markAllNotificationsAsRead = mutation({
         return notifications.length;
     },
 });
+
+// Delete a single notification
+export const deleteNotification = mutation({
+    args: { notificationId: v.id("notifications") },
+    handler: async (ctx, args) => {
+        const notification = await ctx.db.get(args.notificationId);
+        if (!notification) {
+            throw new Error("Notification not found");
+        }
+        
+        await ctx.db.delete(args.notificationId);
+        return true;
+    },
+});
+
+// Clear all notifications for a user
+export const clearAllNotifications = mutation({
+    args: { userId: v.string() },
+    handler: async (ctx, args) => {
+        const notifications = await ctx.db
+            .query("notifications")
+            .filter((q) => q.eq(q.field("userId"), args.userId))
+            .collect();
+
+        for (const notification of notifications) {
+            await ctx.db.delete(notification._id);
+        }
+
+        return notifications.length;
+    },
+});

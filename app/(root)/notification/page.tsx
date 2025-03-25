@@ -1,7 +1,7 @@
 "use client";
 import { useQuery, useMutation } from "convex/react";
 import { useState } from "react";
-import { Bell, User, Calendar, Headphones, Check, CheckCircle, RefreshCw } from "lucide-react";
+import { Bell, User, Calendar, Headphones, Check, CheckCircle, RefreshCw, Trash2, AlertTriangle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
@@ -14,6 +14,7 @@ const NotificationPage = () => {
   const { userId } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"all" | "unread">("all");
+  const [showConfirmClear, setShowConfirmClear] = useState(false);
 
   // Fetch notifications for the current user
   const notifications = useQuery(
@@ -24,6 +25,8 @@ const NotificationPage = () => {
   // Get the mutations for notification status
   const toggleNotificationReadStatus = useMutation(api.notifications.markNotificationAsReadUnread);
   const markAllNotificationsAsRead = useMutation(api.notifications.markAllNotificationsAsRead);
+  const deleteNotification = useMutation(api.notifications.deleteNotification);
+  const clearAllNotifications = useMutation(api.notifications.clearAllNotifications);
 
   // Filter notifications based on active tab
   const filteredNotifications = notifications?.filter((notification) => {
@@ -59,6 +62,30 @@ const NotificationPage = () => {
     }
   };
 
+  // Handle deleting a single notification
+  const handleDeleteNotification = (e: React.MouseEvent, notificationId: string) => {
+    e.stopPropagation(); // Prevent the notification click event
+    deleteNotification({ notificationId });
+  };
+
+  // Handle clearing all notifications
+  const handleClearAllNotifications = () => {
+    if (userId) {
+      clearAllNotifications({ userId });
+      setShowConfirmClear(false);
+    }
+  };
+
+  if (!userId) {
+    return (
+      <EmptyState
+        title="Authentication Required"
+        description="Please sign in to view your notifications"
+        icon={<Bell size={48} className="text-orange-1" />}
+      />
+    );
+  }
+
   if (!notifications) return <LoaderSpinner />;
 
   // Count unread notifications
@@ -69,6 +96,15 @@ const NotificationPage = () => {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-white-1">Notifications</h1>
         <div className="flex items-center gap-4">
+          {notifications.length > 0 && (
+            <button 
+              onClick={() => setShowConfirmClear(true)}
+              className="flex items-center gap-1 text-sm text-white-2 hover:text-red-500 transition-colors"
+            >
+              <Trash2 size={16} />
+              Clear all
+            </button>
+          )}
           {unreadCount > 0 && (
             <button 
               onClick={handleMarkAllAsRead}
@@ -103,6 +139,35 @@ const NotificationPage = () => {
         </div>
       </div>
 
+      {/* Confirmation modal for clearing all notifications */}
+      {showConfirmClear && (
+        <div className="fixed inset-0 bg-black-1/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-black-1 border border-gray-800 rounded-xl p-6 max-w-md w-full">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertTriangle size={24} className="text-red-500" />
+              <h2 className="text-xl font-bold text-white-1">Clear all notifications?</h2>
+            </div>
+            <p className="text-white-2 mb-6">
+              This will permanently delete all your notifications. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowConfirmClear(false)}
+                className="px-4 py-2 rounded-md text-white-1 hover:bg-gray-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleClearAllNotifications}
+                className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {filteredNotifications && filteredNotifications.length > 0 ? (
         <div className="space-y-4">
           {filteredNotifications.map((notification) => (
@@ -113,20 +178,30 @@ const NotificationPage = () => {
               } rounded-xl p-4 transition-all hover:bg-black-1/50 cursor-pointer relative`}
               onClick={() => handleNotificationClick(notification)}
             >
-              {/* Toggle read status button */}
-              <button
-                onClick={(e) => handleToggleReadStatus(e, notification._id)}
-                className="absolute top-2 right-2 p-1 rounded-full bg-black-1/50 hover:bg-orange-1/20 transition-colors"
-                title={notification.isRead ? "Mark as unread" : "Mark as read"}
-              >
-                {notification.isRead ? (
-                  <RefreshCw size={18} className="text-orange-1" />
-                ) : (
-                  <CheckCircle size={18} className="text-orange-1" />
-                )}
-              </button>
+              {/* Action buttons */}
+              <div className="absolute top-2 right-2 flex gap-1">
+                <button
+                  onClick={(e) => handleToggleReadStatus(e, notification._id)}
+                  className="p-1 rounded-full bg-black-1/50 hover:bg-orange-1/20 transition-colors"
+                  title={notification.isRead ? "Mark as unread" : "Mark as read"}
+                >
+                  {notification.isRead ? (
+                    <RefreshCw size={18} className="text-orange-1" />
+                  ) : (
+                    <CheckCircle size={18} className="text-orange-1" />
+                  )}
+                </button>
+                <button
+                  onClick={(e) => handleDeleteNotification(e, notification._id)}
+                  className="p-1 rounded-full bg-black-1/50 hover:bg-red-500/20 transition-colors"
+                  title="Delete notification"
+                >
+                  <Trash2 size={18} className="text-red-500" />
+                </button>
+              </div>
               
               <div className="flex items-start gap-4">
+                {/* Rest of the notification content remains the same */}
                 {/* Notification icon */}
                 <div className="bg-black-1/50 p-3 rounded-full">
                   {notification.type === "new_podcast" ? (
