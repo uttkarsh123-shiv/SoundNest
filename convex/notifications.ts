@@ -83,23 +83,28 @@ export const markNotificationAsReadUnread = mutation({
     },
 });
 
-// Mark all notifications as read for a user
-export const markAllNotificationsAsRead = mutation({
-    args: { userId: v.string() },
+// Mark all notifications as read or unread for a user
+export const markAllNotificationsAsReadUnread = mutation({
+    args: { 
+        userId: v.string(),
+        markAs: v.string() // "read" or "unread"
+    },
     handler: async (ctx, args) => {
+        // Get notifications based on current status (opposite of what we want to mark them as)
+        const targetIsRead = args.markAs === "read";
         const notifications = await ctx.db
             .query("notifications")
             .filter((q) =>
                 q.and(
                     q.eq(q.field("userId"), args.userId),
-                    q.eq(q.field("isRead"), false)
+                    q.eq(q.field("isRead"), !targetIsRead) // Get notifications with opposite status
                 )
             )
             .collect();
 
         for (const notification of notifications) {
             await ctx.db.patch(notification._id, {
-                isRead: true,
+                isRead: targetIsRead,
             });
         }
 

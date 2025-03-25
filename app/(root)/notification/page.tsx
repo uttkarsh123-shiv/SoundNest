@@ -24,7 +24,7 @@ const NotificationPage = () => {
 
   // Get the mutations for notification status
   const toggleNotificationReadStatus = useMutation(api.notifications.markNotificationAsReadUnread);
-  const markAllNotificationsAsRead = useMutation(api.notifications.markAllNotificationsAsRead);
+  const markAllNotificationsReadUnread = useMutation(api.notifications.markAllNotificationsAsReadUnread);
   const deleteNotification = useMutation(api.notifications.deleteNotification);
   const clearAllNotifications = useMutation(api.notifications.clearAllNotifications);
 
@@ -40,7 +40,7 @@ const NotificationPage = () => {
     if (!notification.isRead) {
       toggleNotificationReadStatus({ notificationId: notification._id });
     }
-    
+
     // Navigate based on notification type
     if (notification.type === "new_podcast" && notification.podcastId) {
       router.push(`/podcasts/${notification.podcastId}`);
@@ -58,7 +58,14 @@ const NotificationPage = () => {
   // Handle marking all notifications as read
   const handleMarkAllAsRead = () => {
     if (userId) {
-      markAllNotificationsAsRead({ userId });
+      markAllNotificationsReadUnread({ userId, markAs: "read" });
+    }
+  };
+
+  // Handle marking all notifications as unread
+  const handleMarkAllAsUnread = () => {
+    if (userId) {
+      markAllNotificationsReadUnread({ userId, markAs: "unread" });
     }
   };
 
@@ -76,20 +83,11 @@ const NotificationPage = () => {
     }
   };
 
-  if (!userId) {
-    return (
-      <EmptyState
-        title="Authentication Required"
-        description="Please sign in to view your notifications"
-        icon={<Bell size={48} className="text-orange-1" />}
-      />
-    );
-  }
-
   if (!notifications) return <LoaderSpinner />;
 
-  // Count unread notifications
+  // Count unread and read notifications
   const unreadCount = notifications.filter(n => !n.isRead).length;
+  const readCount = notifications.filter(n => n.isRead).length;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -97,7 +95,7 @@ const NotificationPage = () => {
         <h1 className="text-3xl font-bold text-white-1">Notifications</h1>
         <div className="flex items-center gap-4">
           {notifications.length > 0 && (
-            <button 
+            <button
               onClick={() => setShowConfirmClear(true)}
               className="flex items-center gap-1 text-sm text-white-2 hover:text-red-500 transition-colors"
             >
@@ -106,7 +104,7 @@ const NotificationPage = () => {
             </button>
           )}
           {unreadCount > 0 && (
-            <button 
+            <button
               onClick={handleMarkAllAsRead}
               className="flex items-center gap-1 text-sm text-white-2 hover:text-orange-1 transition-colors"
             >
@@ -114,23 +112,30 @@ const NotificationPage = () => {
               Mark all as read
             </button>
           )}
+          {readCount > 0 && (
+            <button
+              onClick={handleMarkAllAsUnread}
+              className="flex items-center gap-1 text-sm text-white-2 hover:text-orange-1 transition-colors"
+            >
+              <RefreshCw size={16} />
+              Mark all as unread
+            </button>
+          )}
           <div className="flex bg-black-1/50 rounded-full p-1">
             <button
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeTab === "all"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "all"
                   ? "bg-orange-1 text-white-1"
                   : "text-white-2 hover:text-white-1"
-              }`}
+                }`}
               onClick={() => setActiveTab("all")}
             >
               All
             </button>
             <button
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeTab === "unread"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "unread"
                   ? "bg-orange-1 text-white-1"
                   : "text-white-2 hover:text-white-1"
-              }`}
+                }`}
               onClick={() => setActiveTab("unread")}
             >
               Unread {unreadCount > 0 && `(${unreadCount})`}
@@ -173,9 +178,8 @@ const NotificationPage = () => {
           {filteredNotifications.map((notification) => (
             <div
               key={notification._id}
-              className={`bg-black-1/30 border ${
-                notification.isRead ? "border-gray-800" : "border-orange-1/50"
-              } rounded-xl p-4 transition-all hover:bg-black-1/50 cursor-pointer relative`}
+              className={`bg-black-1/30 border ${notification.isRead ? "border-gray-800" : "border-orange-1/50"
+                } rounded-xl p-4 transition-all hover:bg-black-1/50 cursor-pointer relative`}
               onClick={() => handleNotificationClick(notification)}
             >
               {/* Action buttons */}
@@ -199,7 +203,7 @@ const NotificationPage = () => {
                   <Trash2 size={18} className="text-red-500" />
                 </button>
               </div>
-              
+
               <div className="flex items-start gap-4">
                 {/* Rest of the notification content remains the same */}
                 {/* Notification icon */}
@@ -234,8 +238,8 @@ const NotificationPage = () => {
                     {notification.type === "new_podcast"
                       ? `uploaded a new podcast: ${notification.podcastTitle}`
                       : notification.type === "follow"
-                      ? "started following you"
-                      : "liked your podcast"}
+                        ? "started following you"
+                        : "liked your podcast"}
                   </p>
 
                   {/* Podcast image for new podcast notifications */}
