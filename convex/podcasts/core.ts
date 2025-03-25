@@ -36,7 +36,8 @@ export const createPodcast = mutation({
       throw new ConvexError("User not found");
     }
 
-    return await ctx.db.insert("podcasts", {
+    // Create the podcast
+    const podcastId = await ctx.db.insert("podcasts", {
       audioStorageId: args.audioStorageId,
       user: user[0]._id,
       podcastTitle: args.podcastTitle,
@@ -57,6 +58,26 @@ export const createPodcast = mutation({
       likeCount: args.likeCount || 0,
       language: args.language,
     });
+
+    // After creating the podcast, notify followers
+    const followers = await ctx.db
+      .query("follows")
+      .filter((q) => q.eq(q.field("following"), user[0].clerkId))
+      .collect();
+    
+    // Create notifications for each follower
+    for (const follower of followers) {
+      // Use the createNotification mutation from notifications.ts
+      await ctx.db.insert("notifications", {
+        userId: follower.follower,
+        creatorId: user[0].clerkId,
+        type: "new_podcast",
+        podcastId,
+        isRead: false,
+      });
+    }
+    
+    return podcastId;
   },
 });
 

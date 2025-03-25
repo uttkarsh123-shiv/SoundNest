@@ -71,5 +71,17 @@ export default defineSchema({
   })
     .index("by_follower", ["follower"])
     .index("by_following", ["following"])
-    .index("by_follower_and_following", ["follower", "following"])
+    .index("by_follower_and_following", ["follower", "following"]),
+  
+  notifications: defineTable({
+    userId: v.string(),
+    creatorId: v.string(),
+    type: v.string(),
+    podcastId: v.optional(v.id("podcasts")),
+    isRead: v.boolean(),
+    _creationTime: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_creator", ["creatorId"])
+    .index("by_podcast", ["podcastId"]),
 });

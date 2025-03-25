@@ -21,6 +21,7 @@ import type * as follows from "../follows.js";
 import type * as freepik from "../freepik.js";
 import type * as http from "../http.js";
 import type * as migrations_addLikeFields from "../migrations/addLikeFields.js";
+import type * as notifications from "../notifications.js";
 import type * as podcasts_comments from "../podcasts/comments.js";
 import type * as podcasts_core from "../podcasts/core.js";
 import type * as podcasts_filters from "../podcasts/filters.js";
@@ -45,6 +46,7 @@ declare const fullApi: ApiFromModules<{
   freepik: typeof freepik;
   http: typeof http;
   "migrations/addLikeFields": typeof migrations_addLikeFields;
+  notifications: typeof notifications;
   "podcasts/comments": typeof podcasts_comments;
   "podcasts/core": typeof podcasts_core;
   "podcasts/filters": typeof podcasts_filters;
