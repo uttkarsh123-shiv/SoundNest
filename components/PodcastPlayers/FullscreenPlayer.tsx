@@ -1,17 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { Slider } from "../ui/slider";
 import {
     Play,
     Pause,
     Gauge,
     SkipBack,
-
     SkipForward,
     X,
-    Volume2,
-    VolumeX
 } from "lucide-react";
 import { formatTime } from "@/lib/formatTime";
 import { Dialog, DialogContent } from "../ui/dialog";
@@ -20,7 +16,6 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import LikeShareControls from "./LikeShareLoopControls";
-import FullscreenSpeedControl from "./FullscreenSpeedControl";
 import AudioSettingsControl from "./AudioSettingsControl";
 
 interface FullscreenPlayerProps {
@@ -270,7 +265,7 @@ const FullscreenPlayer = ({
                                         {isPlaying ? (
                                             <Pause className="h-10 w-10" stroke="white" />
                                         ) : (
-                                            <Play className="h-10 w-10 ml-1" stroke="white" />
+                                            <Play className="h-10 w-10" stroke="white" />
                                         )}
                                     </button>
 
