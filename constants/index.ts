@@ -19,4 +19,14 @@ export const sidebarLinks = [
     route: "/profile",
     label: "My Profile",
   },
+  {
+    imgURL: "/icons/profile.svg",
+    route: "/notification",
+    label: "Notification",
+  },
+  {
+    imgURL: "/icons/users.svg",
+    route: "/connections",
+    label: "Connections",
+  },
 ];
