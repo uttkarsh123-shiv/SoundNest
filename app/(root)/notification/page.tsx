@@ -1,7 +1,7 @@
 "use client";
 import { useQuery, useMutation } from "convex/react";
 import { useState } from "react";
-import { Bell, User, Calendar, Headphones, Check } from "lucide-react";
+import { Bell, User, Calendar, Headphones, Check, CheckCircle, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
@@ -21,11 +21,9 @@ const NotificationPage = () => {
     userId ? { userId } : "skip"
   );
 
-  // Get the mutation to mark notifications as read
-  const markNotificationAsRead = useMutation(api.notifications.markNotificationAsRead);
+  // Get the mutations for notification status
+  const toggleNotificationReadStatus = useMutation(api.notifications.markNotificationAsReadUnread);
   const markAllNotificationsAsRead = useMutation(api.notifications.markAllNotificationsAsRead);
-
-  // Remove the useEffect that automatically marks notifications as read
 
   // Filter notifications based on active tab
   const filteredNotifications = notifications?.filter((notification) => {
@@ -37,7 +35,7 @@ const NotificationPage = () => {
   const handleNotificationClick = (notification: any) => {
     // Mark as read if not already read
     if (!notification.isRead) {
-      markNotificationAsRead({ notificationId: notification._id });
+      toggleNotificationReadStatus({ notificationId: notification._id });
     }
     
     // Navigate based on notification type
@@ -46,6 +44,12 @@ const NotificationPage = () => {
     } else if (notification.type === "follow") {
       router.push(`/profile/${notification.creatorId}`);
     }
+  };
+
+  // Handle toggling notification read status
+  const handleToggleReadStatus = (e: React.MouseEvent, notificationId: string) => {
+    e.stopPropagation(); // Prevent the notification click event
+    toggleNotificationReadStatus({ notificationId });
   };
 
   // Handle marking all notifications as read
@@ -116,9 +120,22 @@ const NotificationPage = () => {
               key={notification._id}
               className={`bg-black-1/30 border ${
                 notification.isRead ? "border-gray-800" : "border-orange-1/50"
-              } rounded-xl p-4 transition-all hover:bg-black-1/50 cursor-pointer`}
+              } rounded-xl p-4 transition-all hover:bg-black-1/50 cursor-pointer relative`}
               onClick={() => handleNotificationClick(notification)}
             >
+              {/* Toggle read status button */}
+              <button
+                onClick={(e) => handleToggleReadStatus(e, notification._id)}
+                className="absolute top-2 right-2 p-1 rounded-full bg-black-1/50 hover:bg-orange-1/20 transition-colors"
+                title={notification.isRead ? "Mark as unread" : "Mark as read"}
+              >
+                {notification.isRead ? (
+                  <RefreshCw size={18} className="text-orange-1" />
+                ) : (
+                  <CheckCircle size={18} className="text-orange-1" />
+                )}
+              </button>
+              
               <div className="flex items-start gap-4">
                 {/* Notification icon */}
                 <div className="bg-black-1/50 p-3 rounded-full">

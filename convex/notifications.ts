@@ -67,12 +67,18 @@ export const createNotification = mutation({
     },
 });
 
-// Mark a notification as read
-export const markNotificationAsRead = mutation({
+// Mark a notification as read or unread (toggle)
+export const markNotificationAsReadUnread = mutation({
     args: { notificationId: v.id("notifications") },
     handler: async (ctx, args) => {
+        const notification = await ctx.db.get(args.notificationId);
+        if (!notification) {
+            throw new Error("Notification not found");
+        }
+        
+        // Toggle the isRead status
         return await ctx.db.patch(args.notificationId, {
-            isRead: true,
+            isRead: !notification.isRead,
         });
     },
 });
