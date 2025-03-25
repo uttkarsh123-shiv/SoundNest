@@ -147,10 +147,14 @@ const CreatePodcast = () => {
 
             // Redirect to the podcast detail page
             router.push(`/podcasts/${newPodcast}`);
-            toast({
-                title: 'Podcast created successfully',
-                description: 'Your podcast has been published'
-            });
+            
+            // Add a delay before showing the success toast
+            setTimeout(() => {
+                toast({
+                    title: 'Podcast created successfully',
+                    description: 'Your podcast has been published'
+                });
+            }, 1500); // 1.5 second delay
 
         } catch (error) {
             console.error('Error creating podcast:', error);

@@ -10,20 +10,6 @@ import { api } from "@/convex/_generated/api";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import EmptyState from "@/components/EmptyState";
 
-interface Notification {
-  _id: string;
-  _creationTime: number;
-  userId: string;
-  creatorId: string;
-  creatorName: string;
-  creatorImageUrl?: string;
-  podcastId?: string;
-  podcastTitle?: string;
-  podcastImageUrl?: string;
-  type: "new_podcast" | "like" | "follow";
-  isRead: boolean;
-}
-
 const NotificationPage = () => {
   const { userId } = useAuth();
   const router = useRouter();

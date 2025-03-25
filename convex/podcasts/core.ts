@@ -105,8 +105,21 @@ export const deletePodcast = mutation({
       throw new ConvexError("Podcast not found");
     }
 
+    // Delete all notifications related to this podcast
+    const notifications = await ctx.db
+      .query("notifications")
+      .filter((q) => q.eq(q.field("podcastId"), args.podcastId))
+      .collect();
+    
+    for (const notification of notifications) {
+      await ctx.db.delete(notification._id);
+    }
+
+    // Delete storage files
     await ctx.storage.delete(args.imageStorageId);
     await ctx.storage.delete(args.audioStorageId);
+    
+    // Delete the podcast
     return await ctx.db.delete(args.podcastId);
   },
 });
