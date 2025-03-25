@@ -133,7 +133,19 @@ const Community = () => {
 
               {/* User info */}
               <div className="flex-1">
-                <h3 className="font-semibold text-white-1 text-lg">{user.name}</h3>
+                <h3 className="font-semibold text-white-1 text-lg flex items-center gap-1">
+                  {user.name}
+                  {activeTab === "topPodcasters" && user.isVerified && (
+                    <Image 
+                      src="/icons/verified.svg"
+                      alt="Verified"
+                      width={16}
+                      height={16}
+                      className="inline-block"
+                      title="Verified Podcaster"
+                    />
+                  )}
+                </h3>
                 {activeTab === "topPodcasters" ? (
                   <div className="flex flex-col">
                     <p className="text-white-3 text-sm">

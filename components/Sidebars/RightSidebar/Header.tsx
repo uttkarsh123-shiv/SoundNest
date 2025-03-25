@@ -6,16 +6,19 @@ import { usePathname } from 'next/navigation';
 const Header = ({ headerTitle, titleClassName }: { headerTitle?: string; titleClassName?: string }) => {
   const pathname = usePathname();
   const isDiscoverPage = pathname === '/discover';
+  const isCommunityPage = pathname === '/community';
 
-  // Determine the link URL based on the header title and current page
-  let linkUrl = "/discover?filter=trending";
+  let linkUrl = "/";
   
   if (headerTitle === "Fans Like You") {
-    linkUrl = "/discover?filter=popular";
+    linkUrl = "/discover";
+  } else if (headerTitle === "Top Podcasters" || headerTitle === "Popular Creators") {
+    linkUrl = "/community";
   }
   
-  // If we're already on the discover page, use # to prevent navigation
-  if (isDiscoverPage) {
+  // If we're already on the respective page, use # to prevent navigation
+  if ((isDiscoverPage && (headerTitle === "Trending" || headerTitle === "Fans Like You")) || 
+      (isCommunityPage && (headerTitle === "Top Podcasters" || headerTitle === "Popular Creators"))) {
     linkUrl = "#";
   }
 
@@ -29,7 +32,8 @@ const Header = ({ headerTitle, titleClassName }: { headerTitle?: string; titleCl
         href={linkUrl} 
         className="text-16 font-semibold text-orange-1 hover:text-orange-400 hover:scale-105 transition-all duration-300"
         onClick={(e) => {
-          if (isDiscoverPage) {
+          if ((isDiscoverPage && (headerTitle === "Trending" || headerTitle === "Fans Like You")) || 
+              (isCommunityPage && (headerTitle === "Top Podcasters" || headerTitle === "Popular Creators"))) {
             e.preventDefault();
           }
         }}
