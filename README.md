@@ -178,7 +178,7 @@ Build the project from source:
 
 2. Navigate to the project directory:
 ```sh
-❯ cd PodTales
+❯ cd SoundNest
 ```
 
 3. Install the required dependencies:
