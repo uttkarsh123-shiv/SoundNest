@@ -2,7 +2,7 @@
   <img src="https://github.com/iamvishalrathi/PodTales/blob/main/public/icons/logo.png" width="30%" alt="logo">
 </p>
 <p align="center">
-    <h1 align="center">PODTALES: AI SaaS Podcast Application</h1>
+    <h1 align="center">SoundNest: AI SaaS Podcast Application</h1>
 </p>
 <p align="center">
     <em><code><a href="https://podtales.vercel.app/" target="_blank" >❯ Live</a></code></em>
@@ -46,7 +46,7 @@
 
 ## 📍 Overview
 
-PodTales is a cutting-edge AI SaaS platform that empowers users to create, discover, and enjoy podcasts with ease. Leveraging advanced AI technologies, PodTales offers seamless text-to-audio podcast generation with multi-voice support, automatic thumbnail image creation, and a modern, responsive user interface. Users can explore trending and popular podcasts, search and filter content, and manage their own podcast library. The platform integrates robust authentication, real-time data handling, and a feature-rich podcast player for an immersive listening experience across all devices.
+SoundNest is a cutting-edge AI SaaS platform that empowers users to create, discover, and enjoy podcasts with ease. Leveraging advanced AI technologies, PodTales offers seamless text-to-audio podcast generation with multi-voice support, automatic thumbnail image creation, and a modern, responsive user interface. Users can explore trending and popular podcasts, search and filter content, and manage their own podcast library. The platform integrates robust authentication, real-time data handling, and a feature-rich podcast player for an immersive listening experience across all devices.
 
 ---
 
@@ -171,9 +171,9 @@ PodTales is a cutting-edge AI SaaS platform that empowers users to create, disco
 
 Build the project from source:
 
-1. Clone the PodTales repository:
+1. Clone the SoundNest repository:
 ```sh
-❯ git clone https://github.com/iamvishalrathi/PodTales
+❯ git clone https://github.com/uttkarsh123-shiv/SoundNest.git
 ```
 
 2. Navigate to the project directory:
