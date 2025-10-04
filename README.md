@@ -5,9 +5,6 @@
     <h1 align="center">SoundNest: AI SaaS Podcast Application</h1>
 </p>
 <p align="center">
-    <em><code><a href="https://podtales.vercel.app/" target="_blank" >❯ Live</a></code></em>
-</p>
-<p align="center">
 	<img src="https://img.shields.io/github/license/iamvishalrathi/PodTales?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
 	<img src="https://img.shields.io/github/last-commit/iamvishalrathi/PodTales?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
 	<img src="https://img.shields.io/github/languages/top/iamvishalrathi/PodTales?style=flat&color=0080ff" alt="repo-top-language">
