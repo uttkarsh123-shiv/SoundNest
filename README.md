@@ -95,13 +95,6 @@ PodTales is a cutting-edge AI SaaS platform that empowers users to create, disco
 
 ---
 
-## 🔍 Website Preview
-![image](https://github.com/iamvishalrathi/PodTales/blob/main/public/sns1.png)
-![image](https://github.com/iamvishalrathi/PodTales/blob/main/public/sns2.png)
-![image](https://github.com/iamvishalrathi/PodTales/blob/main/public/sns3.png)
-
----
-
 ## 📂 Repository Structure
 
 ```sh
@@ -200,9 +193,3 @@ To run the project, execute the following command:
 ```sh
 ❯ npm run dev
 ```
-
----
-
-## **📞 Contact**
-For any questions, suggestions, or feedback, feel free to reach out:
-- **Email:** [rajatrathi029@gmail.com](mailto:rajatrathi029@gmail.com)
