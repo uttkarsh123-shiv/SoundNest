@@ -42,7 +42,7 @@ const LeftSidebar = () => {
                             className="transition-transform duration-300 group-hover:scale-110"
                         />
                     </div>
-                    <h1 className="text-[26px] font-extrabold text-white max-lg:hidden bg-gradient-to-r from-orange-1 to-white-1 bg-clip-text text-transparent">PodTales</h1>
+                    <h1 className="text-[26px] font-extrabold text-white max-lg:hidden bg-gradient-to-r from-orange-1 to-white-1 bg-clip-text text-transparent">SoundNest</h1>
                 </Link>
 
                 <div className="flex flex-col space-y-1 w-full">

@@ -41,12 +41,12 @@ export default function RootLayout({
                 <p className="flex items-center gap-1">
                   Made with <Heart size={16} className="text-orange-1 fill-orange-1" /> by{" "}
                   <a
-                    href="https://github.com/iamvishalrathi"
+                    href="https://github.com/uttkarsh123-shiv"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-orange-1 hover:underline transition-all duration-200"
                   >
-                    Vishal Kumar
+                    Uttkarsh Singh
                   </a>
                 </p>
               </div>

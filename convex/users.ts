@@ -17,6 +17,33 @@ export const getUserById = query({
   },
 });
 
+
+// convex/users.ts
+// import { mutation, query } from "./_generated/server";
+// import { v } from "convex/values";
+
+// export const createUserIfNotExists = mutation(async (ctx) => {
+//   const identity = await ctx.auth.getUserIdentity();
+//   if (!identity) throw new Error("Not authenticated");
+
+//   const existing = await ctx.db
+//     .query("users")
+//     .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+//     .first();
+
+//   if (existing) return existing._id;
+
+//   return await ctx.db.insert("users", {
+//     clerkId: identity.subject,
+//     name: identity.name ?? "",
+//     email: identity.email ?? "",
+//     imageUrl: identity.pictureUrl ?? "",
+//   });
+// });
+
+
+
+
 // Enhanced query to get top users by multiple parameters
 export const getTopUsers = query({
   args: {},
@@ -99,6 +126,12 @@ export const createUser = internalMutation({
     name: v.string(),
   },
   handler: async (ctx, args) => {
+     const existing = await ctx.db
+      .query("users")
+      .filter(q => q.eq(q.field("clerkId"), args.clerkId))
+      .collect();
+    if (existing.length > 0) return;
+
     await ctx.db.insert("users", {
       clerkId: args.clerkId,
       email: args.email,
@@ -157,6 +190,47 @@ export const deleteUser = internalMutation({
     }
 
     await ctx.db.delete(user._id);
+  },
+});
+
+// Ensure a Convex user exists for the current authenticated Clerk identity
+export const ensureUser = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return { ensured: false };
+
+    const existing = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .first();
+
+    if (!existing) {
+      await ctx.db.insert("users", {
+        clerkId: identity.subject,
+        email: identity.email ?? "",
+        imageUrl: identity.pictureUrl ?? "",
+        name: identity.name ?? "",
+      });
+      return { ensured: true, created: true };
+    }
+
+    // Optionally keep profile fields up-to-date
+    const nextEmail = identity.email ?? existing.email;
+    const nextImage = identity.pictureUrl ?? existing.imageUrl;
+    const nextName = identity.name ?? existing.name;
+    if (
+      nextEmail !== existing.email ||
+      nextImage !== existing.imageUrl ||
+      nextName !== existing.name
+    ) {
+      await ctx.db.patch(existing._id, {
+        email: nextEmail,
+        imageUrl: nextImage,
+        name: nextName,
+      });
+    }
+    return { ensured: true, created: false };
   },
 });
 
