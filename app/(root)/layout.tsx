@@ -29,7 +29,7 @@ export default function RootLayout({
                   className="transition-transform duration-300 group-hover:scale-110"
                 />
                 <h1 className="text-[20px] font-extrabold bg-gradient-to-r from-orange-1 to-white-1 bg-clip-text text-transparent">
-                  PodTales
+                  SoundNest
                 </h1>
               </Link>
               <MobileNav />

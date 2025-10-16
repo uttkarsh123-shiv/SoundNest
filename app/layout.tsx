@@ -5,7 +5,7 @@ import AudioProvider from "@/providers/AudioProvider";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: 'PodTales',
+  title: 'SoundNest',
   description: 'Create and share AI-powered podcasts',
   icons: {
     icon: '/icons/logo.png',
