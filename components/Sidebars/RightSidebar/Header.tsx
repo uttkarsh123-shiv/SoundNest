@@ -19,7 +19,7 @@ const Header = ({ headerTitle, titleClassName }: { headerTitle?: string; titleCl
       {/* Empty div is passed as we want to occupy space if header title doesn't exist */}
       <Link 
         href={linkUrl} 
-        className="text-16 font-semibold text-orange-1 hover:text-orange-400 hover:scale-105 transition-all duration-300"
+        className="text-16 font-semibold text-blue-1 hover:text-blue-2 hover:scale-105 transition-all duration-300"
       >
         See all
       </Link>

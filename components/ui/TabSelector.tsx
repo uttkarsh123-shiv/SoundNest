@@ -24,7 +24,7 @@ const TabSelector = ({ activeTab, setActiveTab, tabs }: TabSelectorProps) => (
           tab.icon ? "flex items-center gap-2" : ""
         } ${
           activeTab === tab.id
-            ? "bg-orange-1 text-white-1"
+            ? "bg-blue-1 text-white-1"
             : "text-white-2 hover:text-white-1"
         }`}
         onClick={() => setActiveTab(tab.id)}

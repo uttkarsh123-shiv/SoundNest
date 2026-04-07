@@ -158,7 +158,7 @@ const PodcastDetail = ({
           {/* Content */}
           <div className="flex w-full flex-col gap-4 sm:gap-5 max-md:items-center md:gap-6">
             <article className="flex flex-col gap-3 max-md:items-center">
-              <h1 className="text-2xl sm:text-32 font-extrabold tracking-[-0.32px] text-white-1 transition-colors duration-200 hover:text-orange-1 text-center md:text-left">
+              <h1 className="text-2xl sm:text-32 font-extrabold tracking-[-0.32px] text-white-1 transition-colors duration-200 hover:text-blue-1 text-center md:text-left">
                 {podcastTitle}
               </h1>
               <figure
@@ -172,7 +172,7 @@ const PodcastDetail = ({
                   width={30}
                   height={30}
                   alt="Caster icon"
-                  className="size-[30px] rounded-full object-cover ring-2 ring-orange-1/30"
+                  className="size-[30px] rounded-full object-cover ring-2 ring-blue-1/30"
                 />
                 <h2 className="text-16 font-medium text-white-3">{author}</h2>
               </figure>
@@ -183,8 +183,8 @@ const PodcastDetail = ({
                 variant="ghost"
                 size="icon"
                 className={`size-10 sm:size-12 rounded-full transition-all duration-200 hover:scale-105 flex items-center justify-center ${isPlaying
-                  ? "bg-black text-orange-1 hover:bg-black/90"
-                  : "bg-orange-1 text-white-1 hover:bg-orange-1/90"
+                  ? "bg-black text-blue-1 hover:bg-black/90"
+                  : "bg-blue-1 text-white-1 hover:bg-blue-1/90"
                   }`}
                 onClick={handlePlay}
               >

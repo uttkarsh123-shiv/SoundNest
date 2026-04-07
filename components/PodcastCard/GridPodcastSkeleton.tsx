@@ -24,7 +24,7 @@ const GridPodcastSkeleton = ({ usage = 'default' }: GridPodcastSkeletonProps) =>
                     {/* Category and language badges skeleton - only for discover */}
                     {isDiscover && (
                         <div className="flex flex-wrap gap-2 mt-2">
-                            <div className="h-5 sm:h-6 bg-orange-1/10 rounded-full animate-pulse w-16 sm:w-20" />
+                            <div className="h-5 sm:h-6 bg-blue-1/10 rounded-full animate-pulse w-16 sm:w-20" />
                             <div className="h-5 sm:h-6 bg-white-1/10 rounded-full animate-pulse w-12 sm:w-16" />
                         </div>
                     )}

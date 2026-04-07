@@ -3,23 +3,23 @@ export const PreviewLoading = () => (
         {/* Enhanced gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-black-1/40 to-black-1/20">
             <div className="h-full w-full animate-[shimmer_2s_infinite] bg-[length:200%_100%]
-        bg-gradient-to-r from-transparent via-orange-1/10 to-transparent" />
+        bg-gradient-to-r from-transparent via-blue-1/10 to-transparent" />
         </div>
 
         {/* Premium loading animation */}
         <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative w-32 h-32">
                 {/* Outer rotating ring */}
-                <div className="absolute inset-0 rounded-full border-2 border-orange-1/20 animate-[spin_3s_linear_infinite]" />
+                <div className="absolute inset-0 rounded-full border-2 border-blue-1/20 animate-[spin_3s_linear_infinite]" />
 
                 {/* Inner pulsing circle */}
-                <div className="absolute inset-4 rounded-full bg-gradient-to-br from-orange-1/20 to-orange-400/20 
+                <div className="absolute inset-4 rounded-full bg-gradient-to-br from-blue-1/20 to-blue-2/20 
           animate-pulse backdrop-blur-xl" />
 
                 {/* Center icon */}
                 <div className="absolute inset-0 flex items-center justify-center">
                     <svg
-                        className="w-12 h-12 text-orange-1/30"
+                        className="w-12 h-12 text-blue-1/30"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

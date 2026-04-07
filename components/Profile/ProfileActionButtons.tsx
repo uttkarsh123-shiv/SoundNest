@@ -36,20 +36,20 @@ const ProfileActionButtons = ({
                     onClick={toggleFollow}
                     className={`${isFollowing
                         ? 'bg-white-1/5 hover:bg-white-1/10 text-white-1 border border-white-1/10'
-                        : 'bg-gradient-to-r from-orange-1 to-orange-600 hover:opacity-90 text-black font-medium'} 
+                        : 'bg-gradient-to-r from-blue-1 to-blue-2 hover:opacity-90 text-black font-medium'} 
             flex items-center gap-2 px-5 py-2.5 rounded-full shadow-md transition-all duration-200`}
                 >
                     {isFollowing ? (
                         <>
                             <span className="relative flex h-2 w-2 mr-1">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-1 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-1"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-1 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-1"></span>
                             </span>
                             Following
                         </>
                     ) : (
                         <>
-                            <Heart size={16} className={isFollowing ? "text-orange-1" : ""} />
+                            <Heart size={16} className={isFollowing ? "text-blue-1" : ""} />
                             Follow
                         </>
                     )}
@@ -61,7 +61,7 @@ const ProfileActionButtons = ({
                     onClick={playRandomPodcast}
                     className="hidden sm:flex bg-black-1/50 hover:bg-black-1/70 text-white-1 items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
                 >
-                    <Play size={16} className="text-orange-1" />
+                    <Play size={16} className="text-blue-1" />
                     <span>Play Random</span>
                 </Button>
             )}
@@ -80,7 +80,7 @@ const ProfileActionButtons = ({
                 onClick={shareProfile}
                 className="bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gray-800"
             >
-                <Share2 size={16} className="text-orange-1" />
+                <Share2 size={16} className="text-blue-1" />
                 <span>Share Profile</span>
             </Button>
         </div>

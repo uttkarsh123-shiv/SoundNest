@@ -15,7 +15,7 @@ const PodcastSection = ({
     return (
         <section className="flex flex-col gap-5">
             <div className="flex items-center gap-4 mb-6">
-                <div className="bg-orange-1/10 p-3 rounded-xl">
+                <div className="bg-blue-1/10 p-3 rounded-xl">
                     {icon}
                 </div>
                 <h1 className="text-2xl font-bold text-white-1">{title}</h1>

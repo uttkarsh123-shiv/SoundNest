@@ -20,7 +20,7 @@ const RequestAdminAccess = ({ userId }: RequestAdminAccessProps) => {
     if (existingRequest === undefined) {
         return (
             <div className="flex items-center justify-center min-h-[70vh]">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-orange-1" />
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-1" />
             </div>
         );
     }
@@ -28,9 +28,9 @@ const RequestAdminAccess = ({ userId }: RequestAdminAccessProps) => {
     // If there's an existing pending request, show status
     if (existingRequest) {
         return (
-            <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-6 text-center">
+            <div className="bg-blue-1/10 border border-blue-1/20 rounded-xl p-6 text-center">
                 <div className="flex justify-center mb-4">
-                    <Shield className="w-12 h-12 text-orange-500" />
+                    <Shield className="w-12 h-12 text-blue-1" />
                 </div>
                 <h2 className="text-xl font-bold text-white-1 mb-2">Request Pending</h2>
                 <p className="text-white-3">
@@ -73,8 +73,8 @@ const RequestAdminAccess = ({ userId }: RequestAdminAccessProps) => {
         <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
             <div className="bg-black-1/30 border border-gray-800 rounded-xl p-8 max-w-md w-full">
                 <div className="flex justify-center mb-6">
-                    <div className="bg-orange-1/20 p-4 rounded-full">
-                        <Shield className="w-8 h-8 text-orange-1" />
+                    <div className="bg-blue-1/20 p-4 rounded-full">
+                        <Shield className="w-8 h-8 text-blue-1" />
                     </div>
                 </div>
                 <h1 className="text-2xl font-bold text-white-1 mb-2">Request Admin Access</h1>
@@ -88,7 +88,7 @@ const RequestAdminAccess = ({ userId }: RequestAdminAccessProps) => {
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
                             placeholder="Why would you like to become an admin?"
-                            className="w-full bg-black-2/50 border border-gray-800 rounded-lg p-3 text-white-1 placeholder:text-white-3 focus:outline-none focus:border-orange-1 transition-colors min-h-[120px]"
+                            className="w-full bg-black-2/50 border border-gray-800 rounded-lg p-3 text-white-1 placeholder:text-white-3 focus:outline-none focus:border-blue-1 transition-colors min-h-[120px]"
                             disabled={isSubmitting}
                             onKeyDown={(e) => {
                                 // Prevent default behavior for space key to ensure it's captured
@@ -101,7 +101,7 @@ const RequestAdminAccess = ({ userId }: RequestAdminAccessProps) => {
                     <button
                         type="submit"
                         disabled={isSubmitting || !reason.trim()}
-                        className="w-full bg-orange-1 hover:bg-orange-600 disabled:opacity-50 disabled:hover:bg-orange-1 text-white font-medium rounded-lg py-3 px-4 transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-blue-1 hover:bg-blue-2 disabled:opacity-50 disabled:hover:bg-blue-1 text-white font-medium rounded-lg py-3 px-4 transition-colors flex items-center justify-center gap-2"
                     >
                         {isSubmitting ? (
                             "Submitting..."

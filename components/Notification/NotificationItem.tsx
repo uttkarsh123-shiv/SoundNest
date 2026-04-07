@@ -19,7 +19,7 @@ const NotificationItem = ({
 }: NotificationItemProps) => (
   <div
     className={`bg-black-1/30 border ${
-      notification.isRead ? "border-gray-800" : "border-orange-1/50"
+      notification.isRead ? "border-gray-800" : "border-blue-1/50"
     } rounded-xl p-3 sm:p-4 transition-all hover:bg-black-1/50 cursor-pointer relative`}
     onClick={onNotificationClick}
   >

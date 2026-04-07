@@ -17,8 +17,8 @@ const FeaturedPodcast = ({ podcast, setAudio }: FeaturedPodcastProps) => {
     return (
         <section className="my-10">
             <div className="flex items-center gap-3 mb-4">
-                <div className="bg-orange-1/10 p-2 rounded-lg">
-                    <Award size={20} className="text-orange-1" />
+                <div className="bg-blue-1/10 p-2 rounded-lg">
+                    <Award size={20} className="text-blue-1" />
                 </div>
                 <h2 className="text-xl font-bold text-white-1">Featured Podcast</h2>
             </div>
@@ -34,7 +34,7 @@ const FeaturedPodcast = ({ podcast, setAudio }: FeaturedPodcastProps) => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <Button
-                            className="absolute bottom-3 left-3 bg-orange-1 hover:bg-orange-1/90 rounded-full size-12 flex items-center justify-center p-0"
+                            className="absolute bottom-3 left-3 bg-blue-1 hover:bg-blue-1/90 rounded-full size-12 flex items-center justify-center p-0"
                             onClick={() => {
                                 setAudio({
                                     title: podcast.podcastTitle || "",
@@ -57,26 +57,26 @@ const FeaturedPodcast = ({ podcast, setAudio }: FeaturedPodcastProps) => {
 
                         <div className="hidden sm:flex flex-wrap gap-4 text-sm text-white-2">
                             <div className="flex items-center gap-1">
-                                <Headphones size={16} className="text-orange-1" />
+                                <Headphones size={16} className="text-blue-1" />
                                 <span>{podcast.views?.toLocaleString() || 0} views</span>
                             </div>
                             <div className="flex items-center gap-1">
-                                <Heart size={16} className="text-orange-1" />
+                                <Heart size={16} className="text-blue-1" />
                                 <span>{podcast.likeCount?.toLocaleString() || 0} likes</span>
                             </div>
                             <div className="flex items-center gap-1">
-                                <Star size={16} className="text-orange-1" />
+                                <Star size={16} className="text-blue-1" />
                                 <span>{podcast.averageRating ? Number(podcast.averageRating).toFixed(1) : "0.0"} rating</span>
                             </div>
                             <div className="flex items-center gap-1">
-                                <Clock size={16} className="text-orange-1" />
+                                <Clock size={16} className="text-blue-1" />
                                 <span>{new Date(podcast._creationTime).toLocaleDateString()}</span>
                             </div>
                         </div>
 
                         <div className="mt-6 flex gap-3">
                             <Button
-                                className="bg-orange-1 hover:bg-orange-1/90 text-white-1"
+                                className="bg-blue-1 hover:bg-blue-1/90 text-white-1"
                                 onClick={() => {
                                     setAudio({
                                         title: podcast.podcastTitle || "",

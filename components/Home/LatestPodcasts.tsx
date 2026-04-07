@@ -13,8 +13,8 @@ const LatestPodcasts = ({ latestPodcasts }: LatestPodcastsProps) => {
         <section className="flex flex-col gap-5 mt-12">
             <header className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="bg-orange-1/10 p-3 rounded-xl">
-                        <Clock size={28} className="text-orange-1" />
+                    <div className="bg-blue-1/10 p-3 rounded-xl">
+                        <Clock size={28} className="text-blue-1" />
                     </div>
                     <h1 className="text-2xl font-bold text-white-1">
                         Latest<span className="hidden md:inline"> Podcasts</span>
@@ -22,10 +22,10 @@ const LatestPodcasts = ({ latestPodcasts }: LatestPodcastsProps) => {
                 </div>
                 <Link
                     href="/discover?filter=latest"
-                    className="flex items-center gap-2 text-16 font-semibold text-orange-1 hover:text-orange-2 transition group"
+                    className="flex items-center gap-2 text-16 font-semibold text-blue-1 hover:text-blue-2 transition group"
                 >
                     See all
-                    <ArrowRight size={20} className="text-orange-1 transition-transform duration-300 group-hover:translate-x-1" />
+                    <ArrowRight size={20} className="text-blue-1 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
             </header>
             <div className="flex flex-col gap-6">

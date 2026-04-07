@@ -54,7 +54,7 @@ const MobileNav = () => {
             <div className="overflow-hidden">
               <h1 
                 className={cn(
-                  "text-[24px] sm:text-[28px] font-extrabold ml-1 bg-gradient-to-r from-orange-1 to-white-1 bg-clip-text text-transparent transition-all duration-500",
+                  "text-[24px] sm:text-[28px] font-extrabold ml-1 bg-gradient-to-r from-blue-1 to-white-1 bg-clip-text text-transparent transition-all duration-500",
                   showTitle ? "max-w-[200px] opacity-100" : "max-w-0 opacity-0"
                 )}
               >
@@ -80,13 +80,13 @@ const MobileNav = () => {
                 <Link href={isProfileRoute ? userProfilePath : route} className={cn(
                   "flex gap-3 items-center py-3 px-3 rounded-lg justify-start transition-all duration-200",
                   isActive 
-                    ? "bg-nav-focus border-r-4 border-orange-1 text-orange-1" 
+                    ? "bg-nav-focus border-r-4 border-blue-1 text-blue-1" 
                     : "hover:bg-black-2/40"
                 )}>
                   <div className="relative">
-                    <Icon size={22} className={isActive ? "text-orange-1" : "text-white-2"} />
+                    <Icon size={22} className={isActive ? "text-blue-1" : "text-white-2"} />
                     {isNotificationRoute && hasUnreadNotifications && (
-                      <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-orange-1"></span>
+                      <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-blue-1"></span>
                     )}
                   </div>
                   <p className="text-[15px] sm:text-base">{label}</p>
@@ -101,7 +101,7 @@ const MobileNav = () => {
               <SheetClose asChild>
                 <Button
                   asChild
-                  className="text-[15px] w-full bg-orange-1 hover:bg-orange-1/90 font-bold rounded-lg py-4 transition-all duration-200 shadow-lg hover:shadow-orange-1/20"
+                  className="text-[15px] w-full bg-blue-1 hover:bg-blue-1/90 font-bold rounded-lg py-4 transition-all duration-200 shadow-lg hover:shadow-blue-1/20"
                 >
                   <Link href="/sign-in">Sign in</Link>
                 </Button>
@@ -110,7 +110,7 @@ const MobileNav = () => {
             <SignedIn>
               <SheetClose asChild>
                 <Button
-                  className="text-[15px] w-full bg-orange-1 hover:bg-orange-1/90 font-bold rounded-lg py-4 transition-all duration-200 shadow-lg hover:shadow-orange-1/20"
+                  className="text-[15px] w-full bg-blue-1 hover:bg-blue-1/90 font-bold rounded-lg py-4 transition-all duration-200 shadow-lg hover:shadow-blue-1/20"
                   onClick={() => signOut(() => router.push('/'))}
                 >
                   Log Out

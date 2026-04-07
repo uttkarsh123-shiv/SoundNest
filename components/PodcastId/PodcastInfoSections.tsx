@@ -52,19 +52,17 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
       // Create translation prompt with explicit instruction for thumbnail translation
       const translationPrompt = `
         Translate the following content from ${podcast.language || 'English'} to ${languageLabel}. 
-        Return the response in JSON format with the following structure:
-        {
-          "description": "translated description",
-          "transcription": "translated transcription",
-          "thumbnail": "translated thumbnail details"
-        }
+        
+        IMPORTANT: Return ONLY a valid JSON object with no markdown formatting, no code blocks, no additional text.
+        The JSON must have exactly this structure:
+        {"description": "translated description", "transcription": "translated transcription", "thumbnail": "translated thumbnail details"}
         
         Content to translate:
         Description: ${podcast.podcastDescription}
-        Transcription: ${podcast.voicePrompt || ''}
-        Thumbnail: ${podcast.imagePrompt || ''}
+        Transcription: ${podcast.voicePrompt || 'No transcription available'}
+        Thumbnail: ${podcast.imagePrompt || 'No thumbnail prompt available'}
 
-        Important: Make sure to translate the thumbnail prompt even if it's in English, regardless of the source language of other content.
+        Return only the JSON object, nothing else.
       `;
 
       setTranslationProgress(50); // Update progress
@@ -75,13 +73,26 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
       setTranslationProgress(90); // Update progress
 
       try {
-        // Parse the JSON response
-        const sanitizedText = text.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
-        const translatedContent = JSON.parse(sanitizedText);
+        // Clean the response text - remove markdown code blocks and control characters
+        let cleanedText = text.trim();
+        
+        // Remove markdown code blocks if present
+        cleanedText = cleanedText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+        
+        // Remove control characters
+        cleanedText = cleanedText.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+        
+        // Find JSON object in the text
+        const jsonMatch = cleanedText.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+          throw new Error('No JSON object found in response');
+        }
+        
+        const translatedContent = JSON.parse(jsonMatch[0]);
 
-        setTranslatedDescription(translatedContent.description);
-        setTranslatedTranscription(translatedContent.transcription);
-        setTranslatedThumbnail(translatedContent.thumbnail);
+        setTranslatedDescription(translatedContent.description || '');
+        setTranslatedTranscription(translatedContent.transcription || '');
+        setTranslatedThumbnail(translatedContent.thumbnail || '');
         setTranslationProgress(100); // Complete progress
 
         toast({
@@ -90,9 +101,10 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
         });
       } catch (parseError) {
         console.error('Error parsing translation response:', parseError);
+        console.error('Raw response:', text);
         toast({
           title: 'Translation error',
-          description: 'Could not parse the translation response',
+          description: 'Could not parse the translation response. Please try again.',
           variant: 'destructive'
         });
       }
@@ -126,8 +138,8 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
       {/* Enhanced Translation Controls */}
       <div className="mb-6 bg-gradient-to-r from-black-1/80 to-black-1/40 p-3 sm:p-5 rounded-xl border border-white-1/10 shadow-lg">
         <div className="flex items-center gap-2 mb-3 sm:mb-4">
-          <div className="bg-orange-1/20 p-1.5 sm:p-2 rounded-full">
-            <Globe size={18} className="text-orange-1" />
+          <div className="bg-blue-1/20 p-1.5 sm:p-2 rounded-full">
+            <Globe size={18} className="text-blue-1" />
           </div>
           <h3 className="text-16 sm:text-18 font-semibold text-white-1">
             <span className="hidden sm:inline">Translation</span> Tools
@@ -148,18 +160,18 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
                 disabled={isTranslating}
               >
                 <SelectTrigger
-                  className="w-full bg-black-1/70 text-white-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-white-1/10 focus:outline-none focus:ring-2 focus:ring-orange-1 h-10 sm:h-12 text-sm sm:text-base"
+                  className="w-full bg-black-1/70 text-white-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-white-1/10 focus:outline-none focus:ring-2 focus:ring-blue-1 h-10 sm:h-12 text-sm sm:text-base"
                 >
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
-                <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl max-h-[40vh]">
+                <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl max-h-[40vh]">
                   {languageOptions
                     .filter(option => option.value !== podcast.language)
                     .map((option) => (
                     <SelectItem
                       key={option.value}
                       value={option.value}
-                      className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
+                      className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
                     >
                       {option.label}
                     </SelectItem>
@@ -171,7 +183,7 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
             <div className="sm:col-span-1">
               <Button
                 onClick={() => translateContent(selectedLanguage)}
-                className="w-full bg-orange-1 hover:bg-orange-400 text-black font-medium py-2 sm:py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base"
+                className="w-full bg-blue-1 hover:bg-blue-2 text-black font-medium py-2 sm:py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base"
                 disabled={isTranslating || !selectedLanguage}
               >
                 {isTranslating ? (
@@ -270,7 +282,7 @@ const PodcastInfoSections = ({ podcast }: PodcastInfoSectionsProps) => {
               {translatedThumbnail || podcast?.imagePrompt}
             </p>
             {podcast?.imagePrompt && !translatedThumbnail && selectedLanguage && (
-              <div className="mt-2 text-sm text-orange-1">
+              <div className="mt-2 text-sm text-blue-1">
                 Click "Translate" to see this content in {languageOptions.find(l => l.value === selectedLanguage)?.label}
               </div>
             )}

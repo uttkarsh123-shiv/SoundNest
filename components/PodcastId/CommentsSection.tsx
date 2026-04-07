@@ -77,14 +77,14 @@ const CommentsSection = ({
                                     }
                                 }}
                                 placeholder="Share your thoughts..."
-                                className="w-full bg-black-1/70 border border-gray-800 rounded-lg p-2 sm:p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-orange-1 min-h-[80px] sm:min-h-[100px] text-sm sm:text-base"
+                                className="w-full bg-black-1/70 border border-gray-800 rounded-lg p-2 sm:p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-blue-1 min-h-[80px] sm:min-h-[100px] text-sm sm:text-base"
                             />
                             <div className="flex justify-end mt-2 sm:mt-3">
                                 <button
                                     onClick={handleCommentSubmit}
                                     disabled={!comment.trim()}
                                     className={`px-3 sm:px-5 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg font-medium transition-all ${comment.trim()
-                                        ? "bg-orange-1 text-black hover:bg-orange-2"
+                                        ? "bg-blue-1 text-black hover:bg-blue-2"
                                         : "bg-white-1/10 text-white-3 cursor-not-allowed"
                                         }`}
                                 >

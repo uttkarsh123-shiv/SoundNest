@@ -27,7 +27,7 @@ import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
 import GenerateAIContent from "@/components/CreatePodcast/GenerateAIContent";
-import { chatSession } from "@/service/Gemini";
+import { chatSession } from "@/service/OpenAI";
 import { Gemini_Prompt } from "@/constants/Gemini_Prompt";
 import { podcastTypes } from "@/constants/PodcastFields";
 import { formSchema } from "@/constants/FormSchema";
@@ -278,7 +278,7 @@ const CreatePodcast = () => {
                                         render={({ field }) => (
                                             <FormFieldWrapper label="Podcast Title">
                                                 <Input
-                                                    className="input-class focus-visible:ring-offset-orange-1 h-12"
+                                                    className="input-class focus-visible:ring-offset-blue-1 h-12"
                                                     placeholder="Enter your podcast title..."
                                                     suppressHydrationWarning
                                                     {...field}
@@ -303,16 +303,16 @@ const CreatePodcast = () => {
                                                     defaultValue={field.value}
                                                 >
                                                     <SelectTrigger
-                                                        className="input-class focus-visible:ring-offset-orange-1 h-12"
+                                                        className="input-class focus-visible:ring-offset-blue-1 h-12"
                                                     >
                                                         <SelectValue placeholder="Select a podcast type" />
                                                     </SelectTrigger>
-                                                    <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl">
+                                                    <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl">
                                                         {podcastTypes.map((option) => (
                                                             <SelectItem
                                                                 key={option.value}
                                                                 value={option.value}
-                                                                className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
+                                                                className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
                                                             >
                                                                 {option.label}
                                                             </SelectItem>
@@ -414,10 +414,10 @@ const CreatePodcast = () => {
                                     disabled={isSubmitting}
                                     type="submit"
                                     className={cn(
-                                        "bg-gradient-to-r from-orange-1 to-orange-400",
+                                        "bg-gradient-to-r from-blue-1 to-blue-2",
                                         "text-white font-semibold gap-3 py-6 text-lg",
                                         "transition-all duration-300 hover:scale-[1.02]",
-                                        "shadow-lg hover:shadow-orange-1/20",
+                                        "shadow-lg hover:shadow-blue-1/20",
                                         "rounded-xl",
                                         "disabled:opacity-50 disabled:hover:scale-100",
                                         "max-w-[600px]",

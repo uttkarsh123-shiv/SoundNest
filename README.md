@@ -1,114 +1,114 @@
-<p align="center">
-  <img src="https://github.com/iamvishalrathi/PodTales/blob/main/public/icons/logo.png" width="30%" alt="logo">
-</p>
-<p align="center">
-    <h1 align="center">SoundNest: AI SaaS Podcast Application</h1>
-</p>
-<p align="center">
-	<img src="https://img.shields.io/github/license/iamvishalrathi/PodTales?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/iamvishalrathi/PodTales?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/iamvishalrathi/PodTales?style=flat&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/iamvishalrathi/PodTales?style=flat&color=0080ff" alt="repo-language-count">
-</p>
-<p align="center">
-		<em>Built with the tools and technologies:</em>
-</p>
-<p align="center">
-    <img src="https://img.shields.io/badge/-Next.js-black?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
-    <img src="https://img.shields.io/badge/-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/-Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/-ShadCN_UI-18181B?style=for-the-badge&logo=shadcnui&logoColor=white" alt="ShadCN UI" />
-    <img src="https://img.shields.io/badge/-Convex-18181B?style=for-the-badge" alt="Convex" />
-    <img src="https://img.shields.io/badge/-Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini" />
-    <img src="https://img.shields.io/badge/-ElevenLabs-FF6F00?style=for-the-badge&logo=elevenlabs&logoColor=white" alt="ElevenLabs" />
-    <img src="https://img.shields.io/badge/-Freepik-0F9AFE?style=for-the-badge&logo=freepik&logoColor=white" alt="Freepik" />
-    <img src="https://img.shields.io/badge/-Clerk-3A3A3A?style=for-the-badge&logo=clerk&logoColor=white" alt="Clerk" />
-</p>
+# SoundNest - AI Podcast Platform
 
-<br>
+AI-powered podcast platform with text-to-audio generation, social features, and comprehensive content management.
 
-## 🔗 Table of Contents
+## Features
 
-- [📍 Overview](#-overview)
-- [👾 Features](#-features)
-- [⚙ Tech Stack](#-tech-stack)
-- [🔍 Website Preview](#-website-preview)
-- [📂 Repository Structure](#-repository-structure)
-- [🚀 Getting Started](#-getting-started)
-    - [📦 Installation](#-installation)
-    - [🤖 Usage](#-usage)
-- [📞 Contact](#-contact)
+### Core Functionality
+- **AI Podcast Generation**: Text-to-speech using ElevenLabs with 5 voice types
+- **AI Content Creation**: Script generation via Gemini AI
+- **AI Thumbnails**: Automated thumbnail generation using Freepik
+- **Audio Player**: Full-featured player with controls, progress tracking, and sticky playback
+- **Real-time Search**: Multi-field search across titles, authors, and descriptions
 
----
+### Social Features
+- **User Profiles**: Customizable profiles with bio, social links, and verification status
+- **Follow System**: Follow/unfollow creators with follower/following counts
+- **Ratings & Reviews**: 5-star rating system with average calculations
+- **Comments**: Real-time commenting on podcasts
+- **Likes**: Like/unlike functionality with counts
+- **Notifications**: Real-time notifications for interactions
 
-## 📍 Overview
+### Content Management
+- **Categories & Languages**: Podcast categorization and language filtering
+- **Advanced Filters**: Filter by type, language, rating, and popularity
+- **View Tracking**: Podcast view counts and analytics
+- **Content Moderation**: Report system with admin review workflow
 
-SoundNest is a cutting-edge AI SaaS platform that empowers users to create, discover, and enjoy podcasts with ease. Leveraging advanced AI technologies, PodTales offers seamless text-to-audio podcast generation with multi-voice support, automatic thumbnail image creation, and a modern, responsive user interface. Users can explore trending and popular podcasts, search and filter content, and manage their own podcast library. The platform integrates robust authentication, real-time data handling, and a feature-rich podcast player for an immersive listening experience across all devices.
+### Admin Features
+- **Admin Panel**: Comprehensive admin dashboard
+- **User Management**: Admin access requests and approvals
+- **Content Moderation**: Review and manage reported content
+- **Statistics**: Platform analytics and user metrics
 
----
+## Tech Stack
 
-## 👾 Features
+**Frontend**: Next.js 14, TypeScript, Tailwind CSS, ShadCN UI  
+**Backend**: Convex (BaaS), Clerk Authentication  
+**AI Services**: ElevenLabs (TTS), Gemini (Content), Freepik (Images)  
+**Database**: Convex with real-time subscriptions  
+**Storage**: Convex file storage for audio/images
 
-### 🎙️ Podcast Creation & Management
-- **Create Podcast Page**: Generate podcasts from text using multi-voice AI, with instant previews and AI-generated thumbnails.
-- **Profile Page**: View, manage, and delete your created podcasts.
-- **Podcast Details Page**: See detailed info including creator, listeners, and transcript.
+## Database Schema
 
-### 🔍 Discovery & Search
-- **Modern Home Page**: Showcases trending podcasts with a sticky player for uninterrupted listening.
-- **Discover Podcasts Page**: Explore new and popular podcasts.
-- **Fully Functional Search**: Find podcasts easily using various search criteria and filters.
+- **users**: Profile data, follower counts, admin status, verification
+- **podcasts**: Content, metadata, ratings, likes, view counts
+- **ratings**: User ratings with timestamps
+- **comments**: Threaded comments with user info
+- **follows**: Follow relationships between users
+- **notifications**: Real-time notification system
+- **reports**: Content moderation and reporting
+- **adminRequests**: Admin access management
 
-### 🎧 Listening Experience
-- **Podcast Player**: Backward/forward controls, mute/unmute, and seamless playback.
-- **Sticky Player**: Continue listening while browsing the site.
+## Component Architecture
 
-### 🛡️ User & Platform Features
-- **Robust Authentication**: Secure user login and registration.
-- **Responsive Design**: Optimized for all devices and screen sizes.
+**70+ React Components** organized by feature:
+- **Admin**: Navigation, statistics, access requests
+- **Community**: User discovery and search
+- **CreatePodcast**: Multi-step creation flow with AI integration
+- **Discover**: Advanced filtering and search
+- **Home**: Featured content and latest podcasts
+- **Notification**: Real-time notification management
+- **PodcastCard**: Grid and list view components
+- **PodcastId**: Detailed podcast pages with interactions
+- **PodcastPlayers**: Audio controls and fullscreen player
+- **Profile**: User profiles with podcast management
+- **Sidebars**: Navigation and user info
+- **UI**: 20+ reusable UI components
 
+## Pages & Routes
 
----
+- **Home** (`/`): Featured and latest podcasts
+- **Discover** (`/discover`): Browse with filters
+- **Create** (`/create-podcast`): AI-powered podcast creation
+- **Profile** (`/profile/[id]`): User profiles and podcast management
+- **Podcast** (`/podcasts/[id]`): Detailed podcast view with player
+- **Community** (`/community`): User discovery
+- **Notifications** (`/notification`): Real-time updates
+- **Admin** (`/admin`): Platform management (admin only)
+- **Auth** (`/sign-in`, `/sign-up`): Authentication pages
 
-## ⚙ Tech Stack
+## Key Features Implementation
 
-### 🖥️ Frontend
-- **Next.js** – React framework for server-side rendering and routing
-- **TypeScript** – Type-safe JavaScript
-- **Tailwind CSS** – Utility-first CSS framework
-- **ShadCN UI** – Modern UI components
+- **Real-time Updates**: Convex subscriptions for live data
+- **File Management**: Audio/image upload with storage IDs
+- **Search Indexing**: Full-text search across multiple fields
+- **Responsive Design**: Mobile-first with adaptive layouts
+- **Error Handling**: Comprehensive error boundaries and user feedback
+- **Loading States**: Skeleton loaders and spinners throughout
+- **Accessibility**: ARIA labels and keyboard navigation
 
-### 🧠 Backend
-- **Convex** – Real-time backend as a service
-- **Gemini** – AI model for text/image generation
-- **ElevenLabs** – AI voice synthesis for podcasts
-- **Freepik** - AI thubmnail generation for podcasts
+## Installation
 
-### 🔐 Authentication
-- **Clerk** – User authentication and management
+```bash
+git clone <repository-url>
+cd soundnest
+npm install
+npm run dev
+```
 
-### 🗄️ Database
-- **Convex Database** – Integrated with Convex backend for real-time data
+## Environment Variables
 
----
+```env
+NEXT_PUBLIC_CONVEX_URL=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+ELEVENLABS_API_KEY=
+GOOGLE_GENERATIVE_AI_API_KEY=
+FREEPIK_API_KEY=
+```
 
-## 📂 Repository Structure
-
-```sh
-└── PodTales/
-    ├── README.md
-    ├── app
-    │   ├── (auth)
-    │   ├── (root)
-    │   ├── globals.css
-    │   └── layout.tsx
-    ├── components
-    │   ├── Carousel.tsx
-    │   ├── EmblaCarouselDotButton.tsx
-    │   ├── EmptyState.tsx
-    │   ├── GeneratePodcast.tsx
-    │   ├── GenerateThumbnail.tsx
-    │   ├── Header.tsx
+Built with modern web technologies for scalable podcast creation and community engagement.
     │   ├── LeftSidebar.tsx
     │   ├── LoaderSpinner.tsx
     │   ├── MobileNav.tsx

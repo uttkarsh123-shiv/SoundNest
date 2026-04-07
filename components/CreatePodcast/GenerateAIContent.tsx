@@ -59,20 +59,20 @@ const GenerateAIContent = ({
                     <Label
                         htmlFor="language-select"
                         className="text-15 sm:text-18 font-bold text-white-1 flex items-center gap-2 sm:gap-3 cursor-pointer">
-                        <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+                        <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
                         Content Language
                     </Label>
                     <Select onValueChange={setSelectedLanguage} defaultValue={selectedLanguage}>
-                        <SelectTrigger id="language-select" className="bg-black-1/50 border-orange-1/10 hover:border-orange-1/30 
+                        <SelectTrigger id="language-select" className="bg-black-1/50 border-blue-1/10 hover:border-blue-1/30 
                             transition-all duration-200 h-10 sm:h-12 rounded-xl text-gray-1 px-3 sm:px-4">
                             <SelectValue placeholder="Select language" className="text-left" />
                         </SelectTrigger>
-                        <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl max-h-[40vh]">
+                        <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl max-h-[40vh]">
                             {languageOptions.map((option) => (
                                 <SelectItem
                                     key={option.value}
                                     value={option.value}
-                                    className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
+                                    className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
                                 >
                                     {option.label}
                                 </SelectItem>
@@ -88,20 +88,20 @@ const GenerateAIContent = ({
                             {/* Content Tone */}
                             <div className="flex flex-col gap-2 sm:gap-3">
                                 <Label htmlFor="tone-select" className="text-15 sm:text-18 font-bold text-white-1 flex items-center gap-2 sm:gap-3 cursor-pointer">
-                                    <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+                                    <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
                                     Content Tone
                                 </Label>
                                 <Select onValueChange={setTone} defaultValue={tone}>
-                                    <SelectTrigger id="tone-select" className="bg-black-1/50 border-orange-1/10 hover:border-orange-1/30 
+                                    <SelectTrigger id="tone-select" className="bg-black-1/50 border-blue-1/10 hover:border-blue-1/30 
                                         transition-all duration-200 h-10 sm:h-12 rounded-xl text-gray-1 px-3 sm:px-4">
                                         <SelectValue placeholder="Select tone" className="text-left" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl max-h-[40vh]">
+                                    <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl max-h-[40vh]">
                                         {toneOptions.map((option) => (
                                             <SelectItem
                                                 key={option.value}
                                                 value={option.value}
-                                                className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
+                                                className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
                                             >
                                                 {option.label}
                                             </SelectItem>
@@ -113,20 +113,20 @@ const GenerateAIContent = ({
                             {/* Target Audience */}
                             <div className="flex flex-col gap-3">
                                 <Label htmlFor="target-audience-select" className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-                                    <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+                                    <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
                                     Target Audience
                                 </Label>
                                 <Select onValueChange={setTargetAudience} defaultValue={targetAudience}>
-                                    <SelectTrigger id="target-audience-select" className="bg-black-1/50 border-orange-1/10 hover:border-orange-1/30 
+                                    <SelectTrigger id="target-audience-select" className="bg-black-1/50 border-blue-1/10 hover:border-blue-1/30 
                                         transition-all duration-200 h-12 rounded-xl text-gray-1 px-4">
                                         <SelectValue placeholder="Select audience" className="text-left" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl">
+                                    <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl">
                                         {targetAudienceOptions.map((option) => (
                                             <SelectItem
                                                 key={option.value}
                                                 value={option.value}
-                                                className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
+                                                className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
                                             >
                                                 {option.label}
                                             </SelectItem>
@@ -138,20 +138,20 @@ const GenerateAIContent = ({
                             {/* Content Style */}
                             <div className="flex flex-col gap-3">
                                 <Label htmlFor="style-select" className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-                                    <div className="h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+                                    <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
                                     Content Style
                                 </Label>
                                 <Select onValueChange={setStyle} defaultValue={style}>
-                                    <SelectTrigger id="style-select" className="bg-black-1/50 border-orange-1/10 hover:border-orange-1/30 
+                                    <SelectTrigger id="style-select" className="bg-black-1/50 border-blue-1/10 hover:border-blue-1/30 
                                         transition-all duration-200 h-12 rounded-xl text-gray-1 px-4">
                                         <SelectValue placeholder="Select style" className="text-left" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-black-1/95 text-white-1 border-orange-1/10 rounded-xl">
+                                    <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl">
                                         {styleOptions.map((option) => (
                                             <SelectItem
                                                 key={option.value}
                                                 value={option.value}
-                                                className="focus:bg-orange-1/20 hover:bg-orange-1/10 transition-colors"
+                                                className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
                                             >
                                                 {option.label}
                                             </SelectItem>
@@ -165,11 +165,11 @@ const GenerateAIContent = ({
                                 <div className="flex items-center justify-between">
                                     <Label
                                         className="text-15 sm:text-18 font-bold text-white-1 flex items-center gap-2 sm:gap-3 cursor-pointer">
-                                        <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+                                        <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
                                         Script Duration
                                     </Label>
-                                    <span className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black-1/40 text-orange-1 
-                                        font-medium text-xs sm:text-sm border border-orange-1/20">
+                                    <span className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black-1/40 text-blue-1 
+                                        font-medium text-xs sm:text-sm border border-blue-1/20">
                                         {duration[0]} {duration[0] === 1 ? 'minute' : 'minutes'}
                                     </span>
                                 </div>
@@ -194,7 +194,7 @@ const GenerateAIContent = ({
                             {/* Additional Notes with full width */}
                             <div className="md:col-span-2 space-y-2 sm:space-y-3">
                                 <Label htmlFor="notes-textarea" className="text-15 sm:text-18 font-bold text-white-1 flex items-center gap-2 sm:gap-3 cursor-pointer">
-                                    <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+                                    <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
                                     Additional Notes (Optional)
                                 </Label>
                                 <Textarea
@@ -203,8 +203,8 @@ const GenerateAIContent = ({
                                         "min-h-[100px] sm:min-h-[120px] w-full rounded-xl",
                                         "bg-black-1/50 hover:bg-black-1/70",
                                         "transition-all duration-200",
-                                        "border border-orange-1/10 hover:border-orange-1/30",
-                                        "focus:border-orange-1/50 focus:ring-1 focus:ring-orange-1/50",
+                                        "border border-blue-1/10 hover:border-blue-1/30",
+                                        "focus:border-blue-1/50 focus:ring-1 focus:ring-blue-1/50",
                                         "p-3 sm:p-4",
                                         "placeholder:text-gray-1/70",
                                         "text-left",
@@ -230,10 +230,10 @@ const GenerateAIContent = ({
                                 onClick={generateAIContent}
                                 disabled={isGeneratingContent || !title}
                                 className={cn(
-                                    "bg-gradient-to-r from-orange-1 to-orange-400",
+                                    "bg-gradient-to-r from-blue-1 to-blue-2",
                                     "text-white font-semibold gap-2 sm:gap-3 py-4 sm:py-6 text-base sm:text-lg",
                                     "transition-all duration-300 hover:scale-[1.02]",
-                                    "shadow-lg hover:shadow-orange-1/20",
+                                    "shadow-lg hover:shadow-blue-1/20",
                                     "rounded-xl",
                                     "disabled:opacity-50 disabled:hover:scale-100",
                                     "max-w-[600px]",

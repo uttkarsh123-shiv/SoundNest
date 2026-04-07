@@ -64,7 +64,7 @@ const Home = () => {
       <div ref={trendingRef} id="trending">
         <PodcastSection
           title="Trending Podcasts"
-          icon={<TrendingUp size={28} className="text-orange-1" />}
+          icon={<TrendingUp size={28} className="text-blue-1" />}
           podcasts={trendingPodcasts}
           filterType="trending"
         />
@@ -74,7 +74,7 @@ const Home = () => {
       <div ref={topRatedRef} id="topRated">
         <PodcastSection
           title="Top Rated Podcasts"
-          icon={<Star size={28} className="text-orange-1" />}
+          icon={<Star size={28} className="text-blue-1" />}
           podcasts={topRatedPodcasts}
           filterType="topRated"
         />

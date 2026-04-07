@@ -118,7 +118,7 @@ const LikeShareLoopControls = ({
                         "rounded-full p-1.5 sm:p-2 transition-colors", // Adjusted padding for mobile
                         isFullscreen ? "hover:bg-gray-800/50" : "hover:bg-gray-800",
                         isLooping 
-                            ? isFullscreen ? "text-orange-1" : "text-orange-500" 
+                            ? isFullscreen ? "text-blue-1" : "text-blue-1" 
                             : isFullscreen ? "text-white-1 hover:text-white" : "text-[#ffffff] hover:text-white"
                     )}
                     title={`Toggle Loop ${isFullscreen ? "(L)" : ""}`}
@@ -133,8 +133,8 @@ const LikeShareLoopControls = ({
                     "rounded-full p-1.5 sm:p-2 transition-colors", // Adjusted padding for mobile
                     isFullscreen ? "hover:bg-gray-800/50" : "hover:bg-gray-800",
                     isLiked
-                        ? isFullscreen ? "text-orange-1" : "text-orange-500"
-                        : isFullscreen ? "text-white-1 hover:text-orange-1" : "text-[#ffffff] hover:text-white"
+                        ? isFullscreen ? "text-blue-1" : "text-blue-1"
+                        : isFullscreen ? "text-white-1 hover:text-blue-1" : "text-[#ffffff] hover:text-white"
                 )}
                 title="Like Podcast"
                 disabled={!user}
@@ -142,7 +142,7 @@ const LikeShareLoopControls = ({
                 <Heart
                     className={cn(
                         isFullscreen ? "h-6 w-6" : "h-4 w-4 sm:h-5 sm:w-5", // Smaller icon on mobile
-                        isLiked && (isFullscreen ? "fill-orange-1" : "fill-orange-500")
+                        isLiked && (isFullscreen ? "fill-blue-1" : "fill-blue-1")
                     )}
                 />
             </button>
@@ -153,7 +153,7 @@ const LikeShareLoopControls = ({
                     className={cn(
                         "rounded-full p-1.5 sm:p-2 transition-colors", // Adjusted padding for mobile
                         isFullscreen
-                            ? "text-white-1 hover:bg-gray-800/50 hover:text-orange-1"
+                            ? "text-white-1 hover:bg-gray-800/50 hover:text-blue-1"
                             : "text-[#ffffff] hover:bg-gray-800 hover:text-white"
                     )}
                     title="Share Podcast"

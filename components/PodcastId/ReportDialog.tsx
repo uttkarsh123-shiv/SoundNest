@@ -114,12 +114,12 @@ const ReportDialog = ({ podcastId, podcastTitle }: ReportDialogProps) => {
                                 <div
                                     key={option.id}
                                     className={`p-3 rounded-lg cursor-pointer transition-all ${selectedOption === option.id
-                                        ? "bg-orange-1/20 border border-orange-1"
+                                        ? "bg-blue-1/20 border border-blue-1"
                                         : "bg-black-1/50 border border-gray-800 hover:bg-black-1/70"
                                         }`}
                                     onClick={() => setSelectedOption(option.id)}
                                 >
-                                    <p className={`${selectedOption === option.id ? "text-orange-1" : "text-white-2"}`}>
+                                    <p className={`${selectedOption === option.id ? "text-blue-1" : "text-white-2"}`}>
                                         {option.label}
                                     </p>
                                 </div>
@@ -173,7 +173,7 @@ const ReportDialog = ({ podcastId, podcastTitle }: ReportDialogProps) => {
                         <Button
                             onClick={handleSubmit}
                             disabled={!selectedOption || isSubmitting}
-                            className={`${!selectedOption ? "bg-white-1/10 text-white-3 cursor-not-allowed" : "bg-orange-1 text-black hover:bg-orange-2"}`}
+                            className={`${!selectedOption ? "bg-white-1/10 text-white-3 cursor-not-allowed" : "bg-blue-1 text-black hover:bg-blue-2"}`}
                         >
                             {isSubmitting ? "Submitting..." : "Submit Report"}
                         </Button>

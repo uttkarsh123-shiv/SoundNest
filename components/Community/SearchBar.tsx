@@ -18,7 +18,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, activeTab }: SearchBarProps) =
         placeholder={`Search ${activeTab === "topPodcasters" ? "top podcasters" : activeTab}...`}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full pl-10 pr-4 py-3 bg-black-1/30 border border-gray-800 rounded-xl text-white-1 placeholder-white-3 focus:outline-none focus:border-orange-1/50"
+        className="w-full pl-10 pr-4 py-3 bg-black-1/30 border border-gray-800 rounded-xl text-white-1 placeholder-white-3 focus:outline-none focus:border-blue-1/50"
       />
     </div>
   );

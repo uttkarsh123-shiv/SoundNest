@@ -30,11 +30,11 @@ const UsersList = ({ users, activeTab, searchQuery }: UsersListProps) => {
           }
           icon={
             activeTab === "followers" ? (
-              <User size={48} className="text-orange-1" />
+              <User size={48} className="text-blue-1" />
             ) : activeTab === "following" ? (
-              <UserCheck size={48} className="text-orange-1" />
+              <UserCheck size={48} className="text-blue-1" />
             ) : (
-              <TrendingUp size={48} className="text-orange-1" />
+              <TrendingUp size={48} className="text-blue-1" />
             )
           }
         />

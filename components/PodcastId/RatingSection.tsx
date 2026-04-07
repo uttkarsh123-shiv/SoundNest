@@ -35,7 +35,7 @@ const RatingSection = ({
             {podcast?.ratingCount && podcast.ratingCount > 0 && (
                 <>
                     <div className="flex items-center gap-2 bg-black-1/50 px-3 sm:px-4 py-2 rounded-full">
-                        <Star size={18} stroke="white" fill="orange" />
+                        <Star size={18} stroke="white" fill="#5B7FFF" />
                         <span className="text-14 font-medium text-white-2">
                             <span className="hidden sm:inline">{podcast.averageRating?.toFixed(1)} ({podcast.ratingCount} ratings)</span>
                             <span className="sm:hidden">{podcast.averageRating?.toFixed(1)}</span>
@@ -71,11 +71,11 @@ const RatingSection = ({
                                 <div key={star} className="flex items-center gap-3">
                                     <div className="flex items-center w-16">
                                         <span className="text-white-2 font-medium">{star}</span>
-                                        <Star size={16} className="ml-1 fill-orange-1 text-orange-1" />
+                                        <Star size={16} className="ml-1 fill-blue-1 text-blue-1" />
                                     </div>
                                     <div className="flex-1 h-4 bg-black-1/50 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-orange-1 rounded-full"
+                                            className="h-full bg-blue-1 rounded-full"
                                             style={{ width: `${percentage}%` }}
                                         />
                                     </div>
@@ -105,7 +105,7 @@ const RatingSection = ({
                             <Star
                                 size={32}
                                 className={`transition-colors ${(hoveredRating !== null ? star <= hoveredRating : star <= (userRating || 0))
-                                    ? "fill-orange-1 text-orange-1"
+                                    ? "fill-blue-1 text-blue-1"
                                     : "text-white-3"
                                     }`}
                             />
@@ -119,7 +119,7 @@ const RatingSection = ({
                             onClick={handleRatingSubmit}
                             disabled={!userRating}
                             className={`px-6 py-2 rounded-lg font-medium transition-all ${userRating
-                                ? "bg-orange-1 text-black hover:bg-orange-2"
+                                ? "bg-blue-1 text-black hover:bg-blue-2"
                                 : "bg-white-1/10 text-white-3 cursor-not-allowed"
                                 }`}
                         >

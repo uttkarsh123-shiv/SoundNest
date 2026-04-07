@@ -44,7 +44,7 @@ const MobileHomeHeader = ({ scrollToSection }: MobileHomeHeaderProps) => {
                     <Bell size={24} className="text-white-2" />
                     {/* Notification dot - only show when there are unread notifications */}
                     {hasUnreadNotifications && (
-                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-orange-1"></span>
+                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-blue-1"></span>
                     )}
                 </Link>
             </div>

@@ -32,7 +32,7 @@ const ProfileHeader = ({
     return (
         <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-lg">
             {/* Banner Background */}
-            <div className="h-32 sm:h-56 bg-gradient-to-r from-orange-1/30 via-purple-600/30 to-blue-600/20 relative">
+            <div className="h-32 sm:h-56 bg-gradient-to-r from-blue-1/30 via-purple-600/30 to-blue-600/20 relative">
                 <div className="absolute inset-0 opacity-20"
                     style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
@@ -77,7 +77,7 @@ const ProfileHeader = ({
                             )}
                         </h1>
                         {isFollowing && (
-                            <Badge variant="outline" className="border-orange-1 text-orange-1 text-xs">
+                            <Badge variant="outline" className="border-blue-1 text-blue-1 text-xs">
                                 Following
                             </Badge>
                         )}
@@ -86,20 +86,20 @@ const ProfileHeader = ({
                     <div className="flex items-center justify-center gap-4 mt-3 text-xs text-white-2">
                         {/* Podcast count */}
                         <span className="flex items-center gap-1">
-                            <Mic size={14} className="text-orange-1" />
+                            <Mic size={14} className="text-blue-1" />
                             <span>{podcastCount}</span>
                         </span>
                         {/* Followers count */}
                         {followersCount !== undefined && (
                             <span className="flex items-center gap-1">
-                                <User size={14} className="text-orange-1" />
+                                <User size={14} className="text-blue-1" />
                                 <span>{followersCount}</span>
                             </span>
                         )}
                         {/* Following count */}
                         {followingCount !== undefined && (
                             <span className="flex items-center gap-1">
-                                <Users size={14} className="text-orange-1" />
+                                <Users size={14} className="text-blue-1" />
                                 <span>{followingCount}</span>
                             </span>
                         )}
@@ -143,7 +143,7 @@ const ProfileHeader = ({
                             )}
                         </h1>
                         {isFollowing && (
-                            <Badge variant="outline" className="border-orange-1 text-orange-1 mt-2">
+                            <Badge variant="outline" className="border-blue-1 text-blue-1 mt-2">
                                 Following
                             </Badge>
                         )}
@@ -153,20 +153,20 @@ const ProfileHeader = ({
                         <div className="text-white-2 flex flex-col gap-2 text-sm sm:text-base">
                             {/* Podcast count */}
                             <span className="flex items-center gap-2">
-                                <Mic size={16} className="text-orange-1" />
+                                <Mic size={16} className="text-blue-1" />
                                 <span className="font-medium">{podcastCount} {podcastCount <= 1 ? 'Podcast' : 'Podcasts'}</span>
                             </span>
                             {/* Followers count */}
                             {followersCount !== undefined && (
                                 <span className="flex items-center gap-2">
-                                    <User size={16} className="text-orange-1" />
+                                    <User size={16} className="text-blue-1" />
                                     <span>{followersCount} {followersCount === 1 ? 'Follower' : 'Followers'}</span>
                                 </span>
                             )}
                             {/* Following count */}
                             {followingCount !== undefined && (
                                 <span className="flex items-center gap-2">
-                                    <Users size={16} className="text-orange-1" />
+                                    <Users size={16} className="text-blue-1" />
                                     <span>{followingCount} Following</span>
                                 </span>
                             )}

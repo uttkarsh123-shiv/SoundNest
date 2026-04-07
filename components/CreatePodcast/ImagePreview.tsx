@@ -76,8 +76,8 @@ const TypeBadge = ({ isAiGenerated }: { isAiGenerated: boolean }) => (
     transition-all duration-500 translate-y-4 group-hover/image:translate-y-0">
     {isAiGenerated ? (
       <div className="max-md:hidden flex items-center gap-2 px-4 py-2
-        bg-gradient-to-r from-orange-1/80 to-orange-400/80 
-        backdrop-blur-xl rounded-full border border-orange-1/50 
+        bg-gradient-to-r from-blue-1/80 to-blue-2/80 
+        backdrop-blur-xl rounded-full border border-blue-1/50 
         shadow-[0_4px_20px_rgba(0,0,0,0.4)]
         hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)]
         transition-all duration-300 hover:scale-105">
@@ -123,9 +123,9 @@ const ImagePreview = ({
         {/* Header */}
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-1 bg-gradient-to-t from-orange-1 to-orange-400 rounded-full" />
+            <div className="h-8 w-1 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
             <div className="space-y-1">
-              <h3 className="font-bold text-sm bg-gradient-to-r from-orange-1 to-orange-400 
+              <h3 className="font-bold text-sm bg-gradient-to-r from-blue-1 to-blue-2 
                 bg-clip-text text-transparent">
                 Podcast Thumbnail
               </h3>
@@ -150,21 +150,21 @@ const ImagePreview = ({
             <div className="absolute inset-0 flex items-center justify-center bg-black-1/80 backdrop-blur-sm">
               <div className="flex flex-col items-center gap-4">
                 <div className="relative">
-                  <div className="w-16 h-16 rounded-full border-2 border-orange-1/30">
+                  <div className="w-16 h-16 rounded-full border-2 border-blue-1/30">
                     <div
-                      className="absolute top-0 left-0 w-16 h-16 rounded-full border-2 border-orange-1 border-t-transparent 
+                      className="absolute top-0 left-0 w-16 h-16 rounded-full border-2 border-blue-1 border-t-transparent 
                       animate-[spin_1.5s_linear_infinite]"
                     />
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-base font-medium text-orange-1">{progress}%</span>
+                    <span className="text-base font-medium text-blue-1">{progress}%</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <p className="text-sm font-semibold text-[white]">
                     {isAiThumbnail ? 'Generating Thumbnail...' : 'Uploading Image...'}
                   </p>
-                  <span className="text-xs text-orange-1/80">Please wait a moment</span>
+                  <span className="text-xs text-blue-1/80">Please wait a moment</span>
                 </div>
               </div>
             </div>

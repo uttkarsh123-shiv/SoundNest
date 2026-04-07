@@ -45,7 +45,7 @@ export default function AdminLayout({
                                 <img
                                     src={user.imageUrl}
                                     alt={user.fullName || "Admin"}
-                                    className="w-10 h-10 rounded-full border-2 border-orange-1"
+                                    className="w-10 h-10 rounded-full border-2 border-blue-1"
                                 />
                                 <div>
                                     <p className="text-white-1 font-medium">{user.fullName}</p>

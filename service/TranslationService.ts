@@ -19,7 +19,7 @@ export async function translateContent(
     // Create translation prompt
     const translationPrompt = `
       Translate the following content from ${sourceLanguage} to ${targetLanguage}. 
-      Return the response in JSON format with the following structure:
+      Return ONLY a valid JSON object with this exact structure (no markdown, no code blocks):
       {
         "description": "translated description",
         "transcription": "translated transcription",
@@ -33,12 +33,13 @@ export async function translateContent(
     `;
     
     const result = await chatSession.sendMessage(translationPrompt);
-    const response = await result.response;
-    const text = response.text();
+    const text = result.response.text();
+    
+    // Remove markdown code blocks if present
+    const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     
     // Parse the JSON response
-    const sanitizedText = text.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
-    const translatedContent = JSON.parse(sanitizedText);
+    const translatedContent = JSON.parse(cleanText);
     
     return {
       description: translatedContent.description,

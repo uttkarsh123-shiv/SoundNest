@@ -220,7 +220,7 @@ export default function ProfileEditModal({
           variant="outline"
           className="gap-2.5 bg-black-1/50 hover:bg-black-1/70 text-white-1 flex items-center px-6 py-2.5 rounded-full border border-gray-800 transition-all duration-200 shadow-sm"
         >
-          <Pencil size={16} className="text-orange-1" />
+          <Pencil size={16} className="text-blue-1" />
           <span className="font-medium">Edit Profile</span>
         </Button>
       </DialogTrigger>
@@ -251,7 +251,7 @@ export default function ProfileEditModal({
                   e.stopPropagation();
                 }
               }}
-              className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
+              className="bg-black-2 border-gray-800 text-white-1 focus:ring-blue-1 focus:border-blue-1"
               autoFocus={false}
               tabIndex={-1} // This helps prevent focus during tab navigation
             />
@@ -271,7 +271,7 @@ export default function ProfileEditModal({
                   e.stopPropagation();
                 }
               }}
-              className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 w-full min-h-[100px]"
+              className="bg-black-2 border-gray-800 text-white-1 focus:ring-blue-1 focus:border-blue-1 w-full min-h-[100px]"
               maxLength={250}
             />
             <p className="text-xs text-white-3 text-right">{bio.length}/250</p>
@@ -285,7 +285,7 @@ export default function ProfileEditModal({
               placeholder="https://yourwebsite.com"
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
-              className="bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1"
+              className="bg-black-2 border-gray-800 text-white-1 focus:ring-blue-1 focus:border-blue-1"
             />
           </div>
 
@@ -316,7 +316,7 @@ export default function ProfileEditModal({
                       <select
                         value={link.platform}
                         onChange={(e) => handleSocialLinkChange(index, "platform", e.target.value)}
-                        className="bg-black-2 border border-gray-800 rounded-md text-white-1 focus:ring-orange-1 focus:border-orange-1 text-sm h-10 w-full sm:w-1/3"
+                        className="bg-black-2 border border-gray-800 rounded-md text-white-1 focus:ring-blue-1 focus:border-blue-1 text-sm h-10 w-full sm:w-1/3"
                       >
                         {PLATFORM_OPTIONS.map((option) => (
                           <option key={option.value} value={option.value}>
@@ -331,7 +331,7 @@ export default function ProfileEditModal({
                             placeholder="Platform name *"
                             value={link.customPlatform || ""}
                             onChange={(e) => handleSocialLinkChange(index, "customPlatform", e.target.value)}
-                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${!link.customPlatform || link.customPlatform.trim() === "" ? 'border-red-500' : ''
+                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-blue-1 focus:border-blue-1 flex-1 ${!link.customPlatform || link.customPlatform.trim() === "" ? 'border-red-500' : ''
                               }`}
                             required
                           />
@@ -351,7 +351,7 @@ export default function ProfileEditModal({
                             placeholder={`Your ${PLATFORM_OPTIONS.find(p => p.value === link.platform)?.label} URL`}
                             value={link.url}
                             onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
-                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
+                            className={`bg-black-2 border-gray-800 text-white-1 focus:ring-blue-1 focus:border-blue-1 flex-1 ${urlErrors[index] ? 'border-red-500' : ''}`}
                           />
                           <Button
                             type="button"
@@ -373,7 +373,7 @@ export default function ProfileEditModal({
                           placeholder={`Your ${link.customPlatform || "Other"} URL`}
                           value={link.url}
                           onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
-                          className={`bg-black-2 border-gray-800 text-white-1 focus:ring-orange-1 focus:border-orange-1 w-full ${urlErrors[index] ? 'border-red-500' : ''}`}
+                          className={`bg-black-2 border-gray-800 text-white-1 focus:ring-blue-1 focus:border-blue-1 w-full ${urlErrors[index] ? 'border-red-500' : ''}`}
                         />
                       </div>
                     )}
@@ -401,7 +401,7 @@ export default function ProfileEditModal({
           </Button>
           <Button
             onClick={handleSubmit}
-            className="bg-orange-1 hover:bg-orange-1/90 text-black"
+            className="bg-blue-1 hover:bg-blue-1/90 text-black"
           >
             Save Changes
           </Button>

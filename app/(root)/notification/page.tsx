@@ -129,11 +129,11 @@ const NotificationPage = () => {
           <EmptyState
             title="No notifications yet"
             description="Join our community to connect with podcasters and get notified about new content"
-            icon={<Bell size={48} className="text-orange-1" />}
+            icon={<Bell size={48} className="text-blue-1" />}
             action={
               <button
                 onClick={() => router.push('/community')}
-                className="mt-4 px-6 py-2 bg-orange-1 hover:bg-orange-600 text-white font-medium rounded-full transition-colors"
+                className="mt-4 px-6 py-2 bg-blue-1 hover:bg-blue-2 text-white font-medium rounded-full transition-colors"
               >
                 Explore Community
               </button>

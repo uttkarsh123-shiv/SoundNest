@@ -12,7 +12,7 @@ const EmptyState = ({ search, selectedCategories, selectedLanguages, clearAllFil
   return (
     <div className="flex flex-col items-center justify-center py-20 bg-white-1/5 rounded-xl border border-white-1/10">
       <div className="bg-white-1/10 p-6 rounded-full mb-5 shadow-inner">
-        <RefreshCw size={32} className="text-orange-1" />
+        <RefreshCw size={32} className="text-blue-1" />
       </div>
       <h3 className="text-2xl font-bold text-white-1 mb-3">No podcasts found</h3>
       <p className="text-white-2 text-center max-w-md mb-8 px-4">
@@ -27,7 +27,7 @@ const EmptyState = ({ search, selectedCategories, selectedLanguages, clearAllFil
           clearAllFilters();
           if (search) window.location.href = '/discover';
         }}
-        className="bg-orange-1 text-black px-8 py-3 rounded-full font-semibold hover:bg-orange-2 transition-colors shadow-lg"
+        className="bg-blue-1 text-black px-8 py-3 rounded-full font-semibold hover:bg-blue-2 transition-colors shadow-lg"
       >
         {selectedCategories.length > 0 || selectedLanguages.length > 0 ? "Clear Filters" : "Clear Search"}
       </button>

@@ -32,20 +32,24 @@ const LeftSidebar = () => {
             'h-[calc(100vh-80px)]': audio?.audioUrl
         })}>
             <nav className='flex flex-col gap-6 w-full'>
-                <Link href="/" className="flex cursor-pointer items-center pb-6 max-lg:justify-center group">
-                    <div className="relative rounded-full">
+                {/* Logo Section */}
+                <Link href="/" className="flex cursor-pointer imaktems-center gap-3 pb-3 px-4 max-lg:justify-center max-lg:px-0 group">
+                    <div className="relative flex-shrink-0">
                         <Image
                             src="/icons/logo.png"
                             alt="logo"
-                            width={80}
-                            height={80}
-                            className="transition-transform duration-300 group-hover:scale-110"
+                            width={50}
+                            height={50}
+                            className="transition-transform duration-300 group-hover:scale-105 max-lg:w-[55px] max-lg:h-[55px]"
                         />
                     </div>
-                    <h1 className="text-[26px] font-extrabold text-white max-lg:hidden bg-gradient-to-r from-orange-1 to-white-1 bg-clip-text text-transparent">SoundNest</h1>
+                    <h1 className="text-[22px] font-extrabold text-white max-lg:hidden bg-gradient-to-r from-blue-1 to-white-1 bg-clip-text text-transparent">
+                        SoundNest
+                    </h1>
                 </Link>
 
-                <div className="flex flex-col space-y-1 w-full">
+                {/* Navigation Links - Full Width */}
+                <div className="flex flex-col space-y-1.5 w-full">
                     {sidebarLinks.map(({ route, label, icon: Icon }) => {
                         // For profile route, check if the current path is the user's profile
                         const isProfileRoute = route === "/profile";
@@ -53,7 +57,7 @@ const LeftSidebar = () => {
 
                         // Check if current path is active
                         const isActive = isProfileRoute
-                            ? pathname === userProfilePath // Only active if it's exactly the user's profile
+                            ? pathname === userProfilePath
                             : pathname === route || pathname.startsWith(`${route}/`);
                             
                         // Check if this is the notification route
@@ -64,51 +68,52 @@ const LeftSidebar = () => {
                                 href={isProfileRoute ? userProfilePath : route}
                                 key={label}
                                 className={cn(
-                                    "flex gap-3 items-center py-3 px-4 rounded-lg transition-all duration-200 hover:bg-white-1/5 max-lg:justify-center lg:justify-start w-full",
+                                    "flex gap-4 items-center py-3.5 px-4 transition-all duration-200 w-full group max-lg:justify-center max-lg:px-0",
                                     isActive
-                                        ? 'bg-gradient-to-l from-orange-1/20 to-transparent border-r-4 border-orange-1 text-orange-1 font-medium'
-                                        : 'text-white-2 hover:text-white-1'
+                                        ? 'bg-blue-1/10 text-blue-1 border-l-4 border-blue-1 max-lg:border-l-0'
+                                        : 'text-white-2 hover:bg-white-1/5 hover:text-white-1 border-l-4 border-transparent max-lg:border-l-0'
                                 )}
                             >
-                                <div className="relative">
+                                <div className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center">
                                     <Icon
-                                        size={24}
+                                        size={26}
                                         className={cn(
-                                            "transition-transform",
-                                            isActive ? "scale-110 text-orange-1" : "text-white-2"
+                                            "transition-all",
+                                            isActive ? "text-blue-1" : "text-white-2 group-hover:text-white-1"
                                         )}
                                     />
                                     {isNotificationRoute && hasUnreadNotifications && (
-                                        <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-orange-1"></span>
+                                        <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-blue-1 ring-2 ring-black-1"></span>
                                     )}
                                 </div>
-                                <p>{label}</p>
+                                <p className="text-[15px] font-medium max-lg:hidden">{label}</p>
                             </Link>
                         );
                     })}
                 </div>
             </nav>
 
-            <div className="mt-auto">
+            {/* Log Out Button - Full Width */}
+            <div className="mt-auto px-4 pb-6 max-lg:px-3">
                 <SignedOut>
-                    <div className="flex-center w-full pb-6 max-lg:px-4 lg:pr-8 px-4">
-                        <Button
-                            asChild
-                            className="text-16 w-full bg-orange-1 hover:bg-orange-1/90 font-extrabold rounded-lg py-5 transition-all duration-200 shadow-lg hover:shadow-orange-1/20"
-                        >
-                            <Link href="/sign-in">Sign in</Link>
-                        </Button>
-                    </div>
+                    <Button
+                        asChild
+                        className="text-[15px] w-full bg-blue-1 hover:bg-blue-2 font-semibold rounded-xl py-6 transition-all duration-200 shadow-lg hover:shadow-blue-1/20 max-lg:py-3.5"
+                    >
+                        <Link href="/sign-in" className="max-lg:flex max-lg:items-center max-lg:justify-center">
+                            <span className="max-lg:hidden">Sign in</span>
+                            <span className="lg:hidden text-base">Log In</span>
+                        </Link>
+                    </Button>
                 </SignedOut>
                 <SignedIn>
-                    <div className="flex-center w-full pb-6 max-lg:px-4 lg:pr-8 px-4">
-                        <Button
-                            className="text-16 w-full bg-orange-1 hover:bg-orange-1/90 font-extrabold rounded-lg py-5 transition-all duration-200 shadow-lg hover:shadow-orange-1/20"
-                            onClick={() => signOut(() => router.push('/'))}
-                        >
-                            Log Out
-                        </Button>
-                    </div>
+                    <Button
+                        className="text-[15px] w-full bg-blue-1 hover:bg-blue-2 font-semibold rounded-xl py-6 transition-all duration-200 shadow-lg hover:shadow-blue-1/20 max-lg:py-3.5"
+                        onClick={() => signOut(() => router.push('/'))}
+                    >
+                        <span className="max-lg:hidden">Log Out</span>
+                        <span className="lg:hidden text-base">Log Out</span>
+                    </Button>
                 </SignedIn>
             </div>
         </section>

@@ -185,8 +185,8 @@ const FullscreenPlayer = ({
                         {/* Header with close button */}
                         <div className="flex justify-between items-center mb-4 md:mb-8">
                             <div className="flex items-center gap-2">
-                                <div className="bg-orange-1/20 p-2 rounded-full">
-                                    <Gauge className="h-5 w-5 text-orange-1" />
+                                <div className="bg-blue-1/20 p-2 rounded-full">
+                                    <Gauge className="h-5 w-5 text-blue-1" />
                                 </div>
                                 <h2 className="text-xl font-bold text-white-1">Now Playing</h2>
                             </div>

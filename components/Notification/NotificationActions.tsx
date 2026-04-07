@@ -16,13 +16,13 @@ const NotificationActions = ({
   <div className="absolute top-2 right-2 flex gap-1">
     <button
       onClick={onToggleRead}
-      className="p-1 rounded-full bg-black-1/50 hover:bg-orange-1/20 transition-colors"
+      className="p-1 rounded-full bg-black-1/50 hover:bg-blue-1/20 transition-colors"
       title={notification.isRead ? "Mark as unread" : "Mark as read"}
     >
       {notification.isRead ? (
-        <RefreshCw size={18} className="text-orange-1" />
+        <RefreshCw size={18} className="text-blue-1" />
       ) : (
-        <CheckCircle size={18} className="text-orange-1" />
+        <CheckCircle size={18} className="text-blue-1" />
       )}
     </button>
     <button

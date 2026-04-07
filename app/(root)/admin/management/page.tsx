@@ -265,7 +265,7 @@ const AdminManagement = () => {
                     <Button
                         onClick={handleAddAdmin}
                         disabled={!userId.trim()}
-                        className="bg-orange-1 text-black hover:bg-orange-2"
+                        className="bg-blue-1 text-black hover:bg-blue-2"
                     >
                         Add Admin
                     </Button>

@@ -35,7 +35,7 @@ const UserCard = ({ user, activeTab }: UserCardProps) => {
           />
         ) : (
           <div className="w-14 h-14 bg-black-1/50 rounded-full flex items-center justify-center">
-            <User size={24} className="text-orange-1" />
+            <User size={24} className="text-blue-1" />
           </div>
         )}
       </div>
@@ -61,7 +61,7 @@ const UserCard = ({ user, activeTab }: UserCardProps) => {
               {user.totalPodcasts} podcasts • {user.followersCount || 0} followers
             </p>
             {user.averageRating > 0 && (
-              <p className="text-orange-1 text-sm">
+              <p className="text-blue-1 text-sm">
                 Rating: {user.averageRating.toFixed(1)} ★
               </p>
             )}

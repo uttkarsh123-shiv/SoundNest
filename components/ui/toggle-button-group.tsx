@@ -28,7 +28,7 @@ export function ToggleButtonGroup({
         <ToggleButton
           isActive={button1Active}
           onClick={() => setButtonActive(true)}
-          activeColor="orange"
+          activeColor="blue"
         >
           <>
             <span className="sm:hidden">Use AI</span>

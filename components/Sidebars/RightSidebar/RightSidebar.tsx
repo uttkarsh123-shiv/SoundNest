@@ -88,7 +88,7 @@ const RightSidebar = () => {
                             {[1, 2, 3].map((i) => (
                                 <div
                                     key={i}
-                                    className={`w-3 h-3 rounded-full mx-1 ${i === 1 ? 'bg-orange-1 scale-125' : 'bg-[white]/30'
+                                    className={`w-3 h-3 rounded-full mx-1 ${i === 1 ? 'bg-blue-1 scale-125' : 'bg-[white]/30'
                                         }`}
                                 />
                             ))}

@@ -30,9 +30,9 @@ const NotificationHeader = ({
                 className="relative cursor-pointer" 
                 onClick={() => setActiveTab("unread" as TabType)}
             >
-                <Bell size={24} className="text-orange-1 sm:hidden" />
+                <Bell size={24} className="text-blue-1 sm:hidden" />
                 {unreadCount > 0 && (
-                    <span className="sm:hidden absolute -top-1 -right-1 h-2 w-2 rounded-full bg-orange-1"></span>
+                    <span className="sm:hidden absolute -top-1 -right-1 h-2 w-2 rounded-full bg-blue-1"></span>
                 )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white-1">
@@ -60,7 +60,7 @@ const NotificationHeader = ({
                     onClick={onMarkAllAsRead}
                     className={cn(
                         "hidden sm:flex items-center justify-center",
-                        "text-white-2 hover:text-orange-1 transition-colors",
+                        "text-white-2 hover:text-blue-1 transition-colors",
                         "sm:w-auto sm:h-auto sm:rounded-none",
                         "sm:hover:bg-transparent"
                     )}
@@ -74,7 +74,7 @@ const NotificationHeader = ({
                     onClick={onMarkAllAsUnread}
                     className={cn(
                         "hidden sm:flex items-center justify-center",
-                        "text-white-2 hover:text-orange-1 transition-colors",
+                        "text-white-2 hover:text-blue-1 transition-colors",
                         "sm:w-auto sm:h-auto sm:rounded-none",
                         "sm:hover:bg-transparent"
                     )}

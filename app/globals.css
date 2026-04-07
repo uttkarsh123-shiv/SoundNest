@@ -9,44 +9,54 @@
 }
 
 html {
-  background-color: #101114;
+  background-color: #1A1D23;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 @layer utilities {
   .input-class {
-    @apply text-16 placeholder:text-16 bg-black-1 rounded-[6px] placeholder:text-gray-1 border-none text-gray-1;
+    @apply text-16 placeholder:text-16 bg-black-1 rounded-md placeholder:text-gray-1 border border-white-1/10 text-gray-1 transition-all duration-200 focus:ring-1 focus:ring-blue-1/50 focus:border-blue-1/50;
   }
 
   .podcast_grid {
-    @apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3;
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4;
   }
 
   .right_sidebar {
-    @apply sticky right-0 top-0 flex w-[310px] flex-col overflow-y-hidden border-none bg-black-1 px-[30px] pt-8 max-xl:hidden;
+    @apply sticky right-0 top-0 flex w-[310px] flex-col overflow-y-hidden border-l border-white-1/5 bg-black-1 px-6 pt-8 max-xl:hidden;
   }
 
   .left_sidebar {
-    @apply sticky left-0 top-0 flex w-fit flex-col justify-between border-none bg-black-1 pt-8 text-white-1 max-md:hidden lg:w-[270px] lg:pl-8;
+    @apply sticky left-0 top-0 flex w-fit flex-col justify-between border-r border-white-1/5 bg-black-1 pt-8 text-white-1 max-md:hidden lg:w-[260px] lg:pl-6;
   }
 
   .generate_thumbnail {
-    @apply flex flex-row justify-between gap-2 rounded-lg border border-black-6 bg-black-1 px-2.5 py-2;
+    @apply flex flex-row justify-between gap-2 rounded-md border border-white-1/10 bg-black-2 px-3 py-2.5 transition-all duration-200 hover:border-blue-1/30 hover:bg-black-2/80;
   }
 
   .generate_content {
-    @apply flex w-full max-w-[520px] flex-col justify-between gap-2 rounded-lg border border-black-6 bg-black-1 px-2.5 py-2 md:flex-row md:gap-0;
+    @apply flex w-full max-w-[520px] flex-col justify-between gap-2 rounded-md border border-white-1/10 bg-black-2 px-3 py-2.5 md:flex-row md:gap-0 transition-all duration-200 hover:border-blue-1/30 hover:bg-black-2/80;
   }
 
   .image_div {
-    @apply flex-center mt-5 h-[142px] w-full cursor-pointer flex-col gap-3 rounded-xl border-[3.2px] border-dashed border-black-6 bg-black-1;
+    @apply flex-center mt-5 h-[142px] w-full cursor-pointer flex-col gap-3 rounded-lg border-2 border-dashed border-white-1/20 bg-black-2 transition-all duration-200 hover:border-blue-1/40 hover:bg-black-2/80;
   }
 
   .carousel_box {
-    @apply relative flex h-fit aspect-square w-full flex-none cursor-pointer flex-col justify-end rounded-xl border-none;
+    @apply relative flex h-fit aspect-square w-full flex-none cursor-pointer flex-col justify-end rounded-lg border-none transition-all duration-300 hover:scale-[1.02];
   }
 
   .button_bold-16 {
-    @apply text-[16px] font-bold text-white-1 transition-all duration-500;
+    @apply text-[16px] font-semibold text-white-1 transition-all duration-300;
   }
 
   .flex-center {
@@ -89,17 +99,18 @@ html {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(91, 127, 255, 0.3);
   border-radius: 10px;
+  transition: background 0.2s ease;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(91, 127, 255, 0.5);
 }
 
 @keyframes fadeIn {
@@ -136,21 +147,24 @@ html {
 }
 
 .glassmorphism {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glassmorphism-auth {
-  background: rgba(6, 3, 3, 0.711);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(6, 3, 3, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .glassmorphism-black {
-  background: rgba(18, 18, 18, 0.64);
-  backdrop-filter: blur(37px);
-  -webkit-backdrop-filter: blur(37px);
+  background: rgba(18, 18, 18, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 @keyframes gradient {
