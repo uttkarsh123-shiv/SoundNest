@@ -3,14 +3,11 @@ import Image from 'next/image';
 import { MessageCircle, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import DetailSection from './SectionDetail';
 import { Id } from '@/convex/_generated/dataModel';
-import { UserResource } from '@clerk/types';
 
-// Update User interface to match UserResource properties
 interface User {
     id: string;
     imageUrl: string;
-    fullName?: string | null; // Changed to accept null
-    username?: string | null; // Changed to accept null
+    name?: string | null;
 }
 
 interface Comment {
@@ -23,7 +20,7 @@ interface Comment {
 }
 
 interface CommentsSectionProps {
-    user: UserResource | User | null | undefined;  // Accept both UserResource and User
+    user: User | null | undefined;
     podcastComments: Comment[] | undefined;
     comment: string;
     isOwner: boolean;
@@ -61,7 +58,7 @@ const CommentsSection = ({
                         <div className="flex-shrink-0 relative w-8 h-8 sm:w-10 sm:h-10 mx-auto sm:mx-0">
                             <Image
                                 src={user.imageUrl}
-                                alt={user.fullName || "User"}
+                                alt={user.name || "User"}
                                 className="rounded-full object-cover"
                                 fill
                                 sizes="(max-width: 640px) 32px, 40px"
@@ -77,14 +74,14 @@ const CommentsSection = ({
                                     }
                                 }}
                                 placeholder="Share your thoughts..."
-                                className="w-full bg-black-1/70 border border-gray-800 rounded-lg p-2 sm:p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-blue-1 min-h-[80px] sm:min-h-[100px] text-sm sm:text-base"
+                                className="w-full bg-black-1/70 border border-gray-800 rounded-lg p-2 sm:p-3 text-white-2 placeholder:text-white-3 focus:outline-none focus:ring-1 focus:ring-green-1 min-h-[80px] sm:min-h-[100px] text-sm sm:text-base"
                             />
                             <div className="flex justify-end mt-2 sm:mt-3">
                                 <button
                                     onClick={handleCommentSubmit}
                                     disabled={!comment.trim()}
                                     className={`px-3 sm:px-5 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg font-medium transition-all ${comment.trim()
-                                        ? "bg-blue-1 text-black hover:bg-blue-2"
+                                        ? "bg-green-1 text-black hover:bg-green-2"
                                         : "bg-white-1/10 text-white-3 cursor-not-allowed"
                                         }`}
                                 >

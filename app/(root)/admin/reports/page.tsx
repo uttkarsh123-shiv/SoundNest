@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/providers/AuthProvider";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import { useConvex } from "convex/react";
 
@@ -16,7 +16,7 @@ const ReportManagement = () => {
     const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
     const [reporterNames, setReporterNames] = useState<Record<string, string>>({});
 
-    const { user } = useUser();
+    const { user, isSignedIn } = useAuth();
     const { toast } = useToast();
     const convex = useConvex();
 
@@ -30,7 +30,7 @@ const ReportManagement = () => {
 
     // Extract unique reporter IDs from reports
     const reporterIds = reports
-        ? [...new Set(reports.filter(r => r.reportedBy).map(r => r.reportedBy))]
+        ? Array.from(new Set(reports.filter(r => r.reportedBy).map(r => r.reportedBy as string)))
         : [];
 
     // Fetch user information for reporters when reports change
@@ -44,7 +44,7 @@ const ReportManagement = () => {
                 if (!reporterNames[reporterId]) {
                     try {
                         // Use the useQuery hook to fetch user data instead of calling the API directly
-                        const userData = await convex.query(api.users.getUserById, { clerkId: reporterId });
+                        const userData = await convex.query(api.users.getUserById, { userId: reporterId });
                         if (userData) {
                             newReporterNames[reporterId] = userData.name || "Unknown User";
                         }
@@ -68,10 +68,10 @@ const ReportManagement = () => {
 
         try {
             await updateReportStatus({
-                reportId,
+                reportId: reportId as any,
                 status: newStatus,
                 reviewNotes: reviewNotes[reportId],
-                reviewedBy: user.id,
+                reviewedBy: user.id as any,
             });
 
             toast({

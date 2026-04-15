@@ -9,9 +9,9 @@ interface SectionContainerProps {
 
 const SectionContainer = ({ title, children, rightElement }: SectionContainerProps) => {
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
             <SectionHeader title={title} rightElement={rightElement} />
-            <div className="bg-black-1/30 rounded-xl p-6 border border-gray-800">
+            <div className="bg-black-5/40 rounded-lg p-5 border border-white-1/5">
                 {children}
             </div>
         </div>

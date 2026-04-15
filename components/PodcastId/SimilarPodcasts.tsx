@@ -61,7 +61,7 @@ const SimilarPodcasts = ({ similarPodcasts }: SimilarPodcastsProps) => {
   return (
     <section ref={sectionRef} className="mt-12 mb-8">
       <div className="flex items-center gap-3 mb-6">
-        <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+        <div className="h-6 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
         <h2 className="text-24 font-bold text-white-1">Similar Podcasts</h2>
       </div>
 

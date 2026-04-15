@@ -46,7 +46,7 @@ const FilterControls = ({
                             </>
                         )}
                         {search && (
-                            <span className="text-blue-1 ml-1 bg-blue-1/10 px-3 py-1 rounded-lg mt-1 sm:mt-0 max-w-[120px] sm:max-w-[250px] truncate">
+                            <span className="text-green-1 ml-1 bg-green-1/10 px-3 py-1 rounded-lg mt-1 sm:mt-0 max-w-[120px] sm:max-w-[250px] truncate">
                                 {search}
                             </span>
                         )}
@@ -57,7 +57,7 @@ const FilterControls = ({
                             <button
                                 onClick={() => setViewMode('grid')}
                                 className={`p-1.5 rounded-md transition-all duration-200 ${viewMode === 'grid'
-                                    ? 'bg-blue-1 text-black shadow-md scale-105'
+                                    ? 'bg-green-1 text-black shadow-md scale-105'
                                     : 'text-white-2 hover:bg-white-1/10'}`}
                                 aria-label="Grid view"
                             >
@@ -66,7 +66,7 @@ const FilterControls = ({
                             <button
                                 onClick={() => setViewMode('list')}
                                 className={`p-1.5 rounded-md transition-all duration-200 ${viewMode === 'list'
-                                    ? 'bg-blue-1 text-black shadow-md scale-105'
+                                    ? 'bg-green-1 text-black shadow-md scale-105'
                                     : 'text-white-2 hover:bg-white-1/10'}`}
                                 aria-label="List view"
                             >
@@ -81,7 +81,7 @@ const FilterControls = ({
                         <button
                             onClick={() => setViewMode('grid')}
                             className={`p-1.5 rounded-md transition-all duration-200 ${viewMode === 'grid'
-                                ? 'bg-blue-1 text-black shadow-md scale-105'
+                                ? 'bg-green-1 text-black shadow-md scale-105'
                                 : 'text-white-2 hover:bg-white-1/10'}`}
                             aria-label="Grid view"
                         >
@@ -90,7 +90,7 @@ const FilterControls = ({
                         <button
                             onClick={() => setViewMode('list')}
                             className={`p-1.5 rounded-md transition-all duration-200 ${viewMode === 'list'
-                                ? 'bg-blue-1 text-black shadow-md scale-105'
+                                ? 'bg-green-1 text-black shadow-md scale-105'
                                 : 'text-white-2 hover:bg-white-1/10'}`}
                             aria-label="List view"
                         >
@@ -110,7 +110,7 @@ const FilterControls = ({
                             if (showLanguageFilter) setShowLanguageFilter(false)
                         }}
                         className={`px-2 sm:px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1 sm:gap-1.5 transition-all duration-200 ${showCategoryFilter || selectedCategories.length > 0
-                            ? 'bg-blue-1 text-black shadow-md'
+                            ? 'bg-green-1 text-black shadow-md'
                             : 'bg-black/20 text-white-2 hover:bg-white-1/10'
                             }`}
                     >
@@ -128,7 +128,7 @@ const FilterControls = ({
                             if (showCategoryFilter) setShowCategoryFilter(false)
                         }}
                         className={`px-2 sm:px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1 sm:gap-1.5 transition-all duration-200 ${showLanguageFilter || selectedLanguages.length > 0
-                            ? 'bg-blue-1 text-black shadow-md'
+                            ? 'bg-green-1 text-black shadow-md'
                             : 'bg-black/20 text-white-2 hover:bg-white-1/10'
                             }`}
                     >
@@ -147,7 +147,7 @@ const FilterControls = ({
                         <button
                             onClick={() => setFilterOption('trending')}
                             className={`px-3 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 transition-all duration-200 whitespace-nowrap flex-1 sm:flex-initial ${filterOption === 'trending'
-                                ? 'bg-blue-1 text-black shadow-md'
+                                ? 'bg-green-1 text-black shadow-md'
                                 : 'text-white-2 hover:bg-white-1/10'
                                 }`}
                         >
@@ -157,7 +157,7 @@ const FilterControls = ({
                         <button
                             onClick={() => setFilterOption('latest')}
                             className={`px-3 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 transition-all duration-200 whitespace-nowrap flex-1 sm:flex-initial ${filterOption === 'latest'
-                                ? 'bg-blue-1 text-black shadow-md'
+                                ? 'bg-green-1 text-black shadow-md'
                                 : 'text-white-2 hover:bg-white-1/10'
                                 }`}
                         >
@@ -167,7 +167,7 @@ const FilterControls = ({
                         <button
                             onClick={() => setFilterOption('popular')}
                             className={`px-3 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 transition-all duration-200 whitespace-nowrap flex-1 sm:flex-initial ${filterOption === 'popular'
-                                ? 'bg-blue-1 text-black shadow-md'
+                                ? 'bg-green-1 text-black shadow-md'
                                 : 'text-white-2 hover:bg-white-1/10'
                                 }`}
                         >
@@ -177,7 +177,7 @@ const FilterControls = ({
                         <button
                             onClick={() => setFilterOption('topRated')}
                             className={`px-3 py-2 rounded-md text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 transition-all duration-200 whitespace-nowrap flex-1 sm:flex-initial ${filterOption === 'topRated'
-                                ? 'bg-blue-1 text-black shadow-md'
+                                ? 'bg-green-1 text-black shadow-md'
                                 : 'text-white-2 hover:bg-white-1/10'
                                 }`}
                         >

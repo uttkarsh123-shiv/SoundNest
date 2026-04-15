@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useQuery } from "convex/react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@/providers/AuthProvider";
 import { TrendingUp, User, UserCheck } from "lucide-react";
 
 import { api } from "@/convex/_generated/api";
@@ -13,7 +13,7 @@ import UsersList from "@/components/Community/UsersList";
 type CommunityTab = "followers" | "following" | "topPodcasters";
 
 const Community = () => {
-  const { userId } = useAuth();
+  const { user: authUser } = useAuth(); const userId = authUser?.id;
   const [activeTab, setActiveTab] = useState<CommunityTab>("topPodcasters");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -27,9 +27,9 @@ const Community = () => {
   // Filter based on search query
   const getFilteredUsers = () => {
     if (activeTab === "followers") {
-      return followers?.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      return followers?.filter(u => u?.name?.toLowerCase().includes(searchQuery.toLowerCase()));
     } else if (activeTab === "following") {
-      return following?.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      return following?.filter(u => u?.name?.toLowerCase().includes(searchQuery.toLowerCase()));
     } else {
       return topUsers?.filter(user => user.name.toLowerCase().includes(searchQuery.toLowerCase()));
     }

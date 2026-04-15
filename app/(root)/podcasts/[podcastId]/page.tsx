@@ -8,12 +8,12 @@ import CommentsSection from '@/components/PodcastId/CommentsSection'
 import SimilarPodcasts from '@/components/PodcastId/SimilarPodcasts'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
-import { useUser } from '@clerk/nextjs'
+import { useAuth } from '@/providers/AuthProvider'
 import { useMutation, useQuery } from 'convex/react'
 import { useEffect, useState, useCallback, useMemo } from 'react'
 
 const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'podcasts'> } }) => {
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const podcast = useQuery(api.podcasts.getPodcastById, { podcastId })
   const [hasUpdatedView, setHasUpdatedView] = useState(false);
@@ -92,7 +92,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
       await submitComment({
         podcastId,
         userId: user.id,
-        userName: user.fullName || user.username || "Anonymous",
+        userName: user.name || "Anonymous",
         userImageUrl: user.imageUrl,
         content: comment.trim()
       });

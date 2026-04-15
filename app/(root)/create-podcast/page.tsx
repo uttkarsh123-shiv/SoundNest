@@ -26,8 +26,9 @@ import { toast } from "@/components/ui/use-toast";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
 import GenerateAIContent from "@/components/CreatePodcast/GenerateAIContent";
-import { chatSession } from "@/service/OpenAI";
+import { chatSession } from "@/service/Gemini";
 import { Gemini_Prompt } from "@/constants/Gemini_Prompt";
 import { podcastTypes } from "@/constants/PodcastFields";
 import { formSchema } from "@/constants/FormSchema";
@@ -37,6 +38,7 @@ import FormFieldWrapper from '@/components/CreatePodcast/FormFieldWrapper';
 
 const CreatePodcast = () => {
     const router = useRouter()
+    const { user } = useAuth();
     //Image States
     const [imagePrompt, setImagePrompt] = useState("");
     const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(null);
@@ -49,7 +51,7 @@ const CreatePodcast = () => {
     const [audioDuration, setAudioDuration] = useState(0);
 
     //Voice States
-    const [voiceType, setVoiceType] = useState<string | null>("Drew");
+    const [voiceType, setVoiceType] = useState<string | null>("29vD33N1CtxCmqQRPOHJ");
     const [voicePrompt, setVoicePrompt] = useState("");
 
     //AI States
@@ -64,7 +66,7 @@ const CreatePodcast = () => {
     const [isGeneratingContent, setIsGeneratingContent] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const createPodcast = useMutation(api.podcasts.createPodcast);
+    const createPodcast = useMutation(api.podcasts.core.createPodcast);
 
     // 1. Define your form
     const form = useForm<z.infer<typeof formSchema>>({
@@ -142,12 +144,13 @@ const CreatePodcast = () => {
                 audioDuration,
                 audioStorageId,
                 imageStorageId,
-                language: selectedLanguage, // Add the selected language
+                language: selectedLanguage,
+                authorId: user?.id || '',
             });
 
             // Redirect to the podcast detail page
             router.push(`/podcasts/${newPodcast}`);
-            
+
             // Add a delay before showing the success toast
             setTimeout(() => {
                 toast({
@@ -202,8 +205,13 @@ const CreatePodcast = () => {
             const text = response.text();
             console.log(text);
             try {
-                // Sanitize the JSON string by removing control characters before parsing
-                const sanitizedText = text.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+                // Strip markdown code fences Gemini sometimes wraps around JSON
+                const stripped = text
+                    .replace(/^```(?:json)?\s*/i, '')
+                    .replace(/\s*```$/, '')
+                    .trim();
+                // Remove control characters
+                const sanitizedText = stripped.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
                 const content = JSON.parse(sanitizedText);
 
                 form.setValue("podcastDescription", content.description);
@@ -256,18 +264,18 @@ const CreatePodcast = () => {
     };
 
     return (
-        <section className="md:px-10 pt-10">
-            <div className="space-y-10">
+        <section className="md:px-6 pt-8 pb-16">
+            <div className="space-y-8">
                 {/* Header */}
-                <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-white-1">Create New Podcast</h1>
-                    <p className="text-gray-1 text-sm">
-                        Fill in the details below to create your podcast. Use AI to generate content or write your own.
+                <div>
+                    <h1 className="text-2xl font-extrabold text-white-1 tracking-tight">Create Podcast</h1>
+                    <p className="text-white-3 text-[13px] mt-1">
+                        Fill in the details, use AI to generate content, then publish.
                     </p>
                 </div>
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                         <div className="grid gap-8">
                             {/* Basic Information */}
                             <SectionContainer title="Basic Information">
@@ -278,7 +286,7 @@ const CreatePodcast = () => {
                                         render={({ field }) => (
                                             <FormFieldWrapper label="Podcast Title">
                                                 <Input
-                                                    className="input-class focus-visible:ring-offset-blue-1 h-12"
+                                                    className="input-class focus-visible:ring-offset-green-1 h-12"
                                                     placeholder="Enter your podcast title..."
                                                     suppressHydrationWarning
                                                     {...field}
@@ -303,16 +311,16 @@ const CreatePodcast = () => {
                                                     defaultValue={field.value}
                                                 >
                                                     <SelectTrigger
-                                                        className="input-class focus-visible:ring-offset-blue-1 h-12"
+                                                        className="input-class focus-visible:ring-offset-green-1 h-12"
                                                     >
                                                         <SelectValue placeholder="Select a podcast type" />
                                                     </SelectTrigger>
-                                                    <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl">
+                                                    <SelectContent className="bg-black-1/95 text-white-1 border-green-1/10 rounded-xl">
                                                         {podcastTypes.map((option) => (
                                                             <SelectItem
                                                                 key={option.value}
                                                                 value={option.value}
-                                                                className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
+                                                                className="focus:bg-green-1/20 hover:bg-green-1/10 transition-colors"
                                                             >
                                                                 {option.label}
                                                             </SelectItem>
@@ -413,16 +421,7 @@ const CreatePodcast = () => {
                                 <Button
                                     disabled={isSubmitting}
                                     type="submit"
-                                    className={cn(
-                                        "bg-gradient-to-r from-blue-1 to-blue-2",
-                                        "text-white font-semibold gap-3 py-6 text-lg",
-                                        "transition-all duration-300 hover:scale-[1.02]",
-                                        "shadow-lg hover:shadow-blue-1/20",
-                                        "rounded-xl",
-                                        "disabled:opacity-50 disabled:hover:scale-100",
-                                        "max-w-[600px]",
-                                        "w-full"
-                                    )}
+                                    className="bg-green-1 hover:bg-green-2 text-black font-bold gap-2 py-2.5 px-10 text-sm rounded-full transition-all disabled:opacity-50 mx-auto"
                                 >
                                     {isSubmitting ? (
                                         <>

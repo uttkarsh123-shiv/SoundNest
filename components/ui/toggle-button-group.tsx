@@ -28,7 +28,7 @@ export function ToggleButtonGroup({
         <ToggleButton
           isActive={button1Active}
           onClick={() => setButtonActive(true)}
-          activeColor="blue"
+          activeColor="green"
         >
           <>
             <span className="sm:hidden">Use AI</span>
@@ -41,7 +41,7 @@ export function ToggleButtonGroup({
         <ToggleButton
           isActive={button2Active}
           onClick={() => setButtonActive(false)}
-          activeColor="blue"
+          activeColor="green"
         >
           <>
             <span className="sm:hidden">Upload Custom</span>

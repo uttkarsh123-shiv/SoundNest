@@ -60,9 +60,9 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
     }
 
     return (
-        <section className="relative w-full h-[340px] hidden md:block">
+        <section className="relative w-full h-[300px] hidden md:block">
             <div
-                className="overflow-hidden rounded-lg"
+                className="overflow-hidden rounded-xl"
                 ref={emblaRef}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
@@ -70,65 +70,67 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                 <div className="flex">
                     {featuredPodcasts.map((podcast) => (
                         <div key={podcast._id} className="relative w-full flex-[0_0_100%]">
-                            <div className="relative w-full h-[340px] rounded-lg overflow-hidden border border-white-1/10 bg-black-2">
+                            <div className="relative w-full h-[300px] rounded-xl overflow-hidden">
                                 <UserImage
                                     imageUrl={podcast.imageUrl!}
                                     title={podcast.podcastTitle}
                                     blurred={true}
                                     overlay={true}
                                 />
-                                <div className="relative h-full flex items-end p-8">
-                                    <div className="w-full space-y-4">
+                                {/* stronger gradient overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+
+                                <div className="relative h-full flex items-end p-6">
+                                    <div className="w-full space-y-3">
                                         {/* Author Info */}
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-2">
                                             <Image
                                                 src={podcast.authorImageUrl!}
                                                 alt={podcast.author}
-                                                width={36}
-                                                height={36}
-                                                className="rounded-full border-2 border-blue-1/40 cursor-pointer hover:border-blue-1 transition-all duration-200"
+                                                width={28}
+                                                height={28}
+                                                className="rounded-full border border-green-1/60 cursor-pointer"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     router.push(`/profile/${podcast.authorId}`);
                                                 }}
                                             />
-                                            <span className="text-white-1 font-medium text-sm">{podcast.author}</span>
+                                            <span className="text-white-2 text-xs font-medium tracking-wide uppercase">{podcast.author}</span>
                                         </div>
 
                                         {/* Title */}
-                                        <h1 className="text-3xl font-heading font-bold text-white-1 drop-shadow-lg line-clamp-2 leading-tight">
+                                        <h1 className="text-2xl font-heading font-bold text-white-1 line-clamp-1 leading-tight">
                                             {podcast.podcastTitle}
                                         </h1>
 
                                         {/* Description */}
-                                        <p className="text-white-2 text-sm line-clamp-2 max-w-3xl leading-relaxed">
+                                        <p className="text-white-3 text-xs line-clamp-1 max-w-2xl leading-relaxed">
                                             {podcast.podcastDescription}
                                         </p>
 
                                         {/* Actions and Stats */}
-                                        <div className="flex items-center justify-between pt-2">
+                                        <div className="flex items-center gap-4 pt-1">
                                             <button
                                                 onClick={() => router.push(`/podcasts/${podcast._id}`)}
-                                                className="bg-blue-1 text-white px-6 py-2.5 rounded-md font-semibold hover:bg-blue-2 transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-blue-1/30 active:scale-[0.98]"
+                                                className="bg-green-1 text-black px-5 py-2 rounded-full text-sm font-bold hover:bg-green-2 transition-all duration-200 flex items-center gap-2 hover:scale-105 active:scale-95"
                                             >
-                                                <Play size={16} className="fill-white" />
+                                                <Play size={14} className="fill-black" />
                                                 Listen Now
                                             </button>
 
-                                            <div className="flex items-center gap-5">
-                                                <div className="flex items-center gap-1.5 bg-black-1/40 backdrop-blur-sm px-3 py-1.5 rounded-md border border-white-1/10">
-                                                    <Headphones size={16} className="text-white-2" />
-                                                    <span className="text-white-1 text-sm font-medium">{podcast.views}</span>
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex items-center gap-1.5 text-white-3 text-xs">
+                                                    <Headphones size={13} />
+                                                    <span>{podcast.views}</span>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 bg-black-1/40 backdrop-blur-sm px-3 py-1.5 rounded-md border border-white-1/10">
-                                                    <Heart size={16} className="text-white-2" />
-                                                    <span className="text-white-1 text-sm font-medium">{podcast.likeCount || 0}</span>
+                                                <div className="flex items-center gap-1.5 text-white-3 text-xs">
+                                                    <Heart size={13} />
+                                                    <span>{podcast.likeCount || 0}</span>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 bg-black-1/40 backdrop-blur-sm px-3 py-1.5 rounded-md border border-white-1/10">
-                                                    <Star size={16} className="text-white-2" />
-                                                    <span className="text-white-1 text-sm font-medium">
-                                                        {podcast?.averageRating ? Number(podcast.averageRating).toFixed(1) : "0.0"}
-                                                    </span>
+                                                <div className="flex items-center gap-1.5 text-white-3 text-xs">
+                                                    <Star size={13} />
+                                                    <span>{podcast?.averageRating ? Number(podcast.averageRating).toFixed(1) : "0.0"}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,7 +142,7 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                 </div>
             </div>
 
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-3">
                 <CarouselDots
                     totalSlides={featuredPodcasts.length}
                     selectedIndex={selectedIndex}

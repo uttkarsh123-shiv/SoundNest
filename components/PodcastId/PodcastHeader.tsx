@@ -13,7 +13,7 @@ const PodcastHeader = ({ podcastType, audioDuration, views, averageRating }: Pod
       {/* Desktop header */}
       <header className="hidden sm:flex mt-9 items-center justify-between bg-black-1/30 p-6 rounded-xl border border-gray-800">
         <div className="flex items-center gap-3">
-          <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+          <div className="h-6 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
           <h1 className="text-24 font-bold text-white-1">
             Currently Playing
           </h1>
@@ -49,7 +49,7 @@ const PodcastHeader = ({ podcastType, audioDuration, views, averageRating }: Pod
       {/* Mobile header */}
       <header className="sm:hidden mt-6 bg-black-1/30 p-4 rounded-xl border border-gray-800">
         <div className="flex items-center gap-2 mb-4">
-          <div className="h-5 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+          <div className="h-5 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
           <h1 className="text-20 font-bold text-white-1">
             Currently Playing
           </h1>
@@ -57,24 +57,24 @@ const PodcastHeader = ({ podcastType, audioDuration, views, averageRating }: Pod
         <div className="grid grid-cols-2 gap-3">
           {/* Category */}
           <div className="flex items-center gap-2 bg-black-1/50 px-3 py-2 rounded-full">
-            <Layers size={16} className="text-blue-1 min-w-4" />
+            <Layers size={16} className="text-green-1 min-w-4" />
             <span className="text-13 font-medium text-white-2 capitalize truncate">{podcastType || "storytelling"}</span>
           </div>
           {/* Duration */}
           <div className="flex items-center gap-2 bg-black-1/50 px-3 py-2 rounded-full">
-            <Clock size={16} className="text-blue-1 min-w-4" />
+            <Clock size={16} className="text-green-1 min-w-4" />
             <span className="text-13 font-medium text-white-2">
               {Math.floor(audioDuration / 60)}:{Math.floor(audioDuration % 60).toString().padStart(2, '0')}
             </span>
           </div>
           {/* Views */}
           <div className="flex items-center gap-2 bg-black-1/50 px-3 py-2 rounded-full">
-            <Headphones size={16} className="text-blue-1 min-w-4" />
+            <Headphones size={16} className="text-green-1 min-w-4" />
             <span className="text-13 font-medium text-white-2">{views} views</span>
           </div>
           {/* Rating */}
           <div className="flex items-center gap-2 bg-black-1/50 px-3 py-2 rounded-full">
-            <Star size={16} className="text-blue-1 min-w-4" fill={averageRating ? "#5B7FFF" : "none"} />
+            <Star size={16} className="text-green-1 min-w-4" fill={averageRating ? "#5B7FFF" : "none"} />
             <span className="text-13 font-medium text-white-2">
               {averageRating ? averageRating.toFixed(1) : "No ratings"}
             </span>

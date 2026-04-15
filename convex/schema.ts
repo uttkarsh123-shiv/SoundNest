@@ -1,4 +1,3 @@
-
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -12,7 +11,7 @@ export default defineSchema({
     imageUrl: v.optional(v.string()),
     imageStorageId: v.optional(v.id("_storage")),
     author: v.string(),
-    authorId: v.string(),
+    authorId: v.string(),       // Convex user _id string
     authorImageUrl: v.string(),
     voicePrompt: v.string(),
     imagePrompt: v.string(),
@@ -24,7 +23,7 @@ export default defineSchema({
     likeCount: v.optional(v.float64()),
     averageRating: v.optional(v.float64()),
     ratingCount: v.optional(v.float64()),
-    language: v.optional(v.string()), // Add language field
+    language: v.optional(v.string()),
   })
     .searchIndex("search_author", { searchField: "author" })
     .searchIndex("search_title", { searchField: "podcastTitle" })
@@ -33,22 +32,20 @@ export default defineSchema({
   users: defineTable({
     email: v.string(),
     imageUrl: v.string(),
-    clerkId: v.string(),
+    passwordHash: v.optional(v.string()),
     name: v.string(),
     followersCount: v.optional(v.number()),
     followingCount: v.optional(v.number()),
     bio: v.optional(v.string()),
     website: v.optional(v.string()),
-    isVerified: v.optional(v.boolean()), // Add isVerified field
-    socialLinks: v.optional(v.array(v.object({
-      platform: v.string(),
-      url: v.string()
-    }))),
+    isVerified: v.optional(v.boolean()),
+    socialLinks: v.optional(v.array(v.object({ platform: v.string(), url: v.string() }))),
     isAdmin: v.optional(v.boolean()),
   }),
+
   ratings: defineTable({
     podcastId: v.id("podcasts"),
-    userId: v.string(),
+    userId: v.string(),         // Convex user _id string
     rating: v.number(),
     createdAt: v.string(),
   })
@@ -57,7 +54,7 @@ export default defineSchema({
 
   comments: defineTable({
     podcastId: v.id("podcasts"),
-    userId: v.string(),
+    userId: v.string(),         // Convex user _id string
     userName: v.string(),
     userImageUrl: v.string(),
     content: v.string(),
@@ -67,17 +64,17 @@ export default defineSchema({
     .index("by_user", ["userId"]),
 
   follows: defineTable({
-    follower: v.string(), // The clerkId of the user who is following
-    following: v.string(), // The clerkId of the user being followed
-    createdAt: v.number(), // Timestamp when the follow relationship was created
+    follower: v.string(),       // Convex user _id string
+    following: v.string(),      // Convex user _id string
+    createdAt: v.number(),
   })
     .index("by_follower", ["follower"])
     .index("by_following", ["following"])
     .index("by_follower_and_following", ["follower", "following"]),
 
   notifications: defineTable({
-    userId: v.string(),
-    creatorId: v.string(),
+    userId: v.string(),         // Convex user _id string
+    creatorId: v.string(),      // Convex user _id string
     message: v.optional(v.string()),
     type: v.string(),
     podcastId: v.optional(v.id("podcasts")),
@@ -91,24 +88,24 @@ export default defineSchema({
   reports: defineTable({
     podcastId: v.id("podcasts"),
     podcastTitle: v.string(),
-    reportType: v.string(), // inappropriate, copyright, offensive, misinformation, other
+    reportType: v.string(),
     details: v.optional(v.string()),
     contactEmail: v.optional(v.string()),
-    reportedBy: v.optional(v.string()), // Changed to string for Clerk user ID
-    status: v.string(), // pending, reviewed, resolved, dismissed
-    reviewedBy: v.optional(v.string()), // Changed to string for Clerk user ID
+    reportedBy: v.optional(v.string()),   // Convex user _id string
+    status: v.string(),
+    reviewedBy: v.optional(v.string()),   // Convex user _id string
     reviewNotes: v.optional(v.string()),
   })
     .index("by_status", ["status"])
     .index("by_podcast", ["podcastId"]),
 
   adminRequests: defineTable({
-    userId: v.string(),
+    userId: v.string(),         // Convex user _id string
     reason: v.string(),
-    status: v.string(), // "pending", "approved", "rejected"
+    status: v.string(),
     createdAt: v.string(),
     reviewedAt: v.optional(v.string()),
     reviewedBy: v.optional(v.string()),
     reviewNotes: v.optional(v.string()),
-  })
+  }),
 });

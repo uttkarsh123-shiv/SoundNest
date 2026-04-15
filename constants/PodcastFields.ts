@@ -87,7 +87,7 @@ export const styleOptions = [
 ];
 
 export const voiceCategories = [
-    { value: 'Drew', label: 'Drew (Male)', description: 'Deep and professional' },
-    { value: 'Rachel', label: 'Rachel (Female)', description: 'Clear and engaging' },
-    { value: 'Sarah', label: 'Sarah (Female)', description: 'Warm and friendly' },
-  ];
+    { value: '29vD33N1CtxCmqQRPOHJ', label: 'Drew (Male)', description: 'Deep and professional' },
+    { value: '21m00Tcm4TlvDq8ikWAM', label: 'Rachel (Female)', description: 'Clear and engaging' },
+    { value: 'EXAVITQu4vr4xnSDxMaL', label: 'Sarah (Female)', description: 'Warm and friendly' },
+];

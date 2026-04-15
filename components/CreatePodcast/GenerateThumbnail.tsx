@@ -84,11 +84,11 @@ const GenerateThumbnail = ({
 
       setProgress(60)
       const uploaded = await startUpload([file])
-      if (!uploaded?.[0]?.response?.storageId) {
+      if (!(uploaded?.[0]?.response as any)?.storageId) {
         throw new Error("Upload failed - no storage ID received")
       }
 
-      const storageId = uploaded[0].response.storageId as Id<"_storage">
+      const storageId = (uploaded[0].response as any).storageId as Id<"_storage">
       setImageStorageId(storageId)
 
       const imageUrl = await getImageUrl({ storageId })
@@ -235,11 +235,22 @@ const GenerateThumbnail = ({
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      <ToggleButtonGroup containerWidth="max-w-[580px]"
-        button1text="Use AI to generate Thumbnail" button2text="Upload custom Thumbnail"
-        button1Active={isAiThumbnail} button2Active={!isAiThumbnail}
-        setButtonActive={setIsAiThumbnail}
-      />
+      <div className="flex rounded-full bg-black-1 p-1 max-w-[520px] mx-auto w-full">
+        <button
+          type="button"
+          onClick={() => setIsAiThumbnail(true)}
+          className={`flex-1 text-[13px] font-semibold py-2 rounded-full transition-all ${isAiThumbnail ? 'bg-green-1 text-black' : 'text-white-3 hover:text-white-1'}`}
+        >
+          Use AI to generate Thumbnail
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsAiThumbnail(false)}
+          className={`flex-1 text-[13px] font-semibold py-2 rounded-full transition-all ${!isAiThumbnail ? 'bg-green-1 text-black' : 'text-white-3 hover:text-white-1'}`}
+        >
+          Upload custom Thumbnail
+        </button>
+      </div>
 
       {isAiThumbnail ? (
         <div className="flex flex-col gap-5 animate-in fade-in-50">
@@ -247,7 +258,7 @@ const GenerateThumbnail = ({
             <div className="mt-4 sm:mt-8 flex flex-col gap-3 sm:gap-4">
               <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
                 <div className="flex items-center gap-2 sm:gap-3 flex-1">
-                  <div className="h-5 sm:h-6 w-1.5 flex-shrink-0 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+                  <div className="h-5 sm:h-6 w-1.5 flex-shrink-0 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
                   <Label className="text-15 sm:text-18 font-bold text-white-1 leading-tight">
                     <>
                       <span className="sm:hidden">Select a Prompt</span>
@@ -276,18 +287,18 @@ const GenerateThumbnail = ({
                       "hover:bg-black-1/70 border border-black-6",
                       "text-gray-1 hover:text-white-1",
                       "flex items-center justify-between",
-                      "hover:shadow-lg hover:shadow-blue-1/5",
+                      "hover:shadow-lg hover:shadow-green-1/5",
                       "hover:scale-[1.01] active:scale-[0.99]",
                       "gap-2 sm:gap-3",
                       imagePrompt === prompt ? [
-                        "bg-black-1/70 border-blue-1/50 text-white-1",
-                        "shadow-lg shadow-blue-1/10"
-                      ] : "hover:border-blue-1/30"
+                        "bg-black-1/70 border-green-1/50 text-white-1",
+                        "shadow-lg shadow-green-1/10"
+                      ] : "hover:border-green-1/30"
                     )}
                   >
                     <div className="flex items-center gap-2 sm:gap-3 flex-1">
                       {imagePrompt === prompt && (
-                        <div className="h-full w-1 absolute left-0 top-0 bg-gradient-to-t from-blue-1 to-blue-2 rounded-l-xl" />
+                        <div className="h-full w-1 absolute left-0 top-0 bg-gradient-to-t from-green-1 to-green-2 rounded-l-xl" />
                       )}
                       <span className="text-xs sm:text-sm font-medium leading-relaxed">{prompt}</span>
                     </div>
@@ -295,10 +306,10 @@ const GenerateThumbnail = ({
                       "w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 flex-shrink-0 transition-all duration-300",
                       "flex items-center justify-center",
                       imagePrompt === prompt ? [
-                        "border-blue-1 bg-blue-1",
-                        "group-hover:bg-blue-2 group-hover:border-blue-2"
+                        "border-green-1 bg-green-1",
+                        "group-hover:bg-green-2 group-hover:border-green-2"
                       ] : [
-                        "border-gray-1/30 group-hover:border-blue-1/50",
+                        "border-gray-1/30 group-hover:border-green-1/50",
                         "group-hover:scale-110"
                       ]
                     )}>
@@ -314,7 +325,7 @@ const GenerateThumbnail = ({
 
           <div className="space-y-3 mt-6">
             <Label htmlFor='thumbnail-prompt' className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-              <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+              <div className="h-6 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
               {thumbnailPrompts.length > 0 ? "Customize Prompt" : "Enter Prompt"}
             </Label>
             <Textarea
@@ -326,7 +337,7 @@ const GenerateThumbnail = ({
                 "disabled:opacity-50 disabled:cursor-not-allowed",
                 "border border-black-6 rounded-xl",
                 "p-4",
-                "focus-visible:ring-offset-blue-1",
+                "focus-visible:ring-offset-green-1",
                 "placeholder:text-gray-1/70"
               )}
               placeholder={
@@ -349,20 +360,8 @@ const GenerateThumbnail = ({
             <Button
               type="submit"
               onClick={generateImage}
-              disabled={
-                isImageLoading ||
-                !imagePrompt.trim()
-              }
-              className={cn(
-                "bg-gradient-to-r from-blue-1 to-blue-2",
-                "text-white font-semibold gap-3 py-6 text-lg",
-                "transition-all duration-300 hover:scale-[1.02]",
-                "shadow-lg hover:shadow-blue-1/20",
-                "rounded-xl",
-                "disabled:opacity-50 disabled:hover:scale-100",
-                "max-w-[600px]",
-                "w-full"
-              )}
+              disabled={isImageLoading || !imagePrompt.trim()}
+              className="bg-green-1 hover:bg-green-2 text-black font-bold gap-2 py-2.5 px-8 text-sm rounded-full transition-all disabled:opacity-50 mx-auto"
             >
               {isImageLoading ? (
                 <>
@@ -384,7 +383,7 @@ const GenerateThumbnail = ({
           <div
             onClick={() => !isImageLoading && imageRef?.current?.click()}
             className={cn(
-              "image_div hover:border-blue-1/50 hover:bg-black-1/30",
+              "image_div hover:border-green-1/50 hover:bg-black-1/30",
               "transition-all duration-200 group animate-in fade-in-50",
               "border-black-6 bg-black-1/50",
               "p-4 sm:p-6 rounded-lg",
@@ -403,7 +402,7 @@ const GenerateThumbnail = ({
             <div className="flex flex-col items-center gap-1">
               <h2
                 className={cn(
-                  "text-12 font-bold text-blue-1 group-hover:text-blue-2",
+                  "text-12 font-bold text-green-1 group-hover:text-green-2",
                   "transition-colors duration-200",
                 )}
               >

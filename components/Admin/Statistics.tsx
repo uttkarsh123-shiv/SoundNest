@@ -12,8 +12,8 @@ const Statistics = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-black-1/30 border border-gray-800 rounded-lg p-6 hover:bg-black-1/40 transition-colors">
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="bg-blue-1/20 p-2 rounded-full">
-                        <Flag size={20} className="text-blue-1" />
+                    <div className="bg-green-1/20 p-2 rounded-full">
+                        <Flag size={20} className="text-green-1" />
                     </div>
                     <h3 className="text-white-3 font-medium">Total Reports</h3>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@/providers/AuthProvider';
 import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import { useQuery } from 'convex/react';
@@ -10,7 +10,7 @@ interface MobileHomeHeaderProps {
 }
 
 const MobileHomeHeader = ({ scrollToSection }: MobileHomeHeaderProps) => {
-    const { user } = useUser();
+    const { user, isSignedIn } = useAuth();
     
     // Fetch notifications to check for unread ones
     const notifications = useQuery(
@@ -34,7 +34,7 @@ const MobileHomeHeader = ({ scrollToSection }: MobileHomeHeaderProps) => {
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-bold text-white-1">
-                        Welcome{user?.firstName ? `, ${user.firstName}` : ''}
+                        Welcome{user?.name ? `, ${user.name}` : ''}
                     </h1>
                     <p className="text-white-3 text-sm mt-1">Discover amazing podcasts today</p>
                 </div>
@@ -44,7 +44,7 @@ const MobileHomeHeader = ({ scrollToSection }: MobileHomeHeaderProps) => {
                     <Bell size={24} className="text-white-2" />
                     {/* Notification dot - only show when there are unread notifications */}
                     {hasUnreadNotifications && (
-                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-blue-1"></span>
+                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-green-1"></span>
                     )}
                 </Link>
             </div>

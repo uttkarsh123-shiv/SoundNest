@@ -38,11 +38,11 @@ const SelectedFilters = ({
               {selectedCategories.map(category => {
                 const categoryLabel = podcastTypes.find(c => c.value === category)?.label || category;
                 return (
-                  <div key={category} className="bg-blue-1/20 text-blue-1 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
+                  <div key={category} className="bg-green-1/20 text-green-1 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
                     {categoryLabel}
                     <button
                       onClick={() => toggleCategory(category)}
-                      className="hover:bg-blue-1/30 rounded-full p-0.5 transition-colors"
+                      className="hover:bg-green-1/30 rounded-full p-0.5 transition-colors"
                       aria-label={`Remove ${categoryLabel} filter`}
                     >
                       <X size={14} />
@@ -63,11 +63,11 @@ const SelectedFilters = ({
               {selectedLanguages.map(lang => {
                 const languageLabel = languageOptions.find(l => l.value === lang)?.label || lang;
                 return (
-                  <div key={lang} className="bg-blue-1/20 text-blue-1 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
+                  <div key={lang} className="bg-green-1/20 text-green-1 px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm">
                     {languageLabel}
                     <button
                       onClick={() => toggleLanguage(lang)}
-                      className="hover:bg-blue-1/30 rounded-full p-0.5 transition-colors"
+                      className="hover:bg-green-1/30 rounded-full p-0.5 transition-colors"
                       aria-label={`Remove ${languageLabel} filter`}
                     >
                       <X size={14} />
@@ -81,7 +81,7 @@ const SelectedFilters = ({
           {/* Clear all button */}
           <button
             onClick={clearAllFilters}
-            className="text-sm text-blue-1 hover:text-blue-2 font-medium transition-colors ml-auto bg-blue-1/5 px-3 py-1 rounded-lg hover:bg-blue-1/10"
+            className="text-sm text-green-1 hover:text-green-2 font-medium transition-colors ml-auto bg-green-1/5 px-3 py-1 rounded-lg hover:bg-green-1/10"
           >
             Clear all
           </button>

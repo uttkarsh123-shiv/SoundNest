@@ -14,12 +14,12 @@ const Header = ({ headerTitle, titleClassName }: { headerTitle?: string; titleCl
   return (
     <header className="flex items-center justify-between">
       {headerTitle ? (
-        <h1 className={cn('text-18 font-bold text-white-1', titleClassName)}>{headerTitle}</h1>
+        <h1 className={cn('text-[13px] font-bold text-white-1 uppercase tracking-widest', titleClassName)}>{headerTitle}</h1>
       ) : <div />}
       {/* Empty div is passed as we want to occupy space if header title doesn't exist */}
       <Link 
         href={linkUrl} 
-        className="text-16 font-semibold text-blue-1 hover:text-blue-2 hover:scale-105 transition-all duration-300"
+        className="text-[12px] font-semibold text-green-1 hover:text-green-2 transition-all duration-300"
       >
         See all
       </Link>

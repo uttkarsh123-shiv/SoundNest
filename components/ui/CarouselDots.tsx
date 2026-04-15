@@ -21,7 +21,7 @@ const CarouselDots = ({
           onClick={() => onDotClick(index)}
           className={`w-2 h-2 rounded-full transition-all mx-1 ${
             index === selectedIndex
-              ? 'bg-blue-1 w-6'
+              ? 'bg-green-1 w-6'
               : 'bg-white-1/30 hover:bg-white-1/50'
           }`}
           aria-label={`Go to slide ${index + 1}`}

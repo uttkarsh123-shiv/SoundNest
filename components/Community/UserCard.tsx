@@ -1,11 +1,11 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { User } from "lucide-react";
+import UserAvatar from "@/components/ui/UserAvatar";
 
 interface UserCardProps {
   user: {
-    clerkId: string;
+    _id?: string;
+    userId?: string;
     name: string;
     imageUrl?: string;
     isVerified?: boolean;
@@ -18,61 +18,30 @@ interface UserCardProps {
 }
 
 const UserCard = ({ user, activeTab }: UserCardProps) => {
+  const profileId = user._id?.toString() || user.userId || '';
+
   return (
     <Link
-      href={`/profile/${user.clerkId}`}
-      className="bg-black-1/30 border border-gray-800 rounded-xl p-4 transition-all hover:bg-black-1/50 flex items-center gap-4"
+      href={`/profile/${profileId}`}
+      className="bg-black-5/40 border border-white-1/5 rounded-lg p-3 transition-all hover:bg-black-5 flex items-center gap-3"
     >
-      {/* User avatar */}
-      <div className="flex-shrink-0">
-        {user.imageUrl ? (
-          <Image
-            src={user.imageUrl}
-            alt={user.name}
-            width={56}
-            height={56}
-            className="rounded-full"
-          />
-        ) : (
-          <div className="w-14 h-14 bg-black-1/50 rounded-full flex items-center justify-center">
-            <User size={24} className="text-blue-1" />
-          </div>
-        )}
-      </div>
+      <UserAvatar name={user.name} imageUrl={user.imageUrl} size={44} />
 
-      {/* User info */}
-      <div className="flex-1">
-        <h3 className="font-semibold text-white-1 text-lg flex items-center gap-1">
-          {user.name}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5">
+          <h3 className="font-semibold text-white-1 text-sm truncate">{user.name}</h3>
           {user.isVerified && (
-            <Image 
-              src="/icons/verified.svg"
-              alt="Verified"
-              width={16}
-              height={16}
-              className="inline-block"
-              title="Verified Podcaster"
-            />
+            <span className="text-[9px] font-bold bg-green-1 text-black px-1.5 py-0.5 rounded-full flex-shrink-0">✓</span>
           )}
-        </h3>
+        </div>
         {activeTab === "topPodcasters" ? (
-          <div className="flex flex-col">
-            <p className="text-white-3 text-sm">
-              {user.totalPodcasts} podcasts • {user.followersCount || 0} followers
-            </p>
-            {user.averageRating > 0 && (
-              <p className="text-blue-1 text-sm">
-                Rating: {user.averageRating.toFixed(1)} ★
-              </p>
-            )}
-          </div>
+          <p className="text-white-3 text-xs mt-0.5">
+            {user.totalPodcasts} podcasts · {user.followersCount || 0} followers
+            {(user.averageRating ?? 0) > 0 && ` · ${user.averageRating!.toFixed(1)} ★`}
+          </p>
         ) : (
-          <p className="text-white-3 text-sm">
-            {user.followedAt && new Date(user.followedAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
+          <p className="text-white-3 text-xs mt-0.5">
+            {user.followedAt && new Date(user.followedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
           </p>
         )}
       </div>

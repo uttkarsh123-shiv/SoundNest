@@ -18,21 +18,21 @@ const ProfileAbout = ({ user, isOwnProfile }: ProfileAboutProps) => {
     // Get appropriate icon based on platform
     const getSocialIcon = (platform: string) => {
         switch (platform.toLowerCase()) {
-            case 'twitter': return <Twitter size={18} className="text-blue-1" />;
-            case 'instagram': return <Instagram size={18} className="text-blue-1" />;
-            case 'youtube': return <Youtube size={18} className="text-blue-1" />;
-            case 'facebook': return <Facebook size={18} className="text-blue-1" />;
-            case 'linkedin': return <Linkedin size={18} className="text-blue-1" />;
-            case 'github': return <Github size={18} className="text-blue-1" />;
-            default: return <Link size={18} className="text-blue-1" />;
+            case 'twitter': return <Twitter size={18} className="text-green-1" />;
+            case 'instagram': return <Instagram size={18} className="text-green-1" />;
+            case 'youtube': return <Youtube size={18} className="text-green-1" />;
+            case 'facebook': return <Facebook size={18} className="text-green-1" />;
+            case 'linkedin': return <Linkedin size={18} className="text-green-1" />;
+            case 'github': return <Github size={18} className="text-green-1" />;
+            default: return <Link size={18} className="text-green-1" />;
         }
     };
 
     return (
         <section className="mb-10">
             <div className="flex items-center gap-4 mb-6">
-                <div className="bg-blue-1/10 p-3 rounded-xl">
-                    <User size={28} className="text-blue-1" />
+                <div className="bg-green-1/10 p-3 rounded-xl">
+                    <User size={28} className="text-green-1" />
                 </div>
                 <h1 className="text-2xl font-bold text-white-1">About {user?.name}</h1>
             </div>
@@ -53,7 +53,7 @@ const ProfileAbout = ({ user, isOwnProfile }: ProfileAboutProps) => {
                             >
                                 Add a bio to tell others about yourself
                                 <span className="bg-white-1/10 p-1 rounded-full">
-                                    <Pen size={14} className="text-blue-1" />
+                                    <Pen size={14} className="text-green-1" />
                                 </span>
                             </p>
                         )
@@ -62,7 +62,7 @@ const ProfileAbout = ({ user, isOwnProfile }: ProfileAboutProps) => {
 
                 {/* Joining Date */}
                 <div className={`flex items-center gap-2 ${(user?.website || (user?.socialLinks && user?.socialLinks.length > 0) || isOwnProfile) ? "mb-6" : ""} text-white-2`}>
-                    <Calendar size={18} className="text-blue-1" />
+                    <Calendar size={18} className="text-green-1" />
                     <span>Joined {user?._creationTime ? new Date(user._creationTime).toLocaleDateString('en-US', {
                         month: 'long',
                         year: 'numeric',
@@ -79,7 +79,7 @@ const ProfileAbout = ({ user, isOwnProfile }: ProfileAboutProps) => {
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 bg-black-1/50 px-4 py-2 rounded-full hover:bg-white-1/10 transition-colors"
                         >
-                            <Globe size={18} className="text-blue-1" />
+                            <Globe size={18} className="text-green-1" />
                             <span className="text-white-2">Website</span>
                         </a>
                     )}
@@ -107,7 +107,7 @@ const ProfileAbout = ({ user, isOwnProfile }: ProfileAboutProps) => {
                         >
                             Add your website and social links to help others connect with you
                             <span className="bg-white-1/10 p-1 rounded-full">
-                                <Pen size={14} className="text-blue-1" />
+                                <Pen size={14} className="text-green-1" />
                             </span>
                         </p>
                     )}

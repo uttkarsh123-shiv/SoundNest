@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/providers/AuthProvider";
 import { useEffect, useState } from "react";
 
 interface LikeShareLoopControlsProps {
@@ -31,7 +31,7 @@ const LikeShareLoopControls = ({
     showShareControl = true, // Default to true
 }: LikeShareLoopControlsProps) => {
     const [isLiked, setIsLiked] = useState(false);
-    const { user } = useUser();
+    const { user, isSignedIn } = useAuth();
     const isFullscreen = variant === "fullscreen";
 
     // Get podcast details including likes
@@ -118,7 +118,7 @@ const LikeShareLoopControls = ({
                         "rounded-full p-1.5 sm:p-2 transition-colors", // Adjusted padding for mobile
                         isFullscreen ? "hover:bg-gray-800/50" : "hover:bg-gray-800",
                         isLooping 
-                            ? isFullscreen ? "text-blue-1" : "text-blue-1" 
+                            ? isFullscreen ? "text-green-1" : "text-green-1" 
                             : isFullscreen ? "text-white-1 hover:text-white" : "text-[#ffffff] hover:text-white"
                     )}
                     title={`Toggle Loop ${isFullscreen ? "(L)" : ""}`}
@@ -133,8 +133,8 @@ const LikeShareLoopControls = ({
                     "rounded-full p-1.5 sm:p-2 transition-colors", // Adjusted padding for mobile
                     isFullscreen ? "hover:bg-gray-800/50" : "hover:bg-gray-800",
                     isLiked
-                        ? isFullscreen ? "text-blue-1" : "text-blue-1"
-                        : isFullscreen ? "text-white-1 hover:text-blue-1" : "text-[#ffffff] hover:text-white"
+                        ? isFullscreen ? "text-green-1" : "text-green-1"
+                        : isFullscreen ? "text-white-1 hover:text-green-1" : "text-[#ffffff] hover:text-white"
                 )}
                 title="Like Podcast"
                 disabled={!user}
@@ -142,7 +142,7 @@ const LikeShareLoopControls = ({
                 <Heart
                     className={cn(
                         isFullscreen ? "h-6 w-6" : "h-4 w-4 sm:h-5 sm:w-5", // Smaller icon on mobile
-                        isLiked && (isFullscreen ? "fill-blue-1" : "fill-blue-1")
+                        isLiked && (isFullscreen ? "fill-green-1" : "fill-green-1")
                     )}
                 />
             </button>
@@ -153,7 +153,7 @@ const LikeShareLoopControls = ({
                     className={cn(
                         "rounded-full p-1.5 sm:p-2 transition-colors", // Adjusted padding for mobile
                         isFullscreen
-                            ? "text-white-1 hover:bg-gray-800/50 hover:text-blue-1"
+                            ? "text-white-1 hover:bg-gray-800/50 hover:text-green-1"
                             : "text-[#ffffff] hover:bg-gray-800 hover:text-white"
                     )}
                     title="Share Podcast"

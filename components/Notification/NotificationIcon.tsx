@@ -9,11 +9,11 @@ interface NotificationIconProps {
 const NotificationIcon = ({ type }: NotificationIconProps) => (
   <div className="bg-black-1/50 p-3 rounded-full">
     {type === "new_podcast" ? (
-      <Headphones size={24} className="text-blue-1" />
+      <Headphones size={24} className="text-green-1" />
     ) : type === "follow" ? (
-      <User size={24} className="text-blue-1" />
+      <User size={24} className="text-green-1" />
     ) : (
-      <Bell size={24} className="text-blue-1" />
+      <Bell size={24} className="text-green-1" />
     )}
   </div>
 );

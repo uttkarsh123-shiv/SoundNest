@@ -177,11 +177,11 @@ const useGeneratePodcast = ({
       const uploadResult = await startUpload([file]);
       console.log('Upload result:', uploadResult);
 
-      if (!uploadResult?.[0]?.response?.storageId) {
+      if (!(uploadResult?.[0]?.response as any)?.storageId) {
         throw new Error('No storage ID received');
       }
 
-      const storageId = uploadResult[0].response.storageId;
+      const storageId = (uploadResult[0].response as any).storageId;
       setAudioStorageId(storageId);
       console.log('Getting audio URL for storageId:', storageId);
 
@@ -275,11 +275,11 @@ const useGeneratePodcast = ({
       const uploadResult = await startUpload([file]);
       console.log('Upload result:', uploadResult);
 
-      if (!uploadResult?.[0]?.response?.storageId) {
+      if (!(uploadResult?.[0]?.response as any)?.storageId) {
         throw new Error('No storage ID received');
       }
 
-      const storageId = uploadResult[0].response.storageId;
+      const storageId = (uploadResult[0].response as any).storageId;
       setAudioStorageId(storageId);
       console.log('Getting audio URL for storageId:', storageId);
 
@@ -360,15 +360,27 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
     isCustomUploading
   } = useGeneratePodcast(props);
 
-  const [isCustomAudio, setIsCustomAudio] = useState(true);
+  const [isCustomAudio, setIsCustomAudio] = useState(false);
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      <ToggleButtonGroup containerWidth="max-w-[520px]"
-        button1text="Use AI to generate Audio" button2text="Upload custom Audio"
-        button1Active={!isCustomAudio} button2Active={isCustomAudio}
-        setButtonActive={(value) => setIsCustomAudio(!value)}
-      />
+      {/* Toggle */}
+      <div className="flex rounded-full bg-black-1 p-1 max-w-[520px] mx-auto w-full">
+        <button
+          type="button"
+          onClick={() => setIsCustomAudio(false)}
+          className={`flex-1 text-[13px] font-semibold py-2 rounded-full transition-all ${!isCustomAudio ? 'bg-green-1 text-black' : 'text-white-3 hover:text-white-1'}`}
+        >
+          Use AI to generate Audio
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsCustomAudio(true)}
+          className={`flex-1 text-[13px] font-semibold py-2 rounded-full transition-all ${isCustomAudio ? 'bg-green-1 text-black' : 'text-white-3 hover:text-white-1'}`}
+        >
+          Upload custom Audio
+        </button>
+      </div>
       {/* Main Area */}
       {!isCustomAudio ? (
         <div className="flex flex-col gap-8">
@@ -377,7 +389,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             <Label
               htmlFor='voice-select'
               className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-              <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+              <div className="h-6 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
               AI Voice
             </Label>
             <Select
@@ -390,16 +402,16 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
               }}
               defaultValue={voiceCategories[0].value}
             >
-              <SelectTrigger id='voice-select' className="bg-black-1/50 border-blue-1/10 hover:border-blue-1/30 
+              <SelectTrigger id='voice-select' className="bg-black-1/50 border-green-1/10 hover:border-green-1/30 
           transition-all duration-200 h-12 rounded-xl text-gray-1 px-4">
                 <SelectValue placeholder="Select voice type" className="text-left" />
               </SelectTrigger>
-              <SelectContent className="bg-black-1/95 text-white-1 border-blue-1/10 rounded-xl">
+              <SelectContent className="bg-black-1/95 text-white-1 border-green-1/10 rounded-xl">
                 {voiceCategories.map((voice) => (
                   <SelectItem
                     key={voice.value}
                     value={voice.value}
-                    className="focus:bg-blue-1/20 hover:bg-blue-1/10 transition-colors"
+                    className="focus:bg-green-1/20 hover:bg-green-1/10 transition-colors"
                   >
                     <div className="flex flex-col">
                       <span className="font-medium">{voice.label}</span>
@@ -417,7 +429,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
               <Label
                 htmlFor='script-textarea'
                 className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-                <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+                <div className="h-6 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
                 Script
               </Label>
               <div className="text-sm text-gray-1 bg-black-1/50 px-3 py-1.5 rounded-full flex gap-3">
@@ -425,7 +437,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
                   {characterCount}/{MAX_CHARACTERS}
                 </span>
                 <span className="opacity-50">|</span>
-                <span className={estimatedCredits > 50 ? "text-blue-1 font-medium" : ""}>
+                <span className={estimatedCredits > 50 ? "text-green-1 font-medium" : ""}>
                   {estimatedCredits} credits
                 </span>
               </div>
@@ -433,7 +445,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             <Textarea
               id='script-textarea'
               placeholder="Write or generate script for your podcast..."
-              className="input-class focus-visible:ring-offset-blue-1 min-h-[200px] text-base leading-relaxed
+              className="input-class focus-visible:ring-offset-green-1 min-h-[200px] text-base leading-relaxed
           transition-all duration-200 resize-y bg-black-1/50 hover:bg-black-1/70"
               value={props.voicePrompt}
               onChange={(e) => {
@@ -468,16 +480,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
                 props.voicePrompt.length > MAX_CHARACTERS ||
                 estimatedCredits > 50
               }
-              className={cn(
-                "bg-gradient-to-r from-blue-1 to-blue-2",
-                "text-white font-semibold gap-3 py-6 text-lg",
-                "transition-all duration-300 hover:scale-[1.02]",
-                "shadow-lg hover:shadow-blue-1/20",
-                "rounded-xl",
-                "disabled:opacity-50 disabled:hover:scale-100",
-                "max-w-[600px]",
-                "w-full"
-              )}
+              className="bg-green-1 hover:bg-green-2 text-black font-bold gap-2 py-2.5 px-8 text-sm rounded-full transition-all disabled:opacity-50 mx-auto"
             >
               {isGenerating ? (
                 <>
@@ -505,7 +508,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
           <div
             onClick={() => !isGenerating && !isCustomUploading && fileInputRef.current?.click()}
             className={cn(
-              "image_div hover:border-blue-1/50 hover:bg-black-1/30",
+              "image_div hover:border-green-1/50 hover:bg-black-1/30",
               "transition-all duration-200 group animate-in fade-in-50",
               "border-black-6 bg-black-1/50",
               "p-4 sm:p-6 rounded-lg",
@@ -524,7 +527,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             <div className="flex flex-col items-center gap-1">
               <h2
                 className={cn(
-                  "text-12 font-bold text-blue-1 group-hover:text-blue-2",
+                  "text-12 font-bold text-green-1 group-hover:text-green-2",
                   "transition-colors duration-200",
                 )}
               >
@@ -539,13 +542,13 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             <Label
               htmlFor='custom-script-textarea'
               className="text-16 sm:text-18 font-bold text-white-1 flex items-center gap-3 cursor-pointer">
-              <div className="h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+              <div className="h-6 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
               Script (Optional)
             </Label>
             <Textarea
               id='custom-script-textarea'
               placeholder="Add a script for your custom audio..."
-              className="input-class focus-visible:ring-offset-blue-1 min-h-[200px] text-base leading-relaxed
+              className="input-class focus-visible:ring-offset-green-1 min-h-[200px] text-base leading-relaxed
               transition-all duration-200 resize-y bg-black-1/50 hover:bg-black-1/70"
               value={props.voicePrompt}
               onChange={(e) => props.setVoicePrompt(e.target.value)}
@@ -558,7 +561,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             backdrop-blur-sm shadow-lg">
               <Progress value={uploadProgress} className="h-3 bg-black-1/50" />
               <div className="flex items-center gap-2.5 text-sm text-gray-1">
-                <Loader size={16} className="animate-spin text-blue-1" />
+                <Loader size={16} className="animate-spin text-green-1" />
                 <p>Uploading audio... {uploadProgress}%</p>
               </div>
             </div>
@@ -571,7 +574,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
         <div className="flex flex-col gap-2 sm:gap-3 mt-4 sm:mt-8">
           <div className="flex items-center justify-between">
             <Label className="text-15 sm:text-18 font-bold text-white-1 flex items-center gap-2 sm:gap-3">
-              <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-blue-1 to-blue-2 rounded-full" />
+              <div className="h-5 sm:h-6 w-1.5 bg-gradient-to-t from-green-1 to-green-2 rounded-full" />
               Audio Preview
             </Label>
             <Button
@@ -602,10 +605,10 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
                   variant="ghost"
                   className={cn(
                     "h-10 w-10 sm:h-14 sm:w-14 rounded-full",
-                    "bg-gradient-to-r from-blue-1 to-blue-2",
+                    "bg-gradient-to-r from-green-1 to-green-2",
                     "hover:scale-110 transition-all duration-300",
-                    "shadow-lg hover:shadow-blue-1/20",
-                    isPlaying && "animate-pulse ring-2 ring-blue-1/50 ring-offset-2 ring-offset-black"
+                    "shadow-lg hover:shadow-green-1/20",
+                    isPlaying && "animate-pulse ring-2 ring-green-1/50 ring-offset-2 ring-offset-black"
                   )}
                 >
                   {isPlaying ?
@@ -618,7 +621,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
                     <div className="absolute inset-0 bg-black-1/50" />
 
                     <div
-                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-1 to-blue-2 
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-1 to-green-2 
                       transition-all duration-150 ease-out rounded-full"
                       style={{
                         width: `${(currentTime / duration) * 100}%`,
@@ -637,8 +640,10 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
               </div>
 
               <audio
+                key={props.audio}
                 ref={audioRef}
                 src={props.audio}
+                preload="auto"
                 className="hidden"
                 onLoadedMetadata={(e) => {
                   props.setAudioDuration(e.currentTarget.duration);
@@ -651,7 +656,8 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
                 }}
                 onEnded={handleAudioEnded}
                 onError={(e) => {
-                  console.error("Audio playback error:", e);
+                  const audio = e.currentTarget as HTMLAudioElement;
+                  console.error("Audio error - src:", audio.src, "error code:", audio.error?.code, audio.error?.message);
                 }}
               />
             </div>
@@ -664,7 +670,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
             backdrop-blur-sm shadow-lg">
               <Progress value={progress} className="h-3 bg-black-1/50" />
               <div className="flex items-center gap-2.5 text-sm text-gray-1">
-                <Loader size={16} className="animate-spin text-blue-1" />
+                <Loader size={16} className="animate-spin text-green-1" />
                 <p>Generating audio... {progress}%</p>
               </div>
             </div>

@@ -10,7 +10,7 @@ const ListPodcastSkeleton = ({ usage = 'default' }: ListPodcastSkeletonProps) =>
     return (
         <div className="flex items-center p-2 sm:p-3 bg-white-1/5 rounded-lg hover:shadow-md hover:shadow-black/20 transition-all duration-300">
             <span className="inline-block text-center w-6 sm:w-8">
-                <div className="h-4 w-4 sm:h-5 sm:w-5 bg-blue-1/20 rounded-full animate-pulse mx-auto" />
+                <div className="h-4 w-4 sm:h-5 sm:w-5 bg-green-1/20 rounded-full animate-pulse mx-auto" />
             </span>
             <div className="flex flex-col size-full gap-2 sm:gap-3">
                 <div className="flex justify-between items-center">
@@ -27,7 +27,7 @@ const ListPodcastSkeleton = ({ usage = 'default' }: ListPodcastSkeletonProps) =>
                         {/* Category and language badges skeleton - only for discover */}
                         {isDiscover && (
                             <div className="flex flex-wrap gap-1 justify-end">
-                                <div className="h-4 sm:h-5 bg-blue-1/10 rounded-full animate-pulse w-12 sm:w-16" />
+                                <div className="h-4 sm:h-5 bg-green-1/10 rounded-full animate-pulse w-12 sm:w-16" />
                                 <div className="h-4 sm:h-5 bg-white-1/10 rounded-full animate-pulse w-10 sm:w-14" />
                             </div>
                         )}

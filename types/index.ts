@@ -16,7 +16,7 @@ export interface TopPodcastersProps {
   _creationTime: number;
   email: string;
   imageUrl: string;
-  clerkId: string;
+  clerkId?: string;  // legacy field, no longer used
   name: string;
   podcast: {
     podcastTitle: string;

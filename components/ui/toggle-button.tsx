@@ -4,26 +4,31 @@ import { Button } from "./button";
 interface ToggleButtonProps {
   isActive: boolean;
   onClick: () => void;
-  activeColor?: "blue" | "orange";
+  activeColor?: "blue" | "orange" | "green";
   children: React.ReactNode;
 }
 
 export function ToggleButton({
   isActive,
   onClick,
-  activeColor = "blue",
+  activeColor = "green",
   children
 }: ToggleButtonProps) {
   const colorStyles = {
+    green: {
+      active: "bg-green-1 text-black shadow-lg hover:bg-green-2",
+      inactive: "text-white-3 border-white-1/10 hover:bg-white-1/5 hover:text-white-1",
+      dot: "bg-green-1"
+    },
     orange: {
-      active: "bg-gradient-to-r from-blue-1 to-blue-2 text-white shadow-lg hover:shadow-blue-1/20",
-      inactive: "text-blue-1 border-blue-1/20 hover:bg-blue-1/10",
-      dot: "bg-blue-1"
+      active: "bg-gradient-to-r from-green-1 to-green-2 text-white shadow-lg hover:shadow-green-1/20",
+      inactive: "text-green-1 border-green-1/20 hover:bg-green-1/10",
+      dot: "bg-green-1"
     },
     blue: {
-      active: "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-blue-500/20",
-      inactive: "text-blue-500 border-blue-500/20 hover:bg-blue-500/10",
-      dot: "bg-blue-500"
+      active: "bg-green-1 text-black shadow-lg hover:bg-green-2",
+      inactive: "text-white-3 border-white-1/10 hover:bg-white-1/5",
+      dot: "bg-green-1"
     }
   };
 

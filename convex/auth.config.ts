@@ -1,9 +1,3 @@
-const authConfig= {
-    providers: [
-        {
-            domain: process.env.NEXT_PUBLIC_CLERK_AUTH_DOMAIN,
-            applicationID: "convex",
-        },
-    ]
-};
+// No external auth provider — using custom JWT auth
+const authConfig = { providers: [] };
 export default authConfig;

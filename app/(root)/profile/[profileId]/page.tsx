@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation } from "convex/react";
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@/providers/AuthProvider";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import { api } from "@/convex/_generated/api";
 import { useAudio } from "@/providers/AudioProvider";
@@ -21,7 +21,7 @@ const ProfilePage = ({
   };
 }) => {
   const user = useQuery(api.users.getUserById, {
-    clerkId: params.profileId,
+    userId: params.profileId,
   });
 
   // Use the optimized query to get podcast stats in one call
@@ -40,9 +40,11 @@ const ProfilePage = ({
     authorId: params.profileId,
   });
 
+  const { user: authUser } = useAuth();
+
   // Add follow-related queries and mutations with proper error handling
   const isUserFollowing = useQuery(api.follows.isFollowing,
-    { followingId: params.profileId }
+    { followerId: authUser?.id, followingId: params.profileId }
   );
 
   const followersCount = useQuery(api.follows.getFollowersCount, {
@@ -59,7 +61,6 @@ const ProfilePage = ({
   const { setAudio } = useAudio();
   const { toast } = useToast();
   const [isFollowing, setIsFollowing] = useState(false);
-  const { userId } = useAuth();
 
   // Update isFollowing state when the query result changes
   useEffect(() => {
@@ -70,8 +71,7 @@ const ProfilePage = ({
 
   if (!user || !podcastsData || !popularPodcasts || !recentPodcasts) return <LoaderSpinner />;
 
-  // Check if the profile being viewed is the current user's profile
-  const isOwnProfile = userId === params.profileId;
+  const isOwnProfile = authUser?.id === params.profileId;
 
   // Get featured podcast - use the most popular one
   const featuredPodcast = popularPodcasts.length > 0 ? popularPodcasts[0] : null;
@@ -124,7 +124,7 @@ const ProfilePage = ({
 
   // Updated Follow/Unfollow function without notifications
   const toggleFollow = async () => {
-    if (!userId) {
+    if (!authUser?.id) {
       toast({
         title: "Authentication Required",
         description: "Please sign in to follow creators",
@@ -136,10 +136,10 @@ const ProfilePage = ({
 
     try {
       if (isFollowing) {
-        await unfollowUser({ followingId: params.profileId });
+        await unfollowUser({ followerId: authUser.id, followingId: params.profileId });
         setIsFollowing(false);
       } else {
-        await followUser({ followingId: params.profileId });
+        await followUser({ followerId: authUser.id, followingId: params.profileId });
         setIsFollowing(true);
       }
     } catch (error) {
@@ -175,7 +175,7 @@ const ProfilePage = ({
         toggleFollow={toggleFollow}
         playRandomPodcast={playRandomPodcast}
         shareProfile={shareProfile}
-        clerkId={params.profileId}
+        userId={params.profileId}
         userName={user?.name || ""}
         userBio={user?.bio || ""}
         userWebsite={user?.website || ""}

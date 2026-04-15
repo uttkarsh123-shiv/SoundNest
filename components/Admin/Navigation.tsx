@@ -12,7 +12,7 @@ const Navigation = () => {
                     <Link
                         href="/admin"
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${pathname === '/admin'
-                                ? 'bg-blue-1/20 text-blue-1'
+                                ? 'bg-green-1/20 text-green-1'
                                 : 'hover:bg-black-1/30'
                             }`}
                     >
@@ -24,7 +24,7 @@ const Navigation = () => {
                     <Link
                         href="/admin/management"
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${pathname === '/admin/management'
-                                ? 'bg-blue-1/20 text-blue-1'
+                                ? 'bg-green-1/20 text-green-1'
                                 : 'hover:bg-black-1/30'
                             }`}
                     >
@@ -36,7 +36,7 @@ const Navigation = () => {
                     <Link
                         href="/admin/reports"
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${pathname === '/admin/reports'
-                                ? 'bg-blue-1/20 text-blue-1'
+                                ? 'bg-green-1/20 text-green-1'
                                 : 'hover:bg-black-1/30'
                             }`}
                     >

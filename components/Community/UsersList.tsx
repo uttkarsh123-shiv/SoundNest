@@ -30,11 +30,11 @@ const UsersList = ({ users, activeTab, searchQuery }: UsersListProps) => {
           }
           icon={
             activeTab === "followers" ? (
-              <User size={48} className="text-blue-1" />
+              <User size={48} className="text-green-1" />
             ) : activeTab === "following" ? (
-              <UserCheck size={48} className="text-blue-1" />
+              <UserCheck size={48} className="text-green-1" />
             ) : (
-              <TrendingUp size={48} className="text-blue-1" />
+              <TrendingUp size={48} className="text-green-1" />
             )
           }
         />
@@ -46,7 +46,7 @@ const UsersList = ({ users, activeTab, searchQuery }: UsersListProps) => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {users.map((user) => (
         <UserCard
-          key={user.clerkId}
+          key={user._id || user.userId}
           user={user}
           activeTab={activeTab}
         />

@@ -18,7 +18,7 @@ const ShowMoreLessButtons = ({
             {hasMore && loadMoreHandler && (
                 <button
                     onClick={loadMoreHandler}
-                    className="bg-blue-1 text-white py-2 sm:py-2.5 px-5 sm:px-6 rounded-md transition-all duration-300 flex items-center gap-2 font-semibold shadow-md hover:shadow-lg hover:shadow-blue-1/20 hover:bg-blue-2 active:scale-[0.98] group text-sm sm:text-base border border-blue-1/20"
+                    className="bg-green-1 text-white py-2 sm:py-2.5 px-5 sm:px-6 rounded-md transition-all duration-300 flex items-center gap-2 font-semibold shadow-md hover:shadow-lg hover:shadow-green-1/20 hover:bg-green-2 active:scale-[0.98] group text-sm sm:text-base border border-green-1/20"
                 >
                     Show More
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-y-0.5">

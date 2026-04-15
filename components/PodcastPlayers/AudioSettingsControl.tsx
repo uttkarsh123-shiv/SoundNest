@@ -60,7 +60,7 @@ const AudioSettingsControl = ({
                     onClick={toggleMute}
                     className={cn(
                         "text-white hover:text-primary transition-colors",
-                        isFullscreen && "hover:text-blue-1"
+                        isFullscreen && "hover:text-green-1"
                     )}
                     title="Toggle Mute (M)"
                 >
@@ -85,7 +85,7 @@ const AudioSettingsControl = ({
                 <button
                     className={cn(
                         "flex items-center gap-1 text-gray-400 transition-colors",
-                        isFullscreen ? "hover:text-blue-1" : "hover:text-white"
+                        isFullscreen ? "hover:text-green-1" : "hover:text-white"
                     )}
                     title="Playback Speed"
                     onClick={() => setIsSpeedMenuOpen(!isSpeedMenuOpen)}
@@ -108,7 +108,7 @@ const AudioSettingsControl = ({
                                     }}
                                     className={cn(
                                         "cursor-pointer text-gray-300 hover:bg-gray-800 focus:bg-gray-800 focus:text-white px-4 py-2 text-sm text-left whitespace-nowrap",
-                                        playbackRate === rate && "text-blue-1 font-medium bg-gray-900"
+                                        playbackRate === rate && "text-green-1 font-medium bg-gray-900"
                                     )}
                                 >
                                     {rate}x

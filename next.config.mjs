@@ -4,9 +4,11 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     eslint: {
-        // Enable ESLint
-        ignoreDuringBuilds: true, // Ignore ESLint during production builds
-        dirs: ['app', 'components'], // Specify the directories to lint
+        ignoreDuringBuilds: true,
+        dirs: ['app', 'components'],
+    },
+    experimental: {
+        optimizeCss: true,
     },
     images: {
         remotePatterns: [
@@ -16,7 +18,11 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'img.clerk.com'
+                hostname: 'api.dicebear.com',
+            },
+            {
+                protocol: 'https',
+                hostname: '*.convex.cloud',
             },
         ]
     }

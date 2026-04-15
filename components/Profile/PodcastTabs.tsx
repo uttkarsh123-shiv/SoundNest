@@ -65,8 +65,8 @@ const PodcastTabs = ({
     const currentPodcasts = allPodcasts.slice(0, visiblePodcasts);
     const title = activeTab === "popular" ? "Popular Podcasts" : "Recent Podcasts";
     const icon = activeTab === "popular" ? 
-        <Star size={28} className="text-blue-1" /> : 
-        <Clock size={28} className="text-blue-1" />;
+        <Star size={28} className="text-green-1" /> : 
+        <Clock size={28} className="text-green-1" />;
 
     // Determine if we can show more or less
     const hasMorePodcasts = allPodcasts.length > visiblePodcasts;
@@ -93,14 +93,14 @@ const PodcastTabs = ({
                         <TabsList className="bg-transparent border-0 p-0">
                             <TabsTrigger
                                 value="popular"
-                                className="px-5 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-1 data-[state=active]:to-blue-2 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
+                                className="px-5 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-1 data-[state=active]:to-green-2 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
                             >
                                 <Star size={15} />
                                 Popular
                             </TabsTrigger>
                             <TabsTrigger
                                 value="recent"
-                                className="px-5 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-1 data-[state=active]:to-blue-2 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
+                                className="px-5 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-1 data-[state=active]:to-green-2 data-[state=active]:text-black data-[state=active]:shadow-md data-[state=inactive]:text-white-2 data-[state=inactive]:hover:bg-white-1/10"
                             >
                                 <Clock size={15} />
                                 Recent

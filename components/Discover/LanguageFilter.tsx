@@ -39,7 +39,7 @@ const LanguageFilter = ({
         <div className="bg-gradient-to-br from-white-1/10 to-white-1/5 backdrop-blur-sm p-6 rounded-xl border border-white-1/10 shadow-lg animate-fadeIn">
             <div className="flex justify-between items-center mb-5">
                 <h3 className="text-white-1 font-semibold flex items-center gap-2 text-lg">
-                    <Globe size={18} className="text-blue-1" />
+                    <Globe size={18} className="text-green-1" />
                     <>
                         <span className="sm:hidden">Language</span>
                         <span className="hidden sm:inline">Filter by Language</span>
@@ -67,7 +67,7 @@ const LanguageFilter = ({
             <div className="max-h-[140px] overflow-y-auto pr-2 pb-2 custom-scrollbar">
                 {letters.map(letter => (
                     <div key={letter} className="mb-3">
-                        <div className="text-blue-1 font-bold text-sm mb-1.5 border-b border-white-1/10 pb-0.5">
+                        <div className="text-green-1 font-bold text-sm mb-1.5 border-b border-white-1/10 pb-0.5">
                             {letter}
                         </div>
                         <div className="flex flex-wrap gap-2 pl-1.5">
@@ -76,7 +76,7 @@ const LanguageFilter = ({
                                     key={language.value}
                                     onClick={() => toggleLanguage(language.value)}
                                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${selectedLanguages.includes(language.value)
-                                        ? 'bg-blue-1 text-black shadow-md scale-105'
+                                        ? 'bg-green-1 text-black shadow-md scale-105'
                                         : 'bg-black/20 text-white-2 hover:bg-white-1/10 hover:scale-105'
                                         }`}
                                 >

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/providers/AuthProvider";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { useDebounce } from "@/lib/useDebounce";
 import { Id } from "@/convex/_generated/dataModel";
 
 const AdminManagement = () => {
-    const { user } = useUser();
+    const { user, isSignedIn } = useAuth();
     const { toast } = useToast();
     const [userId, setUserId] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
@@ -133,9 +133,9 @@ const AdminManagement = () => {
         }
     };
 
-    const handleUserSelect = (selectedUser: { clerkId: string; name: string }) => {
-        setUserId(selectedUser.clerkId);
-        setSearchTerm(selectedUser.name + ' (' + selectedUser.clerkId + ')');
+    const handleUserSelect = (selectedUser: { _id: any; name: string }) => {
+        setUserId(selectedUser._id.toString());
+        setSearchTerm(selectedUser.name + ' (' + selectedUser._id.toString() + ')');
     };
 
     return (
@@ -193,14 +193,14 @@ const AdminManagement = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {adminUsers?.map((admin) => (
                         <div
-                            key={admin.clerkId}
+                            key={admin.id.toString()}
                             className="relative bg-black-1/50 p-3 rounded-lg border border-gray-800"
                         >
-                            {user?.id !== admin.clerkId && (
+                            {user?.id !== admin.id.toString() && (
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => handleRemoveAdmin(admin.clerkId)}
+                                    onClick={() => handleRemoveAdmin(admin.id.toString())}
                                     className="absolute top-2 right-2 text-red-500 hover:text-red-600 p-0 h-6 w-6 transition-colors hover:bg-transparent"
                                 >
                                     <Trash2 size={14} />
@@ -241,7 +241,7 @@ const AdminManagement = () => {
                             <div className="absolute z-10 w-full mt-1 bg-black-1 border border-gray-800 rounded-lg max-h-60 overflow-y-auto">
                                 {users.map((user) => (
                                     <div
-                                        key={user.clerkId}
+                                        key={user._id.toString()}
                                         className="flex items-center gap-3 p-2 hover:bg-black-2 cursor-pointer"
                                         onClick={() => handleUserSelect(user)}
                                     >
@@ -254,7 +254,7 @@ const AdminManagement = () => {
                                         />
                                         <div>
                                             <p className="text-white-1 text-sm font-medium">{user.name}</p>
-                                            <p className="text-white-3 text-xs">{user.clerkId}</p>
+                                            <p className="text-white-3 text-xs">{user._id.toString()}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -265,7 +265,7 @@ const AdminManagement = () => {
                     <Button
                         onClick={handleAddAdmin}
                         disabled={!userId.trim()}
-                        className="bg-blue-1 text-black hover:bg-blue-2"
+                        className="bg-green-1 text-black hover:bg-green-2"
                     >
                         Add Admin
                     </Button>

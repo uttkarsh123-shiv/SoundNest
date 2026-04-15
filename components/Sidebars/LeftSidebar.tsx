@@ -2,122 +2,125 @@
 
 import { sidebarLinks } from "@/constants"
 import { cn } from "@/lib/utils"
-import { SignedIn, SignedOut, useClerk, useUser } from "@clerk/nextjs";
+import { useAuth, useAuthModal } from "@/providers/AuthProvider";
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation"
 import { useAudio } from "@/providers/AudioProvider";
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { useState } from "react";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+
+// Routes that require authentication
+const PROTECTED_ROUTES = ['/create-podcast', '/notification', '/profile', '/admin'];
 
 const LeftSidebar = () => {
-    const { user } = useUser();
+    const { user, isSignedIn, signOut } = useAuth();
+    const { openModal } = useAuthModal();
     const pathname = usePathname();
-    const router = useRouter();
-    const { signOut } = useClerk();
     const { audio } = useAudio();
-    
-    // Fetch notifications to check for unread ones
+    const [collapsed, setCollapsed] = useState(false);
+
     const notifications = useQuery(
         api.notifications.getUserNotifications,
         user?.id ? { userId: user.id } : "skip"
     );
-    
-    // Check if there are any unread notifications
-    const hasUnreadNotifications = notifications?.some(notification => !notification.isRead) || false;
+    const hasUnreadNotifications = notifications?.some(n => !n.isRead) || false;
+
+    const handleNavClick = (e: React.MouseEvent, route: string) => {
+        const isProtected = PROTECTED_ROUTES.some(r => route.startsWith(r));
+        if (isProtected && !isSignedIn) {
+            e.preventDefault();
+            openModal('signup');
+        }
+    };
 
     return (
-        <section className={cn("left_sidebar h-[calc(100vh-1px)] transition-all duration-300", {
-            'h-[calc(100vh-80px)]': audio?.audioUrl
-        })}>
-            <nav className='flex flex-col gap-6 w-full'>
-                {/* Logo Section */}
-                <Link href="/" className="flex cursor-pointer imaktems-center gap-3 pb-3 px-4 max-lg:justify-center max-lg:px-0 group">
-                    <div className="relative flex-shrink-0">
-                        <Image
-                            src="/icons/logo.png"
-                            alt="logo"
-                            width={50}
-                            height={50}
-                            className="transition-transform duration-300 group-hover:scale-105 max-lg:w-[55px] max-lg:h-[55px]"
-                        />
-                    </div>
-                    <h1 className="text-[22px] font-extrabold text-white max-lg:hidden bg-gradient-to-r from-blue-1 to-white-1 bg-clip-text text-transparent">
-                        SoundNest
-                    </h1>
-                </Link>
+        <section className={cn(
+            "sticky left-0 top-0 flex flex-col justify-between border-r border-white-1/5 bg-black-1 text-white-1 max-md:hidden transition-all duration-300 overflow-hidden flex-shrink-0",
+            collapsed ? "w-[60px]" : "w-[220px]",
+            audio?.audioUrl ? "h-[calc(100vh-80px)]" : "h-[calc(100vh-1px)]"
+        )}>
+            <nav className='flex flex-col w-full'>
+                {/* Logo + toggle */}
+                <div className="flex items-center justify-between px-3 py-4">
+                    {!collapsed ? (
+                        <Link href="/" className="flex items-center gap-2 group">
+                            <Image src="/icons/logo.png" alt="logo" width={32} height={32} className="transition-transform duration-300 group-hover:scale-105 flex-shrink-0" />
+                            <span className="text-[17px] font-extrabold bg-gradient-to-r from-green-1 to-white-1 bg-clip-text text-transparent tracking-tight whitespace-nowrap">
+                                SoundNest
+                            </span>
+                        </Link>
+                    ) : (
+                        <Link href="/" className="mx-auto">
+                            <Image src="/icons/logo.png" alt="logo" width={28} height={28} />
+                        </Link>
+                    )}
+                    <button
+                        onClick={() => setCollapsed(p => !p)}
+                        className={cn("text-white-3 hover:text-white-1 transition-colors p-1 rounded-md hover:bg-white-1/5 flex-shrink-0", collapsed && "mx-auto mt-2")}
+                        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                    >
+                        {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+                    </button>
+                </div>
 
-                {/* Navigation Links - Full Width */}
-                <div className="flex flex-col space-y-1.5 w-full">
+                {/* Nav Links */}
+                <div className="flex flex-col mt-1 w-full">
                     {sidebarLinks.map(({ route, label, icon: Icon }) => {
-                        // For profile route, check if the current path is the user's profile
                         const isProfileRoute = route === "/profile";
                         const userProfilePath = user ? `/profile/${user.id}` : "/sign-in";
-
-                        // Check if current path is active
                         const isActive = isProfileRoute
                             ? pathname === userProfilePath
                             : pathname === route || pathname.startsWith(`${route}/`);
-                            
-                        // Check if this is the notification route
                         const isNotificationRoute = route === "/notification";
 
                         return (
                             <Link
                                 href={isProfileRoute ? userProfilePath : route}
                                 key={label}
+                                title={collapsed ? label : undefined}
+                                onClick={(e) => handleNavClick(e, route)}
                                 className={cn(
-                                    "flex gap-4 items-center py-3.5 px-4 transition-all duration-200 w-full group max-lg:justify-center max-lg:px-0",
+                                    "flex items-center py-2.5 transition-all duration-150 w-full group",
+                                    collapsed ? "justify-center px-0" : "gap-3 px-3",
                                     isActive
-                                        ? 'bg-blue-1/10 text-blue-1 border-l-4 border-blue-1 max-lg:border-l-0'
-                                        : 'text-white-2 hover:bg-white-1/5 hover:text-white-1 border-l-4 border-transparent max-lg:border-l-0'
+                                        ? 'text-white-1 border-l-[3px] border-green-1 bg-white-1/5'
+                                        : 'text-white-3 hover:text-white-1 border-l-[3px] border-transparent hover:bg-white-1/5'
                                 )}
                             >
-                                <div className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center">
-                                    <Icon
-                                        size={26}
-                                        className={cn(
-                                            "transition-all",
-                                            isActive ? "text-blue-1" : "text-white-2 group-hover:text-white-1"
-                                        )}
-                                    />
+                                <div className="relative flex-shrink-0 flex items-center justify-center">
+                                    <Icon size={20} className={cn("transition-colors", isActive ? "text-white-1" : "text-white-3 group-hover:text-white-1")} />
                                     {isNotificationRoute && hasUnreadNotifications && (
-                                        <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-blue-1 ring-2 ring-black-1"></span>
+                                        <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-green-1" />
                                     )}
                                 </div>
-                                <p className="text-[15px] font-medium max-lg:hidden">{label}</p>
+                                {!collapsed && <span className="text-[13px] font-semibold">{label}</span>}
                             </Link>
                         );
                     })}
                 </div>
             </nav>
 
-            {/* Log Out Button - Full Width */}
-            <div className="mt-auto px-4 pb-6 max-lg:px-3">
-                <SignedOut>
-                    <Button
-                        asChild
-                        className="text-[15px] w-full bg-blue-1 hover:bg-blue-2 font-semibold rounded-xl py-6 transition-all duration-200 shadow-lg hover:shadow-blue-1/20 max-lg:py-3.5"
+            {/* Log Out */}
+            <div className={cn("pb-4 border-t border-white-1/5 pt-2", collapsed ? "flex justify-center" : "px-3")}>
+                {isSignedIn && (
+                    <button
+                        className={cn(
+                            "flex items-center gap-3 text-[13px] font-medium text-white-3 hover:text-white-1 py-2.5 rounded-md hover:bg-white-1/5 transition-all w-full",
+                            collapsed ? "justify-center px-0" : "px-3"
+                        )}
+                        onClick={() => signOut()}
+                        title={collapsed ? "Log Out" : undefined}
                     >
-                        <Link href="/sign-in" className="max-lg:flex max-lg:items-center max-lg:justify-center">
-                            <span className="max-lg:hidden">Sign in</span>
-                            <span className="lg:hidden text-base">Log In</span>
-                        </Link>
-                    </Button>
-                </SignedOut>
-                <SignedIn>
-                    <Button
-                        className="text-[15px] w-full bg-blue-1 hover:bg-blue-2 font-semibold rounded-xl py-6 transition-all duration-200 shadow-lg hover:shadow-blue-1/20 max-lg:py-3.5"
-                        onClick={() => signOut(() => router.push('/'))}
-                    >
-                        <span className="max-lg:hidden">Log Out</span>
-                        <span className="lg:hidden text-base">Log Out</span>
-                    </Button>
-                </SignedIn>
+                        <span className="text-base leading-none">↩</span>
+                        {!collapsed && <span>Log Out</span>}
+                    </button>
+                )}
             </div>
         </section>
-    )
+    );
 }
 
 export default LeftSidebar

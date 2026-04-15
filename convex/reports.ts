@@ -9,7 +9,7 @@ export const submitReport = mutation({
         reportType: v.string(),
         details: v.optional(v.string()),
         contactEmail: v.optional(v.string()),
-        reportedBy: v.string(), // User's Clerk ID who reported
+        reportedBy: v.string(), // Convex user _id string
     },
     handler: async (ctx, args) => {
         const reportId = await ctx.db.insert("reports", {
@@ -53,7 +53,7 @@ export const updateReportStatus = mutation({
         reportId: v.id("reports"),
         status: v.string(),
         reviewNotes: v.optional(v.string()),
-        reviewedBy: v.id("users"),
+        reviewedBy: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         await ctx.db.patch(args.reportId, {
