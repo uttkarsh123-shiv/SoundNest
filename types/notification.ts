@@ -1,4 +1,4 @@
-export type NotificationType = "new_podcast" | "admin_approved" | "admin_rejected" | "report_status";
+export type NotificationType = "new_podcast" | "follow" | "admin_approved" | "admin_rejected" | "report_status";
 export type NotificationTab = "all" | "unread";
 
 export interface Notification {

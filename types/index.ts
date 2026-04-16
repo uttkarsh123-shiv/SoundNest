@@ -21,6 +21,7 @@ export interface TopPodcastersProps {
   podcast: {
     podcastTitle: string;
     podcastId: Id<"podcasts">;
+    podcastImage?: string;
   }[];
   totalPodcasts: number;
 }

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 interface SectionDetailProps {
-  title: string;
+  title: ReactNode;
   children: ReactNode;
   rightElement?: ReactNode;
 }

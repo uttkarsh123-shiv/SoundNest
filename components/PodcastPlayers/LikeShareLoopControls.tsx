@@ -37,7 +37,7 @@ const LikeShareLoopControls = ({
     // Get podcast details including likes
     const podcast = useQuery(
         api.podcasts.getPodcastById,
-        podcastId ? { podcastId } : "skip"
+        podcastId ? { podcastId: podcastId as any } : "skip"
     );
 
     // Like mutation
@@ -63,7 +63,7 @@ const LikeShareLoopControls = ({
             
             // Make API call
             await likePodcast({
-                podcastId,
+                podcastId: podcastId as any,
                 userId: user.id
             });
         } catch (error) {

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { EmblaCarouselType } from 'embla-carousel'
 import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
 import { CarouselProps } from '@/types'
@@ -10,11 +9,11 @@ import CarouselDots from '../../ui/CarouselDots'
 
 const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
   const router = useRouter();
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()])
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay() as any])
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
 
-  const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
+  const onNavButtonClick = useCallback((emblaApi: any) => {
     const autoplay = emblaApi?.plugins()?.autoplay
     if (!autoplay || !("stopOnInteraction" in autoplay.options)) return
 
@@ -83,7 +82,7 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
         selectedIndex={selectedIndex}
         onDotClick={(index) => {
           emblaApi?.scrollTo(index)
-          onNavButtonClick(emblaApi as EmblaCarouselType)
+          onNavButtonClick(emblaApi as any)
         }}
         className="gap-2"
       />

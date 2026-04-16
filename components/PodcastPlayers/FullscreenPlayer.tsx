@@ -70,7 +70,7 @@ const FullscreenPlayer = ({
     // Get podcast details including likes
     const podcast = useQuery(
         api.podcasts.getPodcastById,
-        audioDetails?.podcastId ? { podcastId: audioDetails.podcastId } : "skip"
+        audioDetails?.podcastId ? { podcastId: audioDetails.podcastId as any } : "skip"
     );
 
     // Update isLiked state when podcast data is loaded
