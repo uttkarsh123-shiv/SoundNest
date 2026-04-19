@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Auth is handled client-side via AuthProvider + modal
-// Middleware only blocks unauthenticated API calls (non-auth endpoints)
+// Public API routes that don't need auth
+const PUBLIC_API_ROUTES = ['/api/auth', '/api/ai'];
+
 export default function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
-    // Only protect non-auth API routes
-    if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth') && !pathname.startsWith('/api/ai')) {
-        const token = req.cookies.get('auth_token')?.value;
-        if (!token) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+    if (!pathname.startsWith('/api/')) return NextResponse.next();
+
+    const isPublic = PUBLIC_API_ROUTES.some(r => pathname.startsWith(r));
+    if (isPublic) return NextResponse.next();
+
+    const token = req.cookies.get('auth_token')?.value;
+    if (!token) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     return NextResponse.next();

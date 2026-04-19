@@ -51,7 +51,7 @@ const CreatePodcast = () => {
     const [audioDuration, setAudioDuration] = useState(0);
 
     //Voice States
-    const [voiceType, setVoiceType] = useState<string | null>("29vD33N1CtxCmqQRPOHJ");
+    const [voiceType, setVoiceType] = useState<string | null>("nPczCjzI2devNBz1zQrb");
     const [voicePrompt, setVoicePrompt] = useState("");
 
     //AI States

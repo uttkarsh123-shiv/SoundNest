@@ -87,7 +87,10 @@ export const styleOptions = [
 ];
 
 export const voiceCategories = [
-    { value: '29vD33N1CtxCmqQRPOHJ', label: 'Drew (Male)', description: 'Deep and professional' },
-    { value: '21m00Tcm4TlvDq8ikWAM', label: 'Rachel (Female)', description: 'Clear and engaging' },
-    { value: 'EXAVITQu4vr4xnSDxMaL', label: 'Sarah (Female)', description: 'Warm and friendly' },
+    { value: 'nPczCjzI2devNBz1zQrb', label: 'Brian (Male)', description: 'Deep, resonant and comforting' },
+    { value: 'EXAVITQu4vr4xnSDxMaL', label: 'Sarah (Female)', description: 'Mature, reassuring, confident' },
+    { value: 'onwK4e9ZLuTAKqWW03F9', label: 'Daniel (Male)', description: 'Steady broadcaster' },
+    { value: 'Xb7hH8MSUJpSbSDYk0k2', label: 'Alice (Female)', description: 'Clear, engaging educator' },
+    { value: 'JBFqnCBsd6RMkjVDRZzb', label: 'George (Male)', description: 'Warm, captivating storyteller' },
+    { value: 'cgSgspJ2msm6clMCkdW9', label: 'Jessica (Female)', description: 'Playful, bright, warm' },
 ];
