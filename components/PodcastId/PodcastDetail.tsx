@@ -15,6 +15,7 @@ import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { useAuth } from "@/providers/AuthProvider";
 import ReportDialog from "./ReportDialog";
+import UserAvatar from "../ui/UserAvatar";
 
 const PodcastDetail = ({
   audioUrl,
@@ -137,7 +138,7 @@ const PodcastDetail = ({
 
   const isPlaying = audio?.podcastId === podcastId;
 
-  if (!imageUrl || !authorImageUrl) return <LoaderSpinner />;
+  if (!imageUrl) return <LoaderSpinner />;
 
   return (
     <div className="w-full bg-black-1/30 p-4 sm:p-6 rounded-xl border border-gray-800">
@@ -167,13 +168,7 @@ const PodcastDetail = ({
                   router.push(`/profile/${authorId}`);
                 }}
               >
-                <Image
-                  src={authorImageUrl}
-                  width={30}
-                  height={30}
-                  alt="Caster icon"
-                  className="size-[30px] rounded-full object-cover ring-2 ring-green-1/30"
-                />
+                <UserAvatar name={author} imageUrl={authorImageUrl} size={30} className="ring-2 ring-green-1/30" />
                 <h2 className="text-16 font-medium text-white-3">{author}</h2>
               </figure>
             </article>

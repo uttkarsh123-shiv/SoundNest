@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { MessageCircle, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import DetailSection from './SectionDetail';
+import UserAvatar from '../ui/UserAvatar';
 import { Id } from '@/convex/_generated/dataModel';
 
 interface User {
@@ -56,13 +57,7 @@ const CommentsSection = ({
                 <div className="mb-4 sm:mb-6">
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 bg-black-1/50 p-3 sm:p-4 rounded-lg border border-gray-800">
                         <div className="flex-shrink-0 relative w-8 h-8 sm:w-10 sm:h-10 mx-auto sm:mx-0">
-                            <Image
-                                src={user.imageUrl}
-                                alt={user.name || "User"}
-                                className="rounded-full object-cover"
-                                fill
-                                sizes="(max-width: 640px) 32px, 40px"
-                            />
+                            <UserAvatar name={user.name || 'User'} imageUrl={user.imageUrl} size={40} />
                         </div>
                         <div className="flex-grow">
                             <textarea

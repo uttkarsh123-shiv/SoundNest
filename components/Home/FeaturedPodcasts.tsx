@@ -8,6 +8,7 @@ import { PodcastProps } from '@/types';
 import FeaturedSkeleton from './FeaturedSkeleton';
 import CarouselDots from '../ui/CarouselDots';
 import UserImage from '../ui/UserImage';
+import UserAvatar from '../ui/UserAvatar';
 
 interface FeaturedPodcastsProps {
     featuredPodcasts: PodcastProps[] | undefined;
@@ -85,16 +86,11 @@ const FeaturedPodcasts = ({ featuredPodcasts }: FeaturedPodcastsProps) => {
                                     <div className="w-full space-y-3">
                                         {/* Author Info */}
                                         <div className="flex items-center gap-2">
-                                            <Image
-                                                src={podcast.authorImageUrl!}
-                                                alt={podcast.author}
-                                                width={28}
-                                                height={28}
-                                                className="rounded-full border border-green-1/60 cursor-pointer"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    router.push(`/profile/${podcast.authorId}`);
-                                                }}
+                                            <UserAvatar
+                                                name={podcast.author}
+                                                imageUrl={podcast.authorImageUrl}
+                                                size={28}
+                                                className="cursor-pointer border border-green-1/60"
                                             />
                                             <span className="text-white-2 text-xs font-medium tracking-wide uppercase">{podcast.author}</span>
                                         </div>
